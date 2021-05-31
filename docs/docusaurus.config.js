@@ -2,13 +2,13 @@
 module.exports = {
   title: "NobeJS",
   tagline: "Rapid NodeJS API Developement",
-  url: "https://your-docusaurus-test-site.com",
+  url: "https://nobejs.vercel.app/",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
-  organizationName: "facebook", // Usually your GitHub org/user name.
-  projectName: "docusaurus", // Usually your repo name.
+  organizationName: "betlaectic", // Usually your GitHub org/user name.
+  projectName: "nobejs", // Usually your repo name.
   themeConfig: {
     navbar: {
       title: "NobeJS",
