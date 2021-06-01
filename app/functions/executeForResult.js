@@ -1,10 +1,10 @@
-module.exports = (func, storeKey = "data") => {
+module.exports = (func, resultKey = "data") => {
   return async (req, res, next) => {
     try {
       console.log("fund", func);
 
       let result = await func.apply(null, [req, res]);
-      req[storeKey] = result;
+      req[resultKey] = result;
       next();
     } catch (error) {
       next(error);

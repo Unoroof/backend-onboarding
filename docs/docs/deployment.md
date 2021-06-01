@@ -1,7 +1,9 @@
 ---
-sidebar_position: 7
+sidebar_position: 8
 ---
 
 # Deployment
 
-Coming Soon..
+Just run dockerbuild and do whatever you want to.
+
+We will add kube manifests very soon.

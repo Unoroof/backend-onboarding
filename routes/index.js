@@ -11,27 +11,27 @@ const blogCollectionResponse = require("../app/responses/blogCollection");
 const blogResourceResponse = require("../app/responses/blogResource");
 
 router.get(
-  "/blog",
+  "/blogs",
   executeForResult(blogController.index, "blogList"),
   executeForResponse(blogCollectionResponse)
 );
 
 router.get(
-  "/blog/:id",
+  "/blogs/:id",
   executeForResult(blogController.show),
   executeForResponse(blogResourceResponse)
 );
 
 router.post(
-  "/blog",
+  "/blogs",
   createBlogRequest,
   executeForResult(blogController.store),
   executeForResponse(blogResourceResponse)
 );
 
-router.put("/blog/:id", executeForResponse(blogController.update));
+router.put("/blogs/:id", executeForResponse(blogController.update));
 
-router.delete("/blog/:id", executeForResponse(blogController.delete));
+router.delete("/blogs/:id", executeForResponse(blogController.delete));
 
 router.post("/author", executeForResponse(authorController.store));
 
