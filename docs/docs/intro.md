@@ -2,34 +2,38 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# Intro
 
-Let's discover **Docusaurus in less than 5 minutes**.
+Decide if you want to use NobeJS or not.
 
-## Getting Started
+## What is NobeJS?
 
-Get started by **creating a new site**.
+NobeJS is not yet another NodeJS framework, Please relax.
 
-Or **try Docusaurus immediately** with **[new.docusaurus.io](https://new.docusaurus.io)**.
+It's just a starter kit to develop APIs and not even Typescript based. Ouch, Imagine our laziness.
 
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**:
+The way to use it is ...simple! **Clone it**
 
 ```shell
-npx @docusaurus/init@latest init my-website classic
+git clone git@github.com:betalectic/nobejs.git
 ```
 
-## Start your site
+It definitely doesn't solve many use cases, it's generic. But the way we deploy this is, making a docker image and deploying it into a Kubernetes Cluster.
 
-Run the development server:
+## What problem it solves for us?
 
-```shell
-cd my-website
+As we have been building projects over an year using NodeJS, we really liked it. We like it as it is, just Node + Express.
 
-npx docusaurus start
-```
+But then, if we are instantiating a new repo every week, we felt, we are doing too much copy pasting, and need one repo which we can clone and get started.
 
-Your site starts at `http://localhost:3000`.
+The framework which we were used to was Laravel. We wanted our NodeJS folder structure and some bit of ecosystem around it.
 
-Open `docs/intro.md` and edit some lines: the site **reloads automatically** and display your changes.
+As part of typical Node + Postgres API Codebase, we use following libraries:
+
+- ExpressJS
+  - Middlewares
+  - Routing
+- Sequelize
+  - For Migrations
+  - For Models, Queries
+- ValidateJS
