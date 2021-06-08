@@ -11,7 +11,9 @@ module.exports = (instance) => {
   }
 
   for (const association of associations) {
-    result[association] = authorSerializer(instance[association]);
+    if (instance[association] !== undefined) {
+      result[association] = authorSerializer(instance[association]);
+    }
   }
 
   return result;

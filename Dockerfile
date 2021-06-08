@@ -1,4 +1,4 @@
-FROM node:10-slim
+FROM node:15-slim
 
 RUN apt-get update \
     && mkdir -p /usr/share/man/man1 \
@@ -7,12 +7,14 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package* ./
+COPY ["package.json", "package-lock.json*", "./"]
 
-RUN npm install -g
+RUN npm install
 
-COPY . ./
+COPY . .
 
-CMD npm start
+EXPOSE 3000
+
+CMD [ "npm", "run", "start" ]

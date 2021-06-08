@@ -5,7 +5,14 @@ const consumeError = require("../functions/consumeError");
 module.exports = {
   async index(req, res) {
     try {
-      let blogs = await Blog.findAll();
+      let blogs = await Blog.findAll({
+        include: [
+          {
+            model: Author,
+            as: "author",
+          },
+        ],
+      });
       return blogs;
     } catch (error) {
       consumeError(error);

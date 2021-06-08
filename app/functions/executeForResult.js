@@ -1,8 +1,6 @@
 module.exports = (func, resultKey = "data") => {
   return async (req, res, next) => {
     try {
-      console.log("fund", func);
-
       let result = await func.apply(null, [req, res]);
       req[resultKey] = result;
       next();

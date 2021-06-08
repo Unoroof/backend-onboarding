@@ -18,3 +18,11 @@ To run locally:
   "port": process.env.DB_PORT
 
 Serializer logic inspired from: https://medium.com/riipen-engineering/serializing-data-with-sequelize-6c3a9633797a
+
+docker stop $(docker ps -q)
+docker build -t nobejs:latest .
+docker run -d -p 3000:3000 nobejs:latest
+
+psql -h host.docker.internal -p 5433 -U postgres
+
+docker exec -it 86ba3da2b288 sh
