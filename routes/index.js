@@ -11,6 +11,24 @@ const blogCollectionResponse = require("../app/responses/blogCollection");
 const blogResourceResponse = require("../app/responses/blogResource");
 
 router.get(
+  "/blogs/liveness",
+  executeForResponse(() => {
+    return {
+      status: "live",
+    };
+  })
+);
+
+router.get(
+  "/blogs/readiness",
+  executeForResponse(() => {
+    return {
+      status: "ready",
+    };
+  })
+);
+
+router.get(
   "/blogs",
   executeForResult(blogController.index, "blogList"),
   executeForResponse(blogCollectionResponse)
