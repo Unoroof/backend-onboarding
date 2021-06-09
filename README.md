@@ -1,6 +1,4 @@
-# Node.js, Express.js, Sequelize.js and PostgreSQL RESTful API
-
-This source code is part of [Node.js, Express.js, Sequelize.js and PostgreSQL RESTful API](https://www.djamware.com/post/5b56a6cc80aca707dd4f65a9/nodejs-expressjs-sequelizejs-and-postgresql-restful-api) tutorial.
+Refer: https://nobejs.vercel.app
 
 To run locally:
 
