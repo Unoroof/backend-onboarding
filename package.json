@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon ./bin/www",
+    "dev": "NODE_ENV=development nodemon ./bin/www",
     "start": "node ./bin/www",
     "migrate": "sequelize db:migrate",
     "db:init": "sequelize init",

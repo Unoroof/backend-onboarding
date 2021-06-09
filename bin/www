@@ -1,13 +1,9 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
-var dotenv = require("dotenv");
-/**
- * Load environment variables from .env file, where API keys and passwords are configured.
- */
-dotenv.config({ path: ".env" });
+if (process.env.NODE_ENV === "development") {
+  var dotenv = require("dotenv");
+  dotenv.config({ path: ".env" });
+}
 
 var debug = require("debug")("node-sequelize:server");
 var http = require("http");
