@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -8,13 +8,14 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable('Profiles', {
+    await queryInterface.createTable("Profiles", {
+      //Todo - Lowercase table names
 
       uuid: {
         type: Sequelize.UUID,
         allowNull: false,
         primaryKey: true,
-        defaultValue: Sequelize.UUIDV4
+        defaultValue: Sequelize.UUIDV4,
       },
       user_uuid: {
         type: Sequelize.UUID,
@@ -27,11 +28,11 @@ module.exports = {
       status: Sequelize.STRING,
       createdAt: {
         type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        defaultValue: Sequelize.NOW,
       },
       updatedAt: {
         type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        defaultValue: Sequelize.NOW,
       },
     });
   },
@@ -43,6 +44,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.dropTable('Profiles');
-  }
+    await queryInterface.dropTable("Profiles");
+  },
 };

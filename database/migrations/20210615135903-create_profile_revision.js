@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -8,11 +8,12 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable('ProfileRevisions', {
+    await queryInterface.createTable("ProfileRevisions", {
+      //Todo - Lowercase and seperate by underscores - profile_revisions
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
       },
       profile_uuid: {
         type: Sequelize.UUID,
@@ -21,7 +22,7 @@ module.exports = {
       data: Sequelize.JSONB,
       createdAt: {
         type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        defaultValue: Sequelize.NOW,
       },
     });
   },
@@ -33,6 +34,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.dropTable('ProfileRevisions');
-  }
+    await queryInterface.dropTable("ProfileRevisions");
+  },
 };
