@@ -1,7 +1,5 @@
-const blog = require("./blog");
-const author = require("./author");
+const ProfileController = require("./profile")
 
 module.exports = {
-  blog,
-  author,
+  ProfileController
 };
