@@ -12,7 +12,6 @@ module.exports = {
       };
       if (req.query.type) constraints.where.type = req.query.type;
       let profiles = await Profile.findAll(constraints);
-      console.log(profiles);
       return profiles;
     } catch (error) {
       consumeError(error);
@@ -30,7 +29,7 @@ module.exports = {
       });
       let toCreateRevision = false;
       if (!profile) {
-        let profile = await Profile.create({
+        profile = await Profile.create({
           user_uuid: req.user,
           type: req.body.type,
           data: req.body.data,
@@ -49,7 +48,7 @@ module.exports = {
         toCreateRevision = JSON.stringify(prevData) !== JSON.stringify(profile.data);
       }
       if (toCreateRevision) {
-        console.log('creating new revision');
+        console.log('Creating New Revision');
         await ProfileRevision.create({
           profile_uuid: profile.uuid,
           data: profile.data
@@ -65,7 +64,6 @@ module.exports = {
     try {
       let profile = await Profile.findByPk(req.params.id);
 
-      console.log("delete", profile);
 
       if (!profile) {
         consumeError({
