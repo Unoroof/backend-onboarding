@@ -13,7 +13,6 @@ module.exports = {
       if (req.query.type) constraints.where.type = req.query.type;
       let profiles = await Profile.findAll(constraints);
       console.log(profiles);
-      if (profiles == 0) res.status(404);
       return profiles;
     } catch (error) {
       consumeError(error);
