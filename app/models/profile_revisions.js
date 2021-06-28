@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: "ProfileRevision",
-            tableName: "ProfileRevisions"
+            tableName: "profile_revisions",
+            updatedAt: false
         }
     );
     return ProfileRevision;
