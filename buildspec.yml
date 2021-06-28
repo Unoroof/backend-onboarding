@@ -1,0 +1,32 @@
+version: 0.2
+run-as: root
+phases:
+  install:
+    commands:
+      - docker login -u rjvim -p Kissmiss9!
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+  pre_build:
+    commands:
+      - echo "Prebuild "
+      - echo $CODEBUILD_WEBHOOK_HEAD_REF
+      - echo $CODEBUILD_SOURCE_VERSION
+      - echo $CODEBUILD_RESOLVED_SOURCE_VERSION
+      - aws --version
+      - export KUBECONFIG=$HOME/.kube/config
+  build:
+    commands:
+      - chmod +x build.sh
+      - aws s3 cp s3://$CLUSTER_NAME-env/backend_onboarding backend_onboarding_env
+      - ./build.sh
+      - echo "Finished building"
+  post_build:
+    commands:
+      - echo "Start post build"
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/${IMAGE_NAME}:$CODEBUILD_RESOLVED_SOURCE_VERSION
+      - sed -i 's@CONTAINER_IMAGE@'"$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/${IMAGE_NAME}:$CODEBUILD_RESOLVED_SOURCE_VERSION"'@' kube-manifests/deployment.yml
+      # Setup kubectl with our EKS Cluster
+      - echo "Update Kube Config"
+      - aws eks update-kubeconfig --name $CLUSTER_NAME
+      - kubectl create configmap backend-onboarding --from-env-file=backend_onboarding_env --dry-run -o yaml | kubectl apply -f -
+      - kubectl get nodes
+      - kubectl apply -f kube-manifests/
