@@ -12,6 +12,8 @@ phases:
       - echo $CODEBUILD_SOURCE_VERSION
       - echo $CODEBUILD_RESOLVED_SOURCE_VERSION
       - aws --version
+      - export UUID=$(openssl rand -hex 12)
+      - echo $UUID
       - export KUBECONFIG=$HOME/.kube/config
   build:
     commands:
@@ -22,8 +24,8 @@ phases:
   post_build:
     commands:
       - echo "Start post build"
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/${IMAGE_NAME}:$CODEBUILD_RESOLVED_SOURCE_VERSION
-      - sed -i 's@CONTAINER_IMAGE@'"$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/${IMAGE_NAME}:$CODEBUILD_RESOLVED_SOURCE_VERSION"'@' kube-manifests/deployment.yml
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/${IMAGE_NAME}:$UUID
+      - sed -i 's@CONTAINER_IMAGE@'"$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/${IMAGE_NAME}:$UUID"'@' kube-manifests/deployment.yml
       # Setup kubectl with our EKS Cluster
       - echo "Update Kube Config"
       - aws eks update-kubeconfig --name $CLUSTER_NAME
