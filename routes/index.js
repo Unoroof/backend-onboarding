@@ -9,6 +9,12 @@ const profileCollectionResponse = require("../app/responses/profileCollection");
 const profileResourceResponse = require("../app/responses/profileResource");
 const createProfileRequest = require("../app/requests/createProfile");
 
+router.get("/liveness", (req, res) => {
+  return res.status(200).send({
+    status: "ok",
+  });
+});
+
 router.get(
   "/profiles",
   executeForResult(profileController.index, "profileList"),
@@ -21,6 +27,5 @@ router.post(
   executeForResult(profileController.storeOrUpdate),
   executeForResponse(profileResourceResponse)
 );
-
 
 module.exports = router;
