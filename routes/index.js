@@ -7,10 +7,17 @@ var executeForResponse = require("../app/functions/executeForResponse");
 const countryAndCityController = require("../app/controllers").CountryAndCityController;
 const countryCollectionResponse = require("../app/responses/countryCollection");
 const cityCollectionResponse = require("../app/responses/cityCollection");
-const profileController = require("../app/controllers").ProfileController; // Todo - Check how we loaded blog controller, add it to controller/index.js and load it
+const profileController = require("../app/controllers").ProfileController;
 const profileCollectionResponse = require("../app/responses/profileCollection");
 const profileResourceResponse = require("../app/responses/profileResource");
 const createProfileRequest = require("../app/requests/createProfile");
+
+router.get("/liveness", (req, res) => {
+  return res.status(200).send({
+    status: "ok",
+  });
+});
+
 router.get(
   "/profiles",
   executeForResult(profileController.index, "profileList"),
