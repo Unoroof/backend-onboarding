@@ -40,10 +40,9 @@ module.exports = {
       else {
         const prevData = profile.data;
         profile = await profile.update({
-          user_uuid: req.body.user_uuid || profile.user_uuid,
           type: req.body.type || profile.type,
           status: req.body.status || profile.status,
-          data: req.body.data || profile.data,
+          data: req.body.data ? {...prevData, ...req.body.data} : profile.data,
         });
         toCreateRevision = JSON.stringify(prevData) !== JSON.stringify(profile.data);
       }
@@ -79,36 +78,3 @@ module.exports = {
     }
   },
 };
-
-    // async show(req, res) {
-    //     try {
-    //         let profile = await Profile.findOne({
-    //             where: {
-    //                 user_uuid: req.user
-    //             }
-    //         });
-    //         if (!profile) {
-    // consumeError({
-    //     message: "Not Found",
-    //     code: 404,
-    // });
-    //         }
-    //         return profile;
-    //     } catch (error) {
-    //         consumeError(error);
-    //     }
-    // },
-
-    // async store(req, res) {
-    //     try {
-    //         let profile = await Profile.create({
-    //             user_uuid: req.user,
-    //             type: req.body.type,
-    //             data: req.body.data,
-    //             status: req.body.status,
-    //         });
-    //         return profile;
-    //     } catch (error) {
-    //         consumeError(error);
-    //     }
-    // },
