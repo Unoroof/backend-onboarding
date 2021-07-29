@@ -4,6 +4,7 @@ const ProductCategoryController = require("./product_category");
 const ProductController = require("./products");
 module.exports = {
   ProfileController,
+  ProductController,
   CountryAndCityController,
   ProductCategoryController
 };

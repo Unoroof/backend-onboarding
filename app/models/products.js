@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
-            modelname: "Product",
-            tablename: "products",
+            modelName: "Product",
+            tableName: "products",
             name: {
                 singular: "product",
                 plural: "products"

@@ -17,6 +17,11 @@ const createProductCategory = require("../app/requests/createProductCategory");
 const productCategoryCollectionResponse = require("../app/responses/categoryCollection");
 const productCategoryResourceResponse = require("../app/responses/categorySerializer");
 
+const productController = require("../app/controllers").ProductController;
+const productResourceResponse = require("../app/responses/productResource");
+const createProduct = require("../app/requests/createProduct");
+const productCollectionResponse = require("../app/responses/productCollection");
+
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
     status: "ok",
@@ -59,4 +64,15 @@ router.get(
   executeForResult(productCategoryController.index),
   executeForResponse(productCategoryCollectionResponse)
 )
+router.post(
+  "/products",
+  createProduct,
+  executeForResult(productController.store),
+  executeForResponse(productResourceResponse)
+);
+router.get(
+  "/products",
+  executeForResult(productController.index),
+  executeForResponse(productCollectionResponse)
+);
 module.exports = router;

@@ -1,0 +1,171 @@
+{
+	"info": {
+		"_postman_id": "0182569f-7957-481e-bcac-a8babeaa5d39",
+		"name": "Onboarding",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Profiles",
+			"item": [
+				{
+					"name": "Get Profiles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{onboarding_endpoint}}/profiles?type=fm-seller",
+							"host": [
+								"{{onboarding_endpoint}}"
+							],
+							"path": [
+								"profiles"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "fm-seller"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update/Create Profiles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"fm-seller\",\n    \"data\": {\n        \"full_name\": \"John Doe\",\n        \"country\": \"United Google\"\n    },\n    \"status\": \"step_1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{onboarding_endpoint}}/profiles",
+							"host": [
+								"{{onboarding_endpoint}}"
+							],
+							"path": [
+								"profiles"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Country And Cities",
+			"item": [
+				{
+					"name": "Get All Countries",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{onboarding_endpoint}}/countries",
+							"host": [
+								"{{onboarding_endpoint}}"
+							],
+							"path": [
+								"countries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cities  by Country Code",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{onboarding_endpoint}}/countries/AL/cities",
+							"host": [
+								"{{onboarding_endpoint}}"
+							],
+							"path": [
+								"countries",
+								"AL",
+								"cities"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Liveness",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{onboarding_endpoint}}/liveness",
+					"host": [
+						"{{onboarding_endpoint}}"
+					],
+					"path": [
+						"liveness"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
