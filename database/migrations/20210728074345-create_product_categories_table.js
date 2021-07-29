@@ -9,7 +9,7 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
     // Creating Product Categories
-    await queryInterface.createTable("categories", {
+    await queryInterface.createTable("product_categories", {
       uuid: {
         allowNull: false,
         type: Sequelize.UUID,
@@ -29,10 +29,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      user_uuid: {
-        allowNull: false,
-        type: Sequelize.UUID,
-      },
     });
   },
 
@@ -43,6 +39,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.dropTable("categories");
+    await queryInterface.dropTable("product_categories");
   }
 };

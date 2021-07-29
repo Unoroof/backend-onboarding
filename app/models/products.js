@@ -27,5 +27,13 @@ module.exports = (sequelize, DataTypes) => {
 
         }
     );
-    return profilerevision;
+    Product.associate = models => {
+        Product.belongsToMany(models.ProductCategory, {
+            through: 'pivot_products_categories', foreignKey: 'product_uuid', as: {
+                singular: 'category',
+                plural: 'categories'
+            }
+        })
+    };
+    return Product;
 }

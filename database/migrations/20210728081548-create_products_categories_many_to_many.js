@@ -8,7 +8,7 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable('products_categories', {
+    await queryInterface.createTable('pivot_products_categories', {
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -35,6 +35,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.dropTable('products_categories');
+    await queryInterface.dropTable('pivot_products_categories');
   }
 };

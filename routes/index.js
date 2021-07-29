@@ -12,6 +12,11 @@ const profileCollectionResponse = require("../app/responses/profileCollection");
 const profileResourceResponse = require("../app/responses/profileResource");
 const createProfileRequest = require("../app/requests/createProfile");
 
+const productCategoryController = require("../app/controllers").ProductCategoryController;
+const createProductCategory = require("../app/requests/createProductCategory");
+const productCategoryCollectionResponse = require("../app/responses/categoryCollection");
+const productCategoryResourceResponse = require("../app/responses/categorySerializer");
+
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
     status: "ok",
@@ -42,5 +47,16 @@ router.get(
   executeForResult(countryAndCityController.getCitybyCountryCode, "cities"),
   executeForResponse(cityCollectionResponse)
 );
+router.post(
+  "/categories",
+  createProductCategory,
+  executeForResult(productCategoryController.store),
+  executeForResponse(productCategoryResourceResponse)
+);
 
+router.get(
+  "/categories",
+  executeForResult(productCategoryController.index),
+  executeForResponse(productCategoryCollectionResponse)
+)
 module.exports = router;
