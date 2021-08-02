@@ -15,7 +15,7 @@ const createProfileRequest = require("../app/requests/createProfile");
 const productCategoryController = require("../app/controllers").ProductCategoryController;
 const createProductCategory = require("../app/requests/createProductCategory");
 const productCategoryCollectionResponse = require("../app/responses/categoryCollection");
-const productCategoryResourceResponse = require("../app/responses/categorySerializer");
+const productCategoryResourceResponse = require("../app/responses/categoryResource");
 
 const productController = require("../app/controllers").ProductController;
 const productResourceResponse = require("../app/responses/productResource");

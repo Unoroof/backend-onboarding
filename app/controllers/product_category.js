@@ -4,7 +4,7 @@ const ProductCategory = require("../models").ProductCategory;
 module.exports = {
     async index(req, res) {
         try {
-            const productCategories = ProductCategory.findAll();
+            const productCategories = await ProductCategory.findAll();
             return productCategories;
         } catch (error) {
             consumeError(error);
@@ -13,7 +13,7 @@ module.exports = {
     async store(req, res) {
 
         try {
-            const newProductCategory = ProductCategory.create({
+            const newProductCategory = await ProductCategory.create({
                 name: req.body.name
             });
             return newProductCategory;
