@@ -15,18 +15,17 @@ const constraints = {
             message: "^Name should not contain special characters"
         },
         type: "string",
-        // TODO: unique name validation 
-        // custom_callback: {
-        //     message: "^Name should be valid and unique",
-        //     callback: async (req) => {
-        //         let count = typeof req.body.name === "string" ? await ProductCategory.count({
-        //             where: {
-        //                 name: req.body.name,
-        //             },
-        //         }) : -1;
-        //         return count === 0 ? true : false;
-        //     },
-        // },
+        custom_callback: {
+            message: "^Name should be valid and unique",
+            callback: async (req) => {
+                let count = typeof req.body.name === "string" ? await Product.count({
+                    where: {
+                        name: req.body.name,
+                    },
+                }) : -1;
+                return count === 0 ? true : false;
+            },
+        },
     },
     categories: {
         presence: {
