@@ -12,6 +12,16 @@ const profileCollectionResponse = require("../app/responses/profileCollection");
 const profileResourceResponse = require("../app/responses/profileResource");
 const createProfileRequest = require("../app/requests/createProfile");
 
+const productCategoryController = require("../app/controllers").ProductCategoryController;
+const createProductCategory = require("../app/requests/createProductCategory");
+const productCategoryCollectionResponse = require("../app/responses/categoryCollection");
+const productCategoryResourceResponse = require("../app/responses/categoryResource");
+
+const productController = require("../app/controllers").ProductController;
+const productResourceResponse = require("../app/responses/productResource");
+const createProduct = require("../app/requests/createProduct");
+const productCollectionResponse = require("../app/responses/productCollection");
+
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
     status: "ok",
@@ -42,5 +52,27 @@ router.get(
   executeForResult(countryAndCityController.getCitybyCountryCode, "cities"),
   executeForResponse(cityCollectionResponse)
 );
+router.post(
+  "/categories",
+  createProductCategory,
+  executeForResult(productCategoryController.store),
+  executeForResponse(productCategoryResourceResponse)
+);
 
+router.get(
+  "/categories",
+  executeForResult(productCategoryController.index),
+  executeForResponse(productCategoryCollectionResponse)
+)
+router.post(
+  "/products",
+  createProduct,
+  executeForResult(productController.store),
+  executeForResponse(productResourceResponse)
+);
+router.get(
+  "/products",
+  executeForResult(productController.index),
+  executeForResponse(productCollectionResponse)
+);
 module.exports = router;

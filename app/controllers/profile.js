@@ -21,12 +21,16 @@ module.exports = {
 
   async storeOrUpdate(req, res) {
     try {
+      // Check if Profile is Present
       let profile = await Profile.findOne({
         where: {
           user_uuid: req.user,
           type: req.body.type
         }
       });
+
+      // if not profile, create it
+      // toCreateRevision flag to check if revision is to be created
       let toCreateRevision = false;
       if (!profile) {
         profile = await Profile.create({
@@ -42,10 +46,13 @@ module.exports = {
         profile = await profile.update({
           type: req.body.type || profile.type,
           status: req.body.status || profile.status,
-          data: req.body.data ? {...prevData, ...req.body.data} : profile.data,
+          data: req.body.data ? { ...prevData, ...req.body.data } : profile.data,
         });
+        // Check if data is changed, then only create revision
         toCreateRevision = JSON.stringify(prevData) !== JSON.stringify(profile.data);
       }
+
+
       if (toCreateRevision) {
         console.log('Creating New Revision');
         await ProfileRevision.create({
@@ -54,25 +61,6 @@ module.exports = {
         })
       }
       return profile;
-    } catch (error) {
-      consumeError(error);
-    }
-  },
-
-  async delete(req, res) {
-    try {
-      let profile = await Profile.findByPk(req.params.id);
-
-
-      if (!profile) {
-        consumeError({
-          message: "Not Found..",
-          code: 404,
-        });
-      }
-
-      await profile.destroy();
-      return {};
     } catch (error) {
       consumeError(error);
     }
