@@ -17,9 +17,9 @@ module.exports = {
             //         code: 422
             //     })
             // }
-            // Check all products uuid with matching category uuids in pivot (M2M) table
+            // Check all products uuid with matching category uuids in M2M table
             const productUuids = categories ? await sequelize.query(`
-                SELECT product_uuid FROM pivot_products_categories WHERE category_uuid IN (:category_uuids) 
+                SELECT product_uuid FROM fp_products_categories WHERE category_uuid IN (:category_uuids) 
             `, {
                 replacements: {
                     category_uuids: categories || [],

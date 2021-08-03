@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: "ProductCategory",
-            tableName: "product_categories",
+            tableName: "fp_categories",
             name: {
                 singular: "productCategory",
                 plural: "productCategories"
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     );
     ProductCategory.associate = models => {
         ProductCategory.belongsToMany(models.Product, {
-            through: 'pivot_products_categories', foreignKey: 'category_uuid', as: {
+            through: 'fp_products_categories', foreignKey: 'category_uuid', as: {
                 singular: 'product',
                 plural: 'products'
             }

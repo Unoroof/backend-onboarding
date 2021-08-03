@@ -8,7 +8,19 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable('pivot_products_categories', {
+    // Creating Product Categories
+    await queryInterface.createTable("fp_categories", {
+      uuid: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        primaryKey: true,
+        defaultValue: Sequelize.UUIDV4,
+      },
+      name: {
+        allowNull: false,
+        unique: true,
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -17,14 +29,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      category_uuid: {
-        type: Sequelize.UUID,
-        primaryKey: true
-      },
-      product_uuid: {
-        type: Sequelize.UUID,
-        primaryKey: true
-      }
     });
   },
 
@@ -35,6 +39,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.dropTable('pivot_products_categories');
+    await queryInterface.dropTable("product_categories");
   }
 };

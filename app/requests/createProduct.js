@@ -9,14 +9,9 @@ const constraints = {
             allowEmpty: false,
             message: "^Please enter a Name",
         },
-        format: {
-            pattern: "^[A-Za-z0-9 ]+$",
-            flags: "i",
-            message: "^Name should not contain special characters"
-        },
         type: "string",
         custom_callback: {
-            message: "^Name should be valid and unique",
+            message: "Name should be valid and unique",
             callback: async (req) => {
                 let count = typeof req.body.name === "string" ? await Product.count({
                     where: {
