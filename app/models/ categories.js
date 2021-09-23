@@ -1,9 +1,9 @@
 "use strict ";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Product extends Model {}
+  class Category extends Model {}
 
-  Product.init(
+  Category.init(
     {
       uuid: {
         type: DataTypes.UUID,
@@ -18,23 +18,23 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Product",
-      tableName: "fm_products",
+      modelName: "Category",
+      tableName: "fm_categories",
       name: {
-        singular: "product",
-        plural: "products",
+        singular: "Category",
+        plural: "Categories",
       },
     }
   );
-  Product.associate = (models) => {
-    Product.belongsToMany(models.Category, {
+  Category.associate = (models) => {
+    Category.belongsToMany(models.Product, {
       through: "fm_products_categories",
-      foreignKey: "product_uuid",
+      foreignKey: "category_uuid",
       as: {
-        singular: "category",
-        plural: "categories",
+        singular: "product",
+        plural: "products",
       },
     });
   };
-  return Product;
+  return Category;
 };
