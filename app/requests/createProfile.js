@@ -5,12 +5,12 @@ const constraints = {
   type: {
     presence: true,
     custom_callback: {
-      message: 'Invalid Value of Type',
+      message: "Invalid Value of Type",
       callback: (req) => {
-        const validTypes = ['fm-seller', 'fm-buyer'];
+        const validTypes = ["fm-seller", "fm-buyer", "fx-live"];
         return validTypes.includes(req.body.type);
-      }
-    }
+      },
+    },
   },
   data: {
     presence: true,

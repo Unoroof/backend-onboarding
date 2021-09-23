@@ -15,7 +15,7 @@ const createProfileRequest = require("../app/requests/createProfile");
 
 const productCategoryController =
   require("../app/controllers").ProductCategoryController;
-const createProductCategory = require("../app/requests/createProductCategory");
+const createCategory = require("../app/requests/createCategory");
 const productCategoryCollectionResponse = require("../app/responses/categoryCollection");
 const productCategoryResourceResponse = require("../app/responses/categoryResource");
 
@@ -57,7 +57,7 @@ router.get(
 
 router.post(
   "/categories",
-  createProductCategory,
+  createCategory,
   executeForResult(productCategoryController.store),
   executeForResponse(productCategoryResourceResponse)
 );

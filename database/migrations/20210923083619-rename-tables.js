@@ -20,7 +20,10 @@ module.exports = {
         }),
         queryInterface.renameTable(
           "fp_products_categories",
-          "fm_products_categories"
+          "fm_products_categories",
+          {
+            transaction: t,
+          }
         ),
       ]);
     });
