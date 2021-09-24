@@ -50,6 +50,7 @@ module.exports = {
   },
 
   async update(req, res) {
+    console.log("queryuuid======", req.params.query_uuid);
     try {
       let query = await Queries.findOne({
         where: {
@@ -62,6 +63,7 @@ module.exports = {
         status: req.body.status,
       });
 
+      console.log("query=====", query);
       return query;
     } catch (error) {
       consumeError(error);

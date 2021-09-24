@@ -15,7 +15,7 @@ const createProfileRequest = require("../app/requests/createProfile");
 
 const productCategoryController =
   require("../app/controllers").ProductCategoryController;
-const createProductCategory = require("../app/requests/createProductCategory");
+const createCategory = require("../app/requests/createCategory");
 const productCategoryCollectionResponse = require("../app/responses/categoryCollection");
 const productCategoryResourceResponse = require("../app/responses/categoryResource");
 
@@ -59,9 +59,10 @@ router.get(
   executeForResult(countryAndCityController.getCitybyCountryCode, "cities"),
   executeForResponse(cityCollectionResponse)
 );
+
 router.post(
   "/categories",
-  createProductCategory,
+  createCategory,
   executeForResult(productCategoryController.store),
   executeForResponse(productCategoryResourceResponse)
 );
@@ -77,6 +78,7 @@ router.post(
   executeForResult(productController.store),
   executeForResponse(productResourceResponse)
 );
+
 router.get(
   "/products",
   executeForResult(productController.index),
