@@ -24,6 +24,11 @@ const productResourceResponse = require("../app/responses/productResource");
 const createProduct = require("../app/requests/createProduct");
 const productCollectionResponse = require("../app/responses/productCollection");
 
+const QueryController = require("../app/controllers").QueryController;
+const createQueryRequest = require("../app/requests/createQuery");
+const queryResourceResponse = require("../app/responses/queryResources");
+const queryCollectionResponse = require("../app/responses/queryCollection");
+
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
     status: "ok",
@@ -67,7 +72,6 @@ router.get(
   executeForResult(productCategoryController.index),
   executeForResponse(productCategoryCollectionResponse)
 );
-
 router.post(
   "/products",
   createProduct,
@@ -79,6 +83,23 @@ router.get(
   "/products",
   executeForResult(productController.index),
   executeForResponse(productCollectionResponse)
+);
+
+router.post(
+  "/queries",
+  createQueryRequest,
+  executeForResult(QueryController.create),
+  executeForResponse(queryResourceResponse)
+);
+router.put(
+  "/queries/:query_uuid/requote",
+  executeForResult(QueryController.update),
+  executeForResponse(queryResourceResponse)
+);
+router.get(
+  "/queries",
+  executeForResult(QueryController.index, "queries"),
+  executeForResponse(queryCollectionResponse)
 );
 
 module.exports = router;
