@@ -43,6 +43,9 @@ module.exports = {
         status: req.body.status,
       });
 
+      // after creating query find eligible responders
+      // and create empty row in query_response
+
       return query;
     } catch (error) {
       consumeError(error);
