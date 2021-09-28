@@ -4,6 +4,7 @@ module.exports = (instance) => {
     "profile_uuid",
     "type",
     "data",
+    "sellers",
     "status",
     "createdAt",
     "updatedAt",

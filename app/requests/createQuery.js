@@ -17,6 +17,9 @@ const constraints = {
   data: {
     presence: true,
   },
+  sellers: {
+    presence: true,
+  },
   status: {
     presence: true,
   },

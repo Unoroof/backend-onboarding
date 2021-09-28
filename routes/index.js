@@ -29,6 +29,9 @@ const createQueryRequest = require("../app/requests/createQuery");
 const queryResourceResponse = require("../app/responses/queryResources");
 const queryCollectionResponse = require("../app/responses/queryCollection");
 
+// const QueryResponseController =
+//   require("../app/controllers").QueryResponseController;
+
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
     status: "ok",
