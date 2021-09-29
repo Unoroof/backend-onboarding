@@ -1,342 +1,600 @@
 {
-	"info": {
-		"_postman_id": "0182569f-7957-481e-bcac-a8babeaa5d39",
-		"name": "Onboarding",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "Profiles",
-			"item": [
-				{
-					"name": "Get Profiles",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{onboarding_endpoint}}/profiles",
-							"host": [
-								"{{onboarding_endpoint}}"
-							],
-							"path": [
-								"profiles"
-							],
-							"query": [
-								{
-									"key": "type",
-									"value": "fm-seller",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Profiles By Type",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{onboarding_endpoint}}/profiles?type=fm-seller",
-							"host": [
-								"{{onboarding_endpoint}}"
-							],
-							"path": [
-								"profiles"
-							],
-							"query": [
-								{
-									"key": "type",
-									"value": "fm-seller"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update/Create Profiles",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"type\": \"fm-buyer\",\n    \"data\": {\n        \"full_name\": \"John Doe\",\n        \"country\": \"United States\",\n        \"certificates\": [\"hello\", \"world\"]\n    },\n    \"status\": \"step_1\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{onboarding_endpoint}}/profiles",
-							"host": [
-								"{{onboarding_endpoint}}"
-							],
-							"path": [
-								"profiles"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Country And Cities",
-			"item": [
-				{
-					"name": "Get All Countries",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{onboarding_endpoint}}/countries",
-							"host": [
-								"{{onboarding_endpoint}}"
-							],
-							"path": [
-								"countries"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Cities  by Country Code",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{onboarding_endpoint}}/countries/IN/cities",
-							"host": [
-								"{{onboarding_endpoint}}"
-							],
-							"path": [
-								"countries",
-								"IN",
-								"cities"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Products",
-			"item": [
-				{
-					"name": "Create Category",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"d\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{onboarding_endpoint}}/categories",
-							"host": [
-								"{{onboarding_endpoint}}"
-							],
-							"path": [
-								"categories"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Product",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"product10\",     \n    \"categories\": [\"3b854545-97fb-401b-8ef8-29af49c39d67\"]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{onboarding_endpoint}}/products",
-							"host": [
-								"{{onboarding_endpoint}}"
-							],
-							"path": [
-								"products"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Categories",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{onboarding_endpoint}}/categories",
-							"host": [
-								"{{onboarding_endpoint}}"
-							],
-							"path": [
-								"categories"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Products",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{onboarding_endpoint}}/products?categories=2e0e237e-1955-4176-bc82-68453c1d7e65,5bc93c28-9dc4-4baa-b0bc-1236949411a1",
-							"host": [
-								"{{onboarding_endpoint}}"
-							],
-							"path": [
-								"products"
-							],
-							"query": [
-								{
-									"key": "categories",
-									"value": "2e0e237e-1955-4176-bc82-68453c1d7e65,5bc93c28-9dc4-4baa-b0bc-1236949411a1"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Liveness",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{access_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{onboarding_endpoint}}/liveness",
-					"host": [
-						"{{onboarding_endpoint}}"
-					],
-					"path": [
-						"liveness"
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "2965bc67-acf4-4edb-888e-b37066796ff5",
+    "name": "Onboarding",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Profiles",
+      "item": [
+        {
+          "name": "Get Profiles",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onboarding_endpoint}}/profiles",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["profiles"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profiles By Type",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onboarding_endpoint}}/profiles?type=fm-seller",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["profiles"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "fm-seller"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profiles By Type, Country and City",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onboarding_endpoint}}/profiles?type=fm-seller&country=India&city=Hyderabad",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["profiles"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "fm-seller"
+                },
+                {
+                  "key": "country",
+                  "value": "India"
+                },
+                {
+                  "key": "city",
+                  "value": "Hyderabad"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update/Create Profiles",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"fm-buyer\",\n    \"data\": {\n        \"city\": {\n            \"label\": \"Hyderabad\",\n            \"value\": \"Hyderabad\"\n        },\n        \"logo\": \"29cd73ee-e206-4404-b711-337378f83875\",\n        \"email\": \"k@gmail.com\",\n        \"range\": {\n            \"label\": \"25-100\",\n            \"value\": \"25-100\"\n        },\n        \"awards\": [\n            \"c3a2e7f8-e189-4c36-bf91-0d749411829f\",\n            \"66c4d559-5a3d-44b7-813c-52ffcb391095\"\n        ],\n        \"mobile\": \"+919010844862\",\n        \"others\": [],\n        \"country\": {\n            \"label\": \"India\",\n            \"value\": \"IN\"\n        },\n        \"accolades\": [],\n        \"full_name\": \"Manasa M\",\n        \"designation\": \"CEO\",\n        \"profile_pic\": \"b2d37695-22f7-4329-8c43-6c208f9f1045\",\n        \"certificates\": [\n            \"cb913c77-a36c-4d69-bd7d-805c050fa228\",\n            \"80ecde0c-c468-4240-b875-ba9672c9f66c\",\n            \"f2d72676-3834-4cfa-9e5a-71c6823c0e6e\"\n        ],\n        \"company_name\": \"Betalectic\",\n        \"currency_type\": {\n            \"label\": \"INR\",\n            \"value\": \"INR\"\n        },\n        \"entity_status\": {\n            \"label\": \"Private Limited Company.\",\n            \"value\": \"private_limited_company\"\n        },\n        \"product_segment\": {\n            \"label\": \"Retail\",\n            \"value\": \"Retail\"\n        },\n        \"offered_products\": [\n            {\n                \"label\": \"Vendor financing\",\n                \"value\": \"79502f49-69b7-44eb-89d2-824de17e8ad7\"\n            },\n            {\n                \"label\": \"Financial\",\n                \"value\": \"935e0f46-3785-42c0-8cd4-91dcfd50b84d\"\n            },\n            {\n                \"label\": \"Digital banking\",\n                \"value\": \"3c58c689-760d-4bdc-b6f1-32423809c1ab\"\n            },\n            {\n                \"label\": \"Credit Card\",\n                \"value\": \"37d8209d-b929-46cd-9d9d-6e7a5c9a3b4c\"\n            },\n            {\n                \"label\": \"finance\",\n                \"value\": \"31df48e7-f308-4459-9938-b23d6fb723da\"\n            },\n            {\n                \"label\": \"beta\",\n                \"value\": \"b3a3a6ab-48d6-42e7-b8f9-3dec3ce2ec8b\"\n            }\n        ],\n        \"additional_company_details\": {\n            \"IFSC_code\": \"ICIC0006294\",\n            \"bank_name\": \"ICICI\",\n            \"swift_code\": \"123456\",\n            \"IBAN_number\": \"1234\",\n            \"branch_name\": \"Gachibowli\",\n            \"company_PAN\": \"AAGCB0870N\",\n            \"office_type\": {\n                \"label\": \"HeadQuarters\",\n                \"value\": \"head_quarters\"\n            },\n            \"account_name\": \"Betalectic\",\n            \"company_GSTNo\": \"36AAGCB0870N1ZF\",\n            \"routing_number\": \"1234\",\n            \"company_address\": \"HYD\",\n            \"company_website\": \"betalectic.com\",\n            \"global_presence\": [\n                {\n                    \"label\": \"India\",\n                    \"value\": \"IN\"\n                },\n                {\n                    \"label\": \"United States\",\n                    \"value\": \"US\"\n                }\n            ],\n            \"company_description\": \"Software/IT Services\",\n            \"credit_rating_long_term\": [\n                {\n                    \"agency\": \"CRISIL\",\n                    \"rating\": \"AAA\"\n                }\n            ],\n            \"credit_rating_short_term\": [\n                {\n                    \"agency\": \"CIBIL\",\n                    \"rating\": \"750\"\n                },\n                {\n                    \"agency\": \"CRISIL\",\n                    \"rating\": \"AAA\"\n                }\n            ]\n        }\n    },\n    \"status\": \"step_1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{onboarding_endpoint}}/profiles",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["profiles"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Country And Cities",
+      "item": [
+        {
+          "name": "Get All Countries",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onboarding_endpoint}}/countries",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["countries"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Cities  by Country Code",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onboarding_endpoint}}/countries/IN/cities",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["countries", "IN", "cities"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Create Category",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"d\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{onboarding_endpoint}}/categories",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["categories"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"product10\",     \n    \"categories\": [\"3b854545-97fb-401b-8ef8-29af49c39d67\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{onboarding_endpoint}}/products",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["products"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Categories",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onboarding_endpoint}}/categories",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["categories"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onboarding_endpoint}}/products?categories=2e0e237e-1955-4176-bc82-68453c1d7e65,5bc93c28-9dc4-4baa-b0bc-1236949411a1",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["products"],
+              "query": [
+                {
+                  "key": "categories",
+                  "value": "2e0e237e-1955-4176-bc82-68453c1d7e65,5bc93c28-9dc4-4baa-b0bc-1236949411a1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Queries",
+      "item": [
+        {
+          "name": "Create Query",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \n    \"type\": \"refinance_existing_loan\",\n    \"data\": {\n        \"initial\": {\n            \"refinance_details\":{ \n                \"loan_currency\": \"$\",\n                \"outstanding_loan_amount\": \"10000000\",\n                \"loan_type\": \"\", \n                \"loan_taken_date\": \"27/09/2021\", \n                \"maturity_date\": \"27/09/2022\", \n                \"interest_rate\": \"10%\", \n                \"funding_bank\": \"SBI\", \n                \"attachments\": [\"link1\", \"link2\"],\n                \"remarks_for_the_seller\": \"helloo test test test test\"\n            },\n            \"product_details\":{ \n                \"product\": \"Vendor Financing\",\n                \"product_special_request\": \"something special requested\" \n            }\n        },\n        \"expiry\":{\n            \"response_restriction\": 10,\n            \"query_valid_till\": 4 \n        }\n    },\n    \"sellers\":{\n        \"addressbook_contacts\":[\n            {\n                \"email\": \"abc@mail.com\",\n                \"mobile\": \"1234567890\"\n            },\n            {\n                \"email\": \"xyz@mail.com\",\n                \"mobile\": \"9876543210\"\n            }\n        ],\n        \"buyer_selected_sellers\":[\n            \"555f3222-613f-440d-9920-b6815a30c6c1\", \n            \"555f3222-613f-440d-9920-b6815a30c6c2\"\n        ],\n        \"system_selected_sellers\":{\n            \"country\": \"india\",\n            \"city\": \"hyderabad\",\n            \"turnover\": \"1000000\"\n        }\n    },\n    \"status\": \"open\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{onboarding_endpoint}}/queries",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["queries"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Query",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"data\": {\n        \"requote_data\":{\n            \"first_name\":\"rajeshhh345\"\n        }\n    },\n    \"status\": \"open\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{onboarding_endpoint}}/queries/048f05d4-d408-4e3d-92be-7cd05440050d/requote",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": [
+                "queries",
+                "048f05d4-d408-4e3d-92be-7cd05440050d",
+                "requote"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Queries",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onboarding_endpoint}}/queries",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["queries"]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{access_token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [""]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [""]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ouery Responses",
+      "item": [
+        {
+          "name": "Get Responses",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onboarding_endpoint}}/response",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["response"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Responses With Owner UUID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onboarding_endpoint}}/response?owner_uuid=555f3222-613f-440d-9920-b6815a30c6c1",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["response"],
+              "query": [
+                {
+                  "key": "owner_uuid",
+                  "value": "555f3222-613f-440d-9920-b6815a30c6c1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Responses Assigned To Profile UUID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onboarding_endpoint}}/response?assigned_uuid=555f3222-613f-440d-9920-b6815a30c6c1",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["response"],
+              "query": [
+                {
+                  "key": "assigned_uuid",
+                  "value": "555f3222-613f-440d-9920-b6815a30c6c1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Responses",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"status\": \"open\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{onboarding_endpoint}}/response/0be453fa-6c25-443e-a511-fae3cf166f1d/quote",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": [
+                "response",
+                "0be453fa-6c25-443e-a511-fae3cf166f1d",
+                "quote"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{access_token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [""]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [""]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Liveness",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{onboarding_endpoint}}/liveness",
+          "host": ["{{onboarding_endpoint}}"],
+          "path": ["liveness"]
+        }
+      },
+      "response": []
+    }
+  ]
 }

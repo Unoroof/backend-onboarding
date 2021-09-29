@@ -2,15 +2,21 @@ const consumeError = require("../functions/consumeError");
 const models = require("../models");
 const Profile = models.Profile;
 const ProfileRevision = models.ProfileRevision;
+
 module.exports = {
   async index(req, res) {
     try {
       let constraints = {
         where: {
           user_uuid: req.user,
-        }
+        },
       };
+
       if (req.query.type) constraints.where.type = req.query.type;
+      if (req.query.country)
+        constraints.where["data.country.label"] = req.query.country;
+      if (req.query.city) constraints.where["data.city.label"] = req.query.city;
+
       let profiles = await Profile.findAll(constraints);
       return profiles;
     } catch (error) {
@@ -18,15 +24,14 @@ module.exports = {
     }
   },
 
-
   async storeOrUpdate(req, res) {
     try {
       // Check if Profile is Present
       let profile = await Profile.findOne({
         where: {
           user_uuid: req.user,
-          type: req.body.type
-        }
+          type: req.body.type,
+        },
       });
 
       // if not profile, create it
@@ -40,25 +45,26 @@ module.exports = {
           status: req.body.status,
         });
         toCreateRevision = true;
-      }
-      else {
+      } else {
         const prevData = profile.data;
         profile = await profile.update({
           type: req.body.type || profile.type,
           status: req.body.status || profile.status,
-          data: req.body.data ? { ...prevData, ...req.body.data } : profile.data,
+          data: req.body.data
+            ? { ...prevData, ...req.body.data }
+            : profile.data,
         });
         // Check if data is changed, then only create revision
-        toCreateRevision = JSON.stringify(prevData) !== JSON.stringify(profile.data);
+        toCreateRevision =
+          JSON.stringify(prevData) !== JSON.stringify(profile.data);
       }
 
-
       if (toCreateRevision) {
-        console.log('Creating New Revision');
+        console.log("Creating New Revision");
         await ProfileRevision.create({
           profile_uuid: profile.uuid,
-          data: profile.data
-        })
+          data: profile.data,
+        });
       }
       return profile;
     } catch (error) {
