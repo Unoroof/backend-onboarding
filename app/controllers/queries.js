@@ -4,7 +4,7 @@ const Profile = models.Profile;
 const QueryResponse = models.QueryResponse;
 const consumeError = require("../functions/consumeError");
 const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
-const { async } = require("validate.js");
+const { Op } = require("sequelize");
 
 module.exports = {
   async index(req, res) {
@@ -53,7 +53,8 @@ module.exports = {
         // after creating query find eligible responders
         const eligibleResponders = await getEligibleResponders(
           req.token,
-          query.sellers
+          query.sellers,
+          query.data
         );
         console.log("check here eligibleResponders", eligibleResponders);
 
@@ -110,7 +111,7 @@ module.exports = {
   },
 };
 
-const getEligibleResponders = async (token, sellers) => {
+const getEligibleResponders = async (token, sellers, queryData) => {
   try {
     let eligibleResponders = {};
     let wired_up_users = [];
@@ -125,8 +126,10 @@ const getEligibleResponders = async (token, sellers) => {
 
     if (sellers.system_selected_sellers) {
       let sellerProfiles = await findSystemSelectedSellers(
-        sellers.system_selected_sellers
+        sellers.system_selected_sellers,
+        queryData
       );
+      console.log("check here system selected seller", sellerProfiles);
       sellerProfiles.forEach((item) => {
         wired_up_users.push(item.uuid);
       });
@@ -152,16 +155,25 @@ const getEligibleResponders = async (token, sellers) => {
   }
 };
 
-const findSystemSelectedSellers = async (condition) => {
+const findSystemSelectedSellers = async (condition, queryData) => {
   try {
     let constraints = {
       where: {
         type: "fm-seller",
         "data.country.label": condition.country,
         "data.city.label": condition.city,
-        // add turnover condition here too
+        "data.currency_type.label":
+          queryData.initial.refinance_details.loan_currency.label,
+        "data.range.max_value": {
+          [Op.gte]: queryData.initial.refinance_details.outstanding_loan_amount,
+        },
       },
     };
+    // add turnover condition here too
+    // queryData.initial.refinance_details.outstanding_loan_amount: 10000000
+    // "range": {"label": "25-100","value": "25-100"},
+
+    console.log("chck here constraints", constraints);
 
     let profiles = await Profile.findAll(constraints);
 
