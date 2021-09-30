@@ -4,6 +4,7 @@ const Profile = models.Profile;
 const QueryResponse = models.QueryResponse;
 const consumeError = require("../functions/consumeError");
 const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
+const { async } = require("validate.js");
 
 module.exports = {
   async index(req, res) {
@@ -136,8 +137,9 @@ const getEligibleResponders = async (token, sellers) => {
         token,
         sellers.addressbook_contacts
       );
+      console.log("check here addressbook", addressbookSellers);
       addressbookSellers.forEach((item) => {
-        wired_up_users.push(item.uuid);
+        wired_up_users.push(item);
       });
     }
 
@@ -172,53 +174,53 @@ const findSystemSelectedSellers = async (condition) => {
 const findAddressbookSellers = async (token, contacts) => {
   try {
     let userProfiles = [];
-    contacts.forEach(async (item) => {
-      let emailPayload = {
-        email: item.email,
-      };
-      let mobilePayload = {
-        mobile: item.mobile,
-      };
-      let userByEmail = await findUserByEmailMobile(token, emailPayload).catch(
-        (e) => {
-          console.log(e);
-        }
-      );
+    await Promise.all(
+      await contacts.map(async (item) => {
+        let emailPayload = {
+          email: item.email,
+        };
+        let mobilePayload = {
+          mobile: item.mobile,
+        };
 
-      console.log("check here uuid email123", userByEmail);
-      if (userByEmail && userByEmail.user_uuid) {
-        let sellerProfile = await Profile.findOne({
-          where: {
-            user_uuid: userByEmail.user_uuid,
-            type: "fm-seller",
-          },
-        });
-        userProfiles.push(sellerProfile.uuid);
-      }
+        await findUserByEmailMobile(token, emailPayload)
+          .then(async (res) => {
+            if (res.user_uuid) {
+              let sellerProfile = await Profile.findOne({
+                where: {
+                  user_uuid: res.user_uuid,
+                  type: "fm-seller",
+                },
+              });
 
-      let userByMobile = await findUserByEmailMobile(
-        token,
-        mobilePayload
-      ).catch((e) => {
-        console.log(e);
-      });
-      // .then((res) => {
-      //   console.log("check here res mo", res);
-      // })
+              userProfiles.push(sellerProfile.uuid);
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+        console.log("check here userProfiles", userProfiles);
 
-      console.log("check here uuid mobile123", userByMobile);
-
-      if (userByMobile && userByMobile.user_uuid) {
-        let sellerProfile = await Profile.findOne({
-          where: {
-            user_uuid: userByMobile.user_uuid,
-            type: "fm-seller",
-          },
-        });
-        userProfiles.push(sellerProfile);
-      }
-    });
-
+        await findUserByEmailMobile(token, mobilePayload)
+          .then(async (res) => {
+            if (res.user_uuid) {
+              let sellerProfile = await Profile.findOne({
+                where: {
+                  user_uuid: res.user_uuid,
+                  type: "fm-seller",
+                },
+              });
+              userProfiles.push(sellerProfile.uuid);
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+        console.log("check here userProfiles2", userProfiles);
+        return userProfiles;
+      })
+    );
+    console.log("check here userProfiles3", userProfiles);
     return userProfiles;
   } catch (error) {
     consumeError(error);
