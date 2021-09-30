@@ -8,7 +8,7 @@ module.exports = {
     try {
       let constraints = {
         where: {
-          user_uuid: req.user,
+          // user_uuid: req.user,
         },
       };
 
@@ -16,6 +16,21 @@ module.exports = {
       if (req.query.country)
         constraints.where["data.country.label"] = req.query.country;
       if (req.query.city) constraints.where["data.city.label"] = req.query.city;
+
+      let profiles = await Profile.findAll(constraints);
+      return profiles;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async getSingleProfile(req, res) {
+    try {
+      let constraints = {
+        where: {
+          user_uuid: req.user,
+        },
+      };
 
       let profiles = await Profile.findAll(constraints);
       return profiles;
