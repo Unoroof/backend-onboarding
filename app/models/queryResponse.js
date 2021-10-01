@@ -50,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      query_type: { type: DataTypes.STRING },
     },
     {
       sequelize,

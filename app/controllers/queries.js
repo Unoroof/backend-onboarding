@@ -66,6 +66,7 @@ module.exports = {
             data: query.data,
             owner_uuid: item,
             assigned_uuid: item,
+            query_type: query.type,
           });
         });
       }

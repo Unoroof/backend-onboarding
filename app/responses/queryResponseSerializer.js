@@ -5,6 +5,7 @@ module.exports = (instance) => {
     "query_uuid",
     "data",
     "status",
+    "query_type",
     "createdAt",
     "updatedAt",
     "owner_uuid",
