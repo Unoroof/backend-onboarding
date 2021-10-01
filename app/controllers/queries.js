@@ -49,7 +49,6 @@ module.exports = {
       });
 
       if (query) {
-        // console.log("check here query", query);
         // after creating query find eligible responders
         const eligibleResponders = await getEligibleResponders(
           req.token,
@@ -67,21 +66,8 @@ module.exports = {
             data: query.data,
             owner_uuid: item,
             assigned_uuid: item,
-            // assigned_to_email: req.body.assigned_to_email,
-            // assigned_to_mobile: req.body.assigned_to_mobile,
           });
         });
-
-        // eligibleResponders.non_wired_up_users.forEach(async (item) => {
-        //   await QueryResponse.create({
-        //     profile_uuid: query.profile_uuid, //query creator
-        //     query_uuid: query.uuid,
-        //     status: "created",
-        //     data: query.data,
-        //     assigned_to_email: item.email,
-        //     assigned_to_mobile: item.mobile,
-        //   });
-        // });
       }
       return query;
     } catch (error) {
@@ -115,7 +101,6 @@ const getEligibleResponders = async (token, sellers, queryData) => {
   try {
     let eligibleResponders = {};
     let wired_up_users = [];
-    // let non_wired_up_users = [];
 
     if (sellers.buyer_selected_sellers) {
       sellers.buyer_selected_sellers.forEach((item) => {
@@ -147,7 +132,6 @@ const getEligibleResponders = async (token, sellers, queryData) => {
     }
 
     eligibleResponders["wired_up_users"] = wired_up_users;
-    // eligibleResponders["non_wired_up_users"] = non_wired_up_users;
 
     return eligibleResponders;
   } catch (error) {
@@ -169,9 +153,6 @@ const findSystemSelectedSellers = async (condition, queryData) => {
         },
       },
     };
-    // add turnover condition here too
-    // queryData.initial.refinance_details.outstanding_loan_amount: 10000000
-    // "range": {"label": "25-100","value": "25-100"},
 
     console.log("chck here constraints", constraints);
 

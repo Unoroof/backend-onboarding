@@ -41,12 +41,6 @@ router.get("/liveness", (req, res) => {
 });
 
 router.get(
-  "/profile",
-  executeForResult(profileController.getSingleProfile, "profileList"),
-  executeForResponse(profileCollectionResponse)
-);
-
-router.get(
   "/profiles",
   executeForResult(profileController.index, "profileList"),
   executeForResponse(profileCollectionResponse)
@@ -57,6 +51,12 @@ router.post(
   createProfileRequest,
   executeForResult(profileController.storeOrUpdate),
   executeForResponse(profileResourceResponse)
+);
+
+router.post(
+  "/all-profiles",
+  executeForResult(profileController.getAllProfiles, "profileList"),
+  executeForResponse(profileCollectionResponse)
 );
 
 router.get(

@@ -2,21 +2,18 @@ const consumeError = require("../functions/consumeError");
 const models = require("../models");
 const Profile = models.Profile;
 const ProfileRevision = models.ProfileRevision;
+const { Op } = require("sequelize");
 
 module.exports = {
   async index(req, res) {
     try {
       let constraints = {
         where: {
-          // user_uuid: req.user,
+          user_uuid: req.user,
         },
       };
 
       if (req.query.type) constraints.where.type = req.query.type;
-      if (req.query.country)
-        constraints.where["data.country.label"] = req.query.country;
-      if (req.query.city) constraints.where["data.city.label"] = req.query.city;
-
       let profiles = await Profile.findAll(constraints);
       return profiles;
     } catch (error) {
@@ -24,13 +21,26 @@ module.exports = {
     }
   },
 
-  async getSingleProfile(req, res) {
+  async getAllProfiles(req, res) {
     try {
       let constraints = {
-        where: {
-          user_uuid: req.user,
-        },
+        where: {},
       };
+
+      if (req.body.type) constraints.where.type = req.body.type;
+      if (req.body.country)
+        constraints.where["data.country.label"] = req.body.country;
+      if (req.body.city) constraints.where["data.city.label"] = req.body.city;
+      if (req.body.currency)
+        constraints.where["data.currency_type.label"] = req.body.currency;
+      if (req.body.turnover) {
+        constraints.where["data.range.min_value"] = {
+          [Op.lte]: req.body.turnover,
+        };
+        constraints.where["data.range.max_value"] = {
+          [Op.gte]: req.body.turnover,
+        };
+      }
 
       let profiles = await Profile.findAll(constraints);
       return profiles;

@@ -61,7 +61,7 @@
           "response": []
         },
         {
-          "name": "Get Profiles By Type, Country and City",
+          "name": "Get Profiles By Type, Country, City, Currency and Turnover",
           "request": {
             "auth": {
               "type": "bearer",
@@ -73,26 +73,21 @@
                 }
               ]
             },
-            "method": "GET",
+            "method": "POST",
             "header": [],
-            "url": {
-              "raw": "{{onboarding_endpoint}}/profiles?type=fm-seller&country=India&city=Hyderabad",
-              "host": ["{{onboarding_endpoint}}"],
-              "path": ["profiles"],
-              "query": [
-                {
-                  "key": "type",
-                  "value": "fm-seller"
-                },
-                {
-                  "key": "country",
-                  "value": "India"
-                },
-                {
-                  "key": "city",
-                  "value": "Hyderabad"
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\" : \"fm-seller\",\n    \"city\" : \"Hyderabad\",\n    \"country\": \"India\",\n    \"currency\": \"INR\",\n    \"turnover\": \"100000000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
                 }
-              ]
+              }
+            },
+            "url": {
+              "raw": "{{onboarding_endpoint}}/all-profiles",
+              "host": ["{{onboarding_endpoint}}"],
+              "path": ["all-profiles"]
             }
           },
           "response": []
@@ -323,7 +318,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{ \n    \"type\": \"refinance_existing_loan\",\n    \"data\": {\n        \"initial\": {\n            \"refinance_details\":{ \n                \"loan_currency\": \"$\",\n                \"outstanding_loan_amount\": \"10000000\",\n                \"loan_type\": \"\", \n                \"loan_taken_date\": \"27/09/2021\", \n                \"maturity_date\": \"27/09/2022\", \n                \"interest_rate\": \"10%\", \n                \"funding_bank\": \"SBI\", \n                \"attachments\": [\"link1\", \"link2\"],\n                \"remarks_for_the_seller\": \"helloo test test test test\"\n            },\n            \"product_details\":{ \n                \"product\": \"Vendor Financing\",\n                \"product_special_request\": \"something special requested\" \n            }\n        },\n        \"expiry\":{\n            \"response_restriction\": 10,\n            \"query_valid_till\": 4 \n        }\n    },\n    \"sellers\":{\n        \"addressbook_contacts\":[\n            {\n                \"email\": \"abc@mail.com\",\n                \"mobile\": \"1234567890\"\n            },\n            {\n                \"email\": \"xyz@mail.com\",\n                \"mobile\": \"9876543210\"\n            }\n        ],\n        \"buyer_selected_sellers\":[\n            \"555f3222-613f-440d-9920-b6815a30c6c1\", \n            \"555f3222-613f-440d-9920-b6815a30c6c2\"\n        ],\n        \"system_selected_sellers\":{\n            \"country\": \"india\",\n            \"city\": \"hyderabad\",\n            \"turnover\": \"1000000\"\n        }\n    },\n    \"status\": \"open\"\n}",
+              "raw": "{\n    \"type\": \"refinance_existing_loan\",\n    \"data\": {\n        \"initial\": {\n            \"refinance_details\": {\n                \"loan_currency\": {\n                    \"label\": \"INR\",\n                    \"value\": \"INR\"\n                },\n                \"outstanding_loan_amount\": \"10000000\",\n                \"loan_type\": \"\",\n                \"loan_taken_date\": \"27/09/2021\",\n                \"maturity_date\": \"27/09/2022\",\n                \"interest_rate\": \"10%\",\n                \"funding_bank\": \"SBI\",\n                \"attachments\": [\n                    \"link1\",\n                    \"link2\"\n                ],\n                \"remarks_for_the_seller\": \"helloo test test test test\"\n            }\n        }\n    },\n    \"sellers\": {\n        \"system_selected_sellers\":{\n            \"country\": \"India\",\n            \"city\": \"Hyderabad\"\n        }\n    },\n    \"status\": \"open\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
