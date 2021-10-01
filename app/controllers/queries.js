@@ -148,6 +148,9 @@ const findSystemSelectedSellers = async (condition, queryData) => {
         "data.city.label": condition.city,
         "data.currency_type.label":
           queryData.initial.refinance_details.loan_currency.label,
+        "data.range.min_value": {
+          [Op.lte]: queryData.initial.refinance_details.outstanding_loan_amount,
+        },
         "data.range.max_value": {
           [Op.gte]: queryData.initial.refinance_details.outstanding_loan_amount,
         },
