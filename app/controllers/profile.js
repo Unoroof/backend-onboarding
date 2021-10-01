@@ -33,12 +33,12 @@ module.exports = {
       if (req.body.city) constraints.where["data.city.label"] = req.body.city;
       if (req.body.currency)
         constraints.where["data.currency_type.label"] = req.body.currency;
-      if (req.body.turnover) {
+      if (req.body.loan_amount) {
         constraints.where["data.range.min_value"] = {
-          [Op.lte]: req.body.turnover,
+          [Op.lte]: req.body.loan_amount,
         };
         constraints.where["data.range.max_value"] = {
-          [Op.gte]: req.body.turnover,
+          [Op.gte]: req.body.loan_amount,
         };
       }
 
