@@ -23,6 +23,8 @@ module.exports = {
         constraints.where.assigned_uuid = req.query.assigned_uuid;
       if (req.query.query_uuid)
         constraints.where.query_uuid = req.query.query_uuid;
+      if (req.query.status) constraints.where.status = req.query.status;
+
       let queryResponses = await QueryResponse.findAll(constraints);
       return queryResponses;
     } catch (error) {
