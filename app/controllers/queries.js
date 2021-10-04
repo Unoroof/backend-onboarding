@@ -44,7 +44,7 @@ module.exports = {
         profile_uuid: profile.uuid,
         type: req.body.type,
         data: req.body.data,
-        status: req.body.status,
+        status: "open",
         sellers: req.body.sellers,
       });
 
