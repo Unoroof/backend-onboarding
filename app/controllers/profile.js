@@ -41,6 +41,8 @@ module.exports = {
           [Op.gte]: req.body.loan_amount,
         };
       }
+      if (req.body.range)
+        constraints.where["data.range.value"] = req.body.range;
 
       let profiles = await Profile.findAll(constraints);
       return profiles;
