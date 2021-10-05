@@ -138,5 +138,5 @@
     - profile_uuid(profile uuid of who created query): `GET /response?profile_uuid=555f3222-613f-440d-9920-b6815a30c6c1`
     - owner uuid (seller profile uuid of whome query is assigned initially): `GET /response?owner_uuid=555f3222-613f-440d-9920-b6815a30c6c1`
     - assigned uuid(seller profile uuid of whome query is assigned): `GET /response?assigned_uuid=555f3222-613f-440d-9920-b6815a30c6c1`
-
     // owner_uuid and assigned_uuid can be same, these would be different when seller assign query to someone else
+    - interval(get queries on fire , which are created in last 24 hours ): `GET /response?interval=24`

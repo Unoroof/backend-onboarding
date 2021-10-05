@@ -2,6 +2,7 @@ const models = require("../models");
 const QueryResponse = models.QueryResponse;
 const Profile = models.Profile;
 const consumeError = require("../functions/consumeError");
+const { Op, Sequelize } = require("sequelize");
 
 module.exports = {
   async index(req, res) {
@@ -26,6 +27,13 @@ module.exports = {
       if (req.query.status) constraints.where.status = req.query.status;
       if (req.query.profile_uuid)
         constraints.where.profile_uuid = req.query.profile_uuid;
+      if (req.query.interval) {
+        constraints.where.createdAt = {
+          [Op.gt]: Sequelize.literal(
+            `NOW() - INTERVAL '${req.query.interval} HOURS'`
+          ),
+        };
+      }
 
       let queryResponses = await QueryResponse.findAll(constraints);
       return queryResponses;
@@ -33,6 +41,7 @@ module.exports = {
       consumeError(error);
     }
   },
+
   async update(req, res) {
     try {
       console.log("check here response_uuid", req.params.response_uuid);
