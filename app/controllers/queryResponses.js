@@ -24,6 +24,8 @@ module.exports = {
       if (req.query.query_uuid)
         constraints.where.query_uuid = req.query.query_uuid;
       if (req.query.status) constraints.where.status = req.query.status;
+      if (req.query.profile_uuid)
+        constraints.where.profile_uuid = req.query.profile_uuid;
 
       let queryResponses = await QueryResponse.findAll(constraints);
       return queryResponses;

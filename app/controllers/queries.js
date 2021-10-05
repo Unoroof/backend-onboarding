@@ -58,17 +58,19 @@ module.exports = {
         console.log("check here eligibleResponders", eligibleResponders);
 
         // create empty row in query_response
-        eligibleResponders.wired_up_users.forEach(async (item) => {
-          await QueryResponse.create({
-            profile_uuid: query.profile_uuid, //query creator
-            query_uuid: query.uuid,
-            status: "created",
-            data: query.data,
-            owner_uuid: item,
-            assigned_uuid: item,
-            query_type: query.type,
-          });
-        });
+        eligibleResponders.wired_up_users.forEach(
+          async (sellersProfileUuid) => {
+            await QueryResponse.create({
+              profile_uuid: query.profile_uuid, // query creator
+              query_uuid: query.uuid,
+              status: "created",
+              data: query.data,
+              owner_uuid: sellersProfileUuid,
+              assigned_uuid: sellersProfileUuid,
+              query_type: query.type,
+            });
+          }
+        );
       }
       return query;
     } catch (error) {
@@ -147,13 +149,12 @@ const findSystemSelectedSellers = async (condition, queryData) => {
         type: "fm-seller",
         "data.country.label": condition.country,
         "data.city.label": condition.city,
-        "data.currency_type.label":
-          queryData.initial.refinance_details.loan_currency.label,
+        "data.currency_type.label": queryData.loan_currency.label,
         "data.range.min_value": {
-          [Op.lte]: queryData.initial.refinance_details.outstanding_loan_amount,
+          [Op.lte]: queryData.outstanding_loan_amount,
         },
         "data.range.max_value": {
-          [Op.gte]: queryData.initial.refinance_details.outstanding_loan_amount,
+          [Op.gte]: queryData.outstanding_loan_amount,
         },
       },
     };
