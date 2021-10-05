@@ -29,6 +29,11 @@ const createQueryRequest = require("../app/requests/createQuery");
 const queryResourceResponse = require("../app/responses/queryResources");
 const queryCollectionResponse = require("../app/responses/queryCollection");
 
+const ResponseController =
+  require("../app/controllers").QueryResponseController;
+const responseCollectionResponse = require("../app/responses/queryResponseCollection");
+const responseResourceResponse = require("../app/responses/queryResponseResources");
+
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
     status: "ok",
@@ -46,6 +51,12 @@ router.post(
   createProfileRequest,
   executeForResult(profileController.storeOrUpdate),
   executeForResponse(profileResourceResponse)
+);
+
+router.post(
+  "/all-profiles",
+  executeForResult(profileController.getAllProfiles, "profileList"),
+  executeForResponse(profileCollectionResponse)
 );
 
 router.get(
@@ -100,6 +111,16 @@ router.get(
   "/queries",
   executeForResult(QueryController.index, "queries"),
   executeForResponse(queryCollectionResponse)
+);
+router.get(
+  "/response",
+  executeForResult(ResponseController.index, "queryResponse"),
+  executeForResponse(responseCollectionResponse)
+);
+router.put(
+  "/response/:response_uuid/quote",
+  executeForResult(ResponseController.update),
+  executeForResponse(responseResourceResponse)
 );
 
 module.exports = router;

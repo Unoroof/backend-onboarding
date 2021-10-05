@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
       data: {
         type: DataTypes.JSONB,
       },
+      sellers: {
+        type: DataTypes.JSONB,
+      },
       status: {
         type: DataTypes.STRING,
       },
