@@ -140,3 +140,24 @@
     - assigned uuid(seller profile uuid of whome query is assigned): `GET /response?assigned_uuid=555f3222-613f-440d-9920-b6815a30c6c1`
     // owner_uuid and assigned_uuid can be same, these would be different when seller assign query to someone else
     - interval(get queries on fire , which are created in last 24 hours ): `GET /response?interval=24`
+
+response status:
+
+- open
+- accepted
+- rejected
+
+===========================================
+wired up generated leads(responses)
+
+Auto Reject:
+
+- update all response with status "rejected"
+
+Auto Assign:
+
+- show criteria
+- create criteria
+
+table:
+auto_assign_condition table: - uuid - uuid - profile_uuid (if contact is wired up user add profile uuid) - uuid - matching_criteria - JSONB - turnover - location - assign_to - type: team member or location based - email - mobile
