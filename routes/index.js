@@ -117,6 +117,11 @@ router.get(
   executeForResult(ResponseController.index, "queryResponse"),
   executeForResponse(responseCollectionResponse)
 );
+// router.get(
+//   "/response/buyers",
+//   executeForResult(ResponseController.getBuyersLeads),
+//   executeForResponse(responseCollectionResponse)
+// );
 router.put(
   "/response/:response_uuid/quote",
   executeForResult(ResponseController.update),

@@ -3,6 +3,8 @@ const QueryResponse = models.QueryResponse;
 const Profile = models.Profile;
 const consumeError = require("../functions/consumeError");
 const { Op, Sequelize } = require("sequelize");
+const getAddressbookContacts = require("../functions/getAddressbookContacts");
+const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
 
 module.exports = {
   async index(req, res) {
@@ -34,9 +36,37 @@ module.exports = {
           ),
         };
       }
+      if (
+        req.query.core_buyer_leads === "true" ||
+        req.query.wirdeup_generated_leads === "true"
+      ) {
+        constraints.where.createdAt = {
+          [Op.lt]: Sequelize.literal(`NOW() - INTERVAL '24 HOURS'`),
+        };
+      }
+
+      console.log("check constraints", constraints);
 
       let queryResponses = await QueryResponse.findAll(constraints);
-      return queryResponses;
+
+      if (
+        req.query.core_buyer_leads === "true" ||
+        req.query.wirdeup_generated_leads === "true"
+      ) {
+        if (queryResponses.length !== 0) {
+          let buyersLeads = await getBuyersLeads(req.token, queryResponses);
+          console.log("check here buyersLeads", buyersLeads);
+          if (req.query.core_buyer_leads === "true") {
+            return buyersLeads.coreBuyerLeads;
+          } else if (req.query.wirdeup_generated_leads === "true") {
+            return buyersLeads.wiredUpGeneratedLeads;
+          }
+        } else {
+          return queryResponses;
+        }
+      } else {
+        return queryResponses;
+      }
     } catch (error) {
       consumeError(error);
     }
@@ -74,4 +104,107 @@ module.exports = {
       consumeError(error);
     }
   },
+};
+
+const getBuyersLeads = async (token, queryResponses) => {
+  try {
+    const addressbookContacts = await getAddressbookContacts(token);
+
+    let addressbookUserProfileUuids = await getAddressbookUserProfilUuids(
+      token,
+      addressbookContacts
+    );
+
+    console.log(
+      "check here:addressbookUserProfileUuids:",
+      addressbookUserProfileUuids
+    );
+    let coreBuyerLeads = [];
+
+    await queryResponses.map(async (response) => {
+      await addressbookUserProfileUuids.map((profileUuid) => {
+        if (response.profile_uuid === profileUuid) {
+          coreBuyerLeads.push(response);
+        }
+      });
+    });
+
+    console.log("check here coreBuyerLeads:", coreBuyerLeads);
+
+    let wiredUpGeneratedLeads = await diffArray(queryResponses, coreBuyerLeads);
+
+    console.log("check here wiredUpGeneratedLeads:", wiredUpGeneratedLeads);
+
+    let buyers = {
+      coreBuyerLeads: coreBuyerLeads,
+      wiredUpGeneratedLeads: wiredUpGeneratedLeads,
+    };
+
+    return buyers;
+  } catch (error) {
+    consumeError(error);
+  }
+};
+
+const getAddressbookUserProfilUuids = async (token, addressbookContacts) => {
+  try {
+    let addressbookUserProfileUuids = [];
+    await Promise.all(
+      await addressbookContacts.map(async (contact) => {
+        if (contact.email) {
+          let payload = {
+            email: contact.email,
+          };
+
+          await findUserByEmailMobile(token, payload)
+            .then(async (res) => {
+              let buyerProfile = await Profile.findOne({
+                where: {
+                  user_uuid: res.user_uuid,
+                  type: "fm-buyer",
+                },
+              });
+              if (buyerProfile) {
+                addressbookUserProfileUuids.push(buyerProfile.uuid);
+              }
+            })
+            .catch((error) => {
+              console.log("error", error);
+            });
+        }
+
+        if (contact.mobile) {
+          let payload = {
+            mobile: contact.mobile,
+          };
+
+          await findUserByEmailMobile(token, payload)
+            .then(async (res) => {
+              let buyerProfile = await Profile.findOne({
+                where: {
+                  user_uuid: res.user_uuid,
+                  type: "fm-buyer",
+                },
+              });
+              if (buyerProfile) {
+                addressbookUserProfileUuids.push(buyerProfile.uuid);
+              }
+            })
+            .catch((error) => {
+              console.log("error", error);
+            });
+        }
+      })
+    );
+
+    return addressbookUserProfileUuids;
+  } catch (error) {
+    consumeError(error);
+  }
+};
+
+const diffArray = (arr1, arr2) => {
+  return arr1
+    .concat(arr2)
+    .filter((item) => !arr1.includes(item) || !arr2.includes(item));
 };
