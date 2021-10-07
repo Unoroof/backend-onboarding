@@ -135,5 +135,10 @@ router.post(
   executeForResult(AutoAssignConditionController.create),
   executeForResponse(AutoAssignConditionResourceResponse)
 );
+router.put(
+  "/auto-assign-conditions/:criteria_uuid",
+  executeForResult(AutoAssignConditionController.update),
+  executeForResponse(AutoAssignConditionResourceResponse)
+);
 
 module.exports = router;
