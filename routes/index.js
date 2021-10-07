@@ -34,6 +34,12 @@ const ResponseController =
 const responseCollectionResponse = require("../app/responses/queryResponseCollection");
 const responseResourceResponse = require("../app/responses/queryResponseResources");
 
+const AutoAssignConditionController =
+  require("../app/controllers").AutoAssignConditionController;
+const createAutoAssignConditionRequest = require("../app/requests/createAutoAssignCondition");
+const AutoAssignConditionCollectionResponse = require("../app/responses/autoAssignConditionsCollection");
+const AutoAssignConditionResourceResponse = require("../app/responses/autoAssignConditionResources");
+
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
     status: "ok",
@@ -117,10 +123,33 @@ router.get(
   executeForResult(ResponseController.index, "queryResponse"),
   executeForResponse(responseCollectionResponse)
 );
+
 router.put(
   "/response/:response_uuid/quote",
   executeForResult(ResponseController.update),
   executeForResponse(responseResourceResponse)
+);
+
+router.post(
+  "/auto-assign-conditions",
+  createAutoAssignConditionRequest,
+  executeForResult(AutoAssignConditionController.create),
+  executeForResponse(AutoAssignConditionResourceResponse)
+);
+router.get(
+  "/auto-assign-conditions",
+  executeForResult(AutoAssignConditionController.index, "autoAssignCondition"),
+  executeForResponse(AutoAssignConditionCollectionResponse)
+);
+router.put(
+  "/auto-assign-conditions/:criteria_uuid",
+  executeForResult(AutoAssignConditionController.update),
+  executeForResponse(AutoAssignConditionResourceResponse)
+);
+router.delete(
+  "/auto-assign-conditions/:criteria_uuid",
+  executeForResult(AutoAssignConditionController.delete),
+  executeForResponse(AutoAssignConditionResourceResponse)
 );
 
 module.exports = router;
