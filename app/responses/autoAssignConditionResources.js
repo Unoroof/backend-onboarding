@@ -1,5 +1,5 @@
-const queryResponseSerializer = require("./queryResponseSerializer");
+const autoAssignConditionSerializer = require("./autoAssignConditionSerializer");
 
 module.exports = (req, res, next) => {
-  return queryResponseSerializer(req["autoAssignCondition"]);
+  return autoAssignConditionSerializer(req["data"]);
 };

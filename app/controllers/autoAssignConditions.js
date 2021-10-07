@@ -1,9 +1,31 @@
 const models = require("../models");
-const AutoAssignCondition = models.AutoAssignCondition;
+const AutoAssignCondition = models.AutoAssignConditions;
 const Profile = models.Profile;
 const consumeError = require("../functions/consumeError");
 
 module.exports = {
+  async index(req, res) {
+    try {
+      let profile = await Profile.findOne({
+        where: {
+          user_uuid: req.user,
+          type: "fm-seller",
+        },
+      });
+
+      let constraints = {
+        where: {
+          profile_uuid: profile.uuid,
+        },
+      };
+
+      let autoAssignConditions = await AutoAssignCondition.findAll(constraints);
+      return autoAssignConditions;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
   async create(req, res) {
     try {
       let profile = await Profile.findOne({
@@ -18,8 +40,6 @@ module.exports = {
         matching_criteria: req.body.matching_criteria,
         assign_to: req.body.assign_to,
       });
-
-      console.log("check here autoAssignCondition", autoAssignCondition);
 
       return autoAssignCondition;
     } catch (error) {
@@ -45,10 +65,9 @@ module.exports = {
         },
       });
 
+      console.log("check here update autoAssignCondition", autoAssignCondition);
+
       let updatedCriteria = await autoAssignCondition.update(payload);
-
-      console.log("check here update autoAssignCondition", updatedCriteria);
-
       return updatedCriteria;
     } catch (error) {
       consumeError(error);
@@ -57,22 +76,17 @@ module.exports = {
 
   async delete(req, res) {
     try {
-      let profile = await Profile.findOne({
+      let autoAssignCondition = await AutoAssignCondition.findOne({
         where: {
-          user_uuid: req.user,
-          type: "fm-seller",
+          uuid: req.params.criteria_uuid,
         },
       });
 
-      let autoAssignCondition = await AutoAssignCondition.create({
-        profile_uuid: profile.uuid,
-        matching_criteria: req.body.matching_criteria,
-        assign_to: req.body.assign_to,
-      });
+      let deletedCriteria = await autoAssignCondition.destroy();
 
-      console.log("check here autoAssignCondition", autoAssignCondition);
+      console.log("check here delete autoAssignCondition", deletedCriteria);
 
-      return autoAssignCondition;
+      return deletedCriteria;
     } catch (error) {
       consumeError(error);
     }
