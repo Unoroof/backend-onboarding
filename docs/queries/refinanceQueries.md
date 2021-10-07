@@ -141,23 +141,46 @@
     // owner_uuid and assigned_uuid can be same, these would be different when seller assign query to someone else
     - interval(get queries on fire , which are created in last 24 hours ): `GET /response?interval=24`
 
-response status:
-
-- open
-- accepted
-- rejected
-
 ===========================================
 wired up generated leads(responses)
 
-Auto Reject:
+    Auto Reject:
+        -   update all response with status "rejected"
 
-- update all response with status "rejected"
+    Auto Assign:
+        -   show criteria
+        -   create criteria
 
-Auto Assign:
+    auto_assign_condition table:
+        -   uuid - uuid
+        -   profile_uuid (if contact is wired up user add profile uuid) - uuid
+        -   matching_criteria - JSONB
+            -   turnover
+            -   location
+        - assign_to
+            -   type: team member or location based
+            -   email
+            -   mobile
 
-- show criteria
-- create criteria
+    POST `/create-autoassign-criteria`
+    payload:{
+        "matching_criteria": {
+            "currency":{},
+            "range":{}
+        },
+        "assign_to":{
+            "type": "team_member",
+            "email": "rajesh@betalectic.com",
+            "mobile": "+917417057634"
+        }
+    }
 
-table:
-auto_assign_condition table: - uuid - uuid - profile_uuid (if contact is wired up user add profile uuid) - uuid - matching_criteria - JSONB - turnover - location - assign_to - type: team member or location based - email - mobile
+    payload2:{
+        "matching_criteria": {
+            "currency":{},
+            "range":{}
+        },
+        "assign_to":{
+            "type": "location_based",
+        }
+    }

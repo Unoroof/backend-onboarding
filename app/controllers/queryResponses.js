@@ -9,13 +9,6 @@ const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
 module.exports = {
   async index(req, res) {
     try {
-      // let profile = await Profile.findOne({
-      //   where: {
-      //     user_uuid: req.user,
-      //     type: "fm-buyer",
-      //   },
-      // });
-
       let constraints = {
         where: {},
       };

@@ -4,6 +4,7 @@ const CountryAndCityController = require("./countryCity");
 const ProductCategoryController = require("./category");
 const ProductController = require("./product");
 const QueryResponseController = require("./queryResponses");
+const AutoAssignConditionController = require("./autoAssignConditions");
 module.exports = {
   ProfileController,
   ProductController,
@@ -11,4 +12,5 @@ module.exports = {
   ProductCategoryController,
   QueryController,
   QueryResponseController,
+  AutoAssignConditionController,
 };

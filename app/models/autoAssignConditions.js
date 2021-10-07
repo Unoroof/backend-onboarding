@@ -3,7 +3,7 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class AutoAssignConditions extends Model {}
 
-  Queries.init(
+  AutoAssignConditions.init(
     {
       uuid: {
         type: DataTypes.UUID,
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       profile_uuid: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
       },
       matching_criteria: {
         type: DataTypes.JSONB,
