@@ -5,8 +5,9 @@ const QueryResponse = models.QueryResponse;
 const consumeError = require("../functions/consumeError");
 const getBuyersLeads = require("../functions/getBuyersLeads");
 const { Op, Sequelize } = require("sequelize");
-const { async } = require("validate.js");
 const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
+const getAddressbookUsersProfile = require("../functions/getAddressbookUsersProfile");
+const getAddressbookContacts = require("../functions/getAddressbookContacts");
 
 module.exports = {
   async index(req, res) {
@@ -98,48 +99,101 @@ module.exports = {
       };
 
       let queryResponses = await QueryResponse.findAll(constraints);
-      let buyersLeads = await getBuyersLeads(req.token, queryResponses);
+      let buyersLeads = await getBuyersLeads(req.token, queryResponses); // change name
 
       let autoAssignCondition = await AutoAssignCondition.findOne({
         where: {
           uuid: req.params.criteria_uuid,
         },
       });
-
-      let emailPayload = {
-        email: autoAssignCondition.assign_to.email,
-      };
-
-      let user = await findUserByEmailMobile(req.token, emailPayload);
-
-      if (!user) {
-        let mobilePayload = {
-          mobile: autoAssignCondition.assign_to.mobile,
+      if (autoAssignCondition.assign_to.type === "team_member") {
+        let emailPayload = {
+          email: autoAssignCondition.assign_to.email,
         };
-        user = await findUserByEmailMobile(req.token, mobilePayload);
+
+        let user = await findUserByEmailMobile(req.token, emailPayload);
+
+        if (!user) {
+          let mobilePayload = {
+            mobile: autoAssignCondition.assign_to.mobile,
+          };
+          user = await findUserByEmailMobile(req.token, mobilePayload);
+        }
+
+        let sellerProfile = await Profile.findOne({
+          where: {
+            user_uuid: user.user_uuid,
+            type: "fm-seller",
+          },
+        });
+
+        buyersLeads.wiredUpGeneratedLeads.map(async (queryResponse) => {
+          if (
+            parseInt(autoAssignCondition.matching_criteria.range.min_value) <=
+            parseInt(queryResponse.data.outstanding_loan_amount) <=
+            parseInt(autoAssignCondition.matching_criteria.range.max_value)
+          ) {
+            let payload = {
+              assigned_uuid: sellerProfile.uuid,
+            };
+            queryResponse = await queryResponse.update(payload);
+          }
+        });
+      } else if (autoAssignCondition.assign_to.type === "location_based") {
+        const addressbookContacts = await getAddressbookContacts(req.token);
+
+        const type = "fm-seller";
+        let addressbookUserProfile = await getAddressbookUsersProfile(
+          req.token,
+          addressbookContacts,
+          type
+        );
+
+        console.log("check addressbookUserProfile", addressbookUserProfile);
+
+        let addressbookUserProfileUuid = await addressbookUserProfile.map(
+          (profile) => {
+            if (
+              parseInt(
+                autoAssignCondition.matching_criteria.range.min_value
+              ) === parseInt(profile.data.range.min_value) &&
+              parseInt(
+                autoAssignCondition.matching_criteria.range.max_value
+              ) === parseInt(profile.data.range.max_value) &&
+              autoAssignCondition.matching_criteria.city.label ===
+                profile.data.city.label &&
+              autoAssignCondition.matching_criteria.country.label ===
+                profile.data.country.label
+            ) {
+              return profile.uuid;
+            }
+          }
+        );
+        console.log(
+          "check addressbookUserProfileUuid",
+          addressbookUserProfileUuid
+        );
+
+        // now have 10 queryresponse which will be devided equally to allthe addressbookUserProfileUuid
+        // await buyersLeads.wiredUpGeneratedLeads.map((queryResponse) => {});
+        let dividedQueryResponses = generateArrayWithLimit(
+          buyersLeads.wiredUpGeneratedLeads,
+          addressbookUserProfileUuid.length
+        );
+
+        console.log("check here dividedQueryResponses", dividedQueryResponses);
+
+        for (var i = 0; i < addressbookUserProfileUuid.length; i++) {
+          dividedQueryResponses[0].map(async (queryResponse) => {
+            let payload = {
+              assigned_uuid: addressbookUserProfileUuid[i],
+            };
+
+            await queryResponse.update(payload);
+          });
+        }
       }
 
-      let sellerProfile = await Profile.findOne({
-        where: {
-          user_uuid: user.user_uuid,
-          type: "fm-seller",
-        },
-      });
-
-      buyersLeads.wiredUpGeneratedLeads.map(async (queryResponse) => {
-        if (
-          parseInt(autoAssignCondition.matching_criteria.range.min_value) <=
-          parseInt(queryResponse.data.outstanding_loan_amount) <=
-          parseInt(autoAssignCondition.matching_criteria.range.max_value)
-        ) {
-          let payload = {
-            assigned_uuid: sellerProfile.uuid,
-          };
-          queryResponse = await queryResponse.update(payload);
-        }
-      });
-
-      console.log("check here ", autoAssignCondition);
       return autoAssignCondition;
     } catch (error) {
       consumeError(error);
@@ -163,4 +217,17 @@ module.exports = {
       consumeError(error);
     }
   },
+};
+
+const generateArrayWithLimit = (data, limit) => {
+  var index = 0;
+  var arrayLength = data.length;
+  var tempArray = [];
+
+  for (index = 0; index < arrayLength; index += limit) {
+    myChunk = data.slice(index, index + limit);
+    tempArray.push(myChunk);
+  }
+
+  return tempArray;
 };

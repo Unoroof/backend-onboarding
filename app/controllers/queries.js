@@ -63,12 +63,13 @@ module.exports = {
             await QueryResponse.create({
               profile_uuid: query.profile_uuid, // query creator
               query_uuid: query.uuid,
-              status: "created",
+              status: "pending",
               data: query.data,
               owner_uuid: sellersProfileUuid,
               assigned_uuid: sellersProfileUuid,
               query_type: query.type,
             });
+            //autoassign to criteria if found asssign to
           }
         );
       }
@@ -174,14 +175,12 @@ const findAddressbookSellers = async (token, contacts) => {
     let userProfiles = [];
     await Promise.all(
       await contacts.map(async (item) => {
-        let emailPayload = {
+        let payload = {
           email: item.email,
-        };
-        let mobilePayload = {
           mobile: item.mobile,
         };
 
-        await findUserByEmailMobile(token, emailPayload)
+        await findUserByEmailMobile(token, payload)
           .then(async (res) => {
             if (res.user_uuid) {
               let sellerProfile = await Profile.findOne({
@@ -198,23 +197,6 @@ const findAddressbookSellers = async (token, contacts) => {
             console.log(e);
           });
         console.log("check here userProfiles", userProfiles);
-
-        await findUserByEmailMobile(token, mobilePayload)
-          .then(async (res) => {
-            if (res.user_uuid) {
-              let sellerProfile = await Profile.findOne({
-                where: {
-                  user_uuid: res.user_uuid,
-                  type: "fm-seller",
-                },
-              });
-              userProfiles.push(sellerProfile.uuid);
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-        console.log("check here userProfiles2", userProfiles);
         return userProfiles;
       })
     );

@@ -1,27 +1,22 @@
-const models = require("../models");
-const Profile = models.Profile;
 const consumeError = require("./consumeError");
 const getAddressbookContacts = require("./getAddressbookContacts");
-const findUserByEmailMobile = require("./findUserByEmailMobile");
+const getAddressbookUsersProfile = require("./getAddressbookUsersProfile");
 
 module.exports = async (token, queryResponses) => {
   try {
     const addressbookContacts = await getAddressbookContacts(token);
 
-    let addressbookUserProfileUuids = await getAddressbookUserProfilUuids(
+    let addressbookUserProfile = await getAddressbookUsersProfile(
       token,
       addressbookContacts
     );
 
-    console.log(
-      "check here:addressbookUserProfileUuids:",
-      addressbookUserProfileUuids
-    );
+    console.log("check here:addressbookUserProfile:", addressbookUserProfile);
     let coreBuyerLeads = [];
 
     await queryResponses.map(async (response) => {
-      await addressbookUserProfileUuids.map((profileUuid) => {
-        if (response.profile_uuid === profileUuid) {
+      await addressbookUserProfile.map((profile) => {
+        if (response.profile_uuid === profile.uuid) {
           coreBuyerLeads.push(response);
         }
       });
@@ -39,63 +34,6 @@ module.exports = async (token, queryResponses) => {
     };
 
     return buyers;
-  } catch (error) {
-    consumeError(error);
-  }
-};
-
-const getAddressbookUserProfilUuids = async (token, addressbookContacts) => {
-  try {
-    let addressbookUserProfileUuids = [];
-    await Promise.all(
-      await addressbookContacts.map(async (contact) => {
-        if (contact.email) {
-          let payload = {
-            email: contact.email,
-          };
-
-          await findUserByEmailMobile(token, payload)
-            .then(async (res) => {
-              let buyerProfile = await Profile.findOne({
-                where: {
-                  user_uuid: res.user_uuid,
-                  type: "fm-buyer",
-                },
-              });
-              if (buyerProfile) {
-                addressbookUserProfileUuids.push(buyerProfile.uuid);
-              }
-            })
-            .catch((error) => {
-              console.log("error", error);
-            });
-        }
-
-        if (contact.mobile) {
-          let payload = {
-            mobile: contact.mobile,
-          };
-
-          await findUserByEmailMobile(token, payload)
-            .then(async (res) => {
-              let buyerProfile = await Profile.findOne({
-                where: {
-                  user_uuid: res.user_uuid,
-                  type: "fm-buyer",
-                },
-              });
-              if (buyerProfile) {
-                addressbookUserProfileUuids.push(buyerProfile.uuid);
-              }
-            })
-            .catch((error) => {
-              console.log("error", error);
-            });
-        }
-      })
-    );
-
-    return addressbookUserProfileUuids;
   } catch (error) {
     consumeError(error);
   }
