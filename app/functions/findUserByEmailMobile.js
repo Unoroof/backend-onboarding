@@ -21,7 +21,7 @@ module.exports = (token, payload) => {
         resolve(response.data);
       })
       .catch((error) => {
-        reject(error.response.data);
+        reject(error.response);
       });
   });
 };
