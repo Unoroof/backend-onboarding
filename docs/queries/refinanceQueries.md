@@ -165,22 +165,46 @@ wired up generated leads(responses)
     POST `/create-autoassign-criteria`
     payload:{
         "matching_criteria": {
-            "currency":{},
-            "range":{}
+            "currency": {
+                "label": "INR",
+                "value": "INR"
+            },
+            "range": {
+                "label": "25-100",
+                "value": "25-100",
+                "min_value": "250000000",
+                "max_value": "1000000000"
+            }
         },
-        "assign_to":{
+        "assign_to": {
             "type": "team_member",
-            "email": "rajesh@betalectic.com",
+            "email": "rajesh123@mail.com",
             "mobile": "+917417057634"
         }
     }
 
     payload2:{
         "matching_criteria": {
-            "currency":{},
-            "range":{}
+            "currency": {
+                "label": "INR",
+                "value": "INR"
+            },
+            "range": {
+                "label": "25-100",
+                "value": "25-100",
+                "min_value": "250000000",
+                "max_value": "1000000000"
+            },
+            "city": {
+                "label": "Hyderabad",
+                "value": "Hyderabad"
+            },
+            "country": {
+                "label": "India",
+                "value": "In"
+            }
         },
-        "assign_to":{
+        "assign_to": {
             "type": "location_based",
         }
     }

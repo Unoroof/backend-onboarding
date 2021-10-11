@@ -151,5 +151,10 @@ router.delete(
   executeForResult(AutoAssignConditionController.delete),
   executeForResponse(AutoAssignConditionResourceResponse)
 );
+router.post(
+  "/auto-assign/:criteria_uuid",
+  executeForResult(AutoAssignConditionController.autoAssign),
+  executeForResponse(AutoAssignConditionResourceResponse)
+);
 
 module.exports = router;
