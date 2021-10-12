@@ -107,18 +107,12 @@ module.exports = {
         },
       });
       if (autoAssignCondition.assign_to.type === "team_member") {
-        let emailPayload = {
+        let payload = {
           email: autoAssignCondition.assign_to.email,
+          mobile: autoAssignCondition.assign_to.mobile,
         };
 
-        let user = await findUserByEmailMobile(req.token, emailPayload);
-
-        if (!user) {
-          let mobilePayload = {
-            mobile: autoAssignCondition.assign_to.mobile,
-          };
-          user = await findUserByEmailMobile(req.token, mobilePayload);
-        }
+        let user = await findUserByEmailMobile(req.token, payload);
 
         let sellerProfile = await Profile.findOne({
           where: {
