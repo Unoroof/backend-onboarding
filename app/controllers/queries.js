@@ -153,15 +153,28 @@ const findSystemSelectedSellers = async (condition, queryData) => {
         type: "fm-seller",
         "data.country.label": condition.country,
         "data.city.label": condition.city,
-        "data.currency_type.label": queryData.loan_currency.label,
-        "data.range.min_value": {
-          [Op.lte]: parseInt(queryData.outstanding_loan_amount),
-        },
-        "data.range.max_value": {
-          [Op.gte]: parseInt(queryData.outstanding_loan_amount),
-        },
       },
     };
+    if (queryData.outstanding_loan_amount) {
+      constraints.where["data.currency_type.label"] =
+        queryData.loan_currency.label;
+
+      constraints.where["data.range.min_value"] = {
+        [Op.lte]: parseInt(queryData.outstanding_loan_amount),
+      };
+
+      constraints.where["data.range.max_value"] = {
+        [Op.gte]: parseInt(queryData.outstanding_loan_amount),
+      };
+    }
+
+    if (queryData.product) {
+      constraints.where["data"] = {
+        [Op.contains]: {
+          offered_products: [queryData.product],
+        },
+      };
+    }
 
     console.log("chck here constraints", constraints);
 
