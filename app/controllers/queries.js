@@ -5,6 +5,7 @@ const QueryResponse = models.QueryResponse;
 const consumeError = require("../functions/consumeError");
 const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
 const { Op } = require("sequelize");
+const autoAssign = require("../functions/autoAssign");
 
 module.exports = {
   async index(req, res) {
@@ -60,16 +61,18 @@ module.exports = {
         // create empty row in query_response
         eligibleResponders.wired_up_users.forEach(
           async (sellersProfileUuid) => {
-            await QueryResponse.create({
+            let queryResponse = await QueryResponse.create({
               profile_uuid: query.profile_uuid, // query creator
               query_uuid: query.uuid,
               status: "pending",
               data: query.data,
               owner_uuid: sellersProfileUuid,
-              assigned_uuid: sellersProfileUuid,
               query_type: query.type,
             });
-            //autoassign to criteria if found asssign to
+
+            if (queryResponse) {
+              await autoAssign(req.token, queryResponse);
+            }
           }
         );
       }
