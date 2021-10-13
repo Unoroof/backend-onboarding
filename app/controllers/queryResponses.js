@@ -14,8 +14,8 @@ module.exports = {
       };
 
       if (req.query.uuid) constraints.where.owner_uuid = req.query.uuid;
-      if (req.query.owner_uuid) s;
-      constraints.where.owner_uuid = req.query.owner_uuid;
+      if (req.query.owner_uuid)
+        constraints.where.owner_uuid = req.query.owner_uuid;
       if (req.query.assigned_uuid)
         constraints.where.assigned_uuid = req.query.assigned_uuid;
       if (req.query.query_uuid)
