@@ -41,6 +41,8 @@ module.exports = {
         },
       });
 
+      req.body.data["company_name"] = profile.data.company_name;
+      
       const query = await Queries.create({
         profile_uuid: profile.uuid,
         type: req.body.type,
