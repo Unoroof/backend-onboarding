@@ -44,6 +44,13 @@ module.exports = {
       if (req.body.range)
         constraints.where["data.range.value"] = req.body.range;
 
+      if (req.body.product)
+        constraints.where["data"] = {
+          [Op.contains]: {
+            offered_products: [req.body.product],
+          },
+        };
+
       let profiles = await Profile.findAll(constraints);
       return profiles;
     } catch (error) {

@@ -8,49 +8,26 @@ module.exports = async (token, addressbookContacts, type = "fm-buyer") => {
     let addressbookUserProfile = [];
     await Promise.all(
       await addressbookContacts.map(async (contact) => {
-        if (contact.email) {
-          let payload = {
-            email: contact.email,
-          };
+        let payload = {
+          email: contact.email,
+          mobile: contact.mobile,
+        };
 
-          await findUserByEmailMobile(token, payload)
-            .then(async (res) => {
-              let buyerProfile = await Profile.findOne({
-                where: {
-                  user_uuid: res.user_uuid,
-                  type: type,
-                },
-              });
-              if (buyerProfile) {
-                addressbookUserProfile.push(buyerProfile);
-              }
-            })
-            .catch((error) => {
-              console.log("error", error);
+        await findUserByEmailMobile(token, payload)
+          .then(async (res) => {
+            let buyerProfile = await Profile.findOne({
+              where: {
+                user_uuid: res.user_uuid,
+                type: type,
+              },
             });
-        }
-
-        if (contact.mobile) {
-          let payload = {
-            mobile: contact.mobile,
-          };
-
-          await findUserByEmailMobile(token, payload)
-            .then(async (res) => {
-              let buyerProfile = await Profile.findOne({
-                where: {
-                  user_uuid: res.user_uuid,
-                  type: type,
-                },
-              });
-              if (buyerProfile) {
-                addressbookUserProfile.push(buyerProfile);
-              }
-            })
-            .catch((error) => {
-              console.log("error", error);
-            });
-        }
+            if (buyerProfile) {
+              addressbookUserProfile.push(buyerProfile);
+            }
+          })
+          .catch((error) => {
+            console.log("error", error);
+          });
       })
     );
 

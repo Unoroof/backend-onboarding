@@ -5,6 +5,7 @@ const QueryResponse = models.QueryResponse;
 const consumeError = require("../functions/consumeError");
 const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
 const { Op } = require("sequelize");
+const autoAssign = require("../functions/autoAssign");
 
 module.exports = {
   async index(req, res) {
@@ -40,6 +41,8 @@ module.exports = {
         },
       });
 
+      req.body.data["company_name"] = profile.data.company_name;
+      
       const query = await Queries.create({
         profile_uuid: profile.uuid,
         type: req.body.type,
@@ -60,16 +63,18 @@ module.exports = {
         // create empty row in query_response
         eligibleResponders.wired_up_users.forEach(
           async (sellersProfileUuid) => {
-            await QueryResponse.create({
+            let queryResponse = await QueryResponse.create({
               profile_uuid: query.profile_uuid, // query creator
               query_uuid: query.uuid,
               status: "pending",
               data: query.data,
               owner_uuid: sellersProfileUuid,
-              assigned_uuid: sellersProfileUuid,
               query_type: query.type,
             });
-            //autoassign to criteria if found asssign to
+
+            if (queryResponse) {
+              await autoAssign(req.token, queryResponse);
+            }
           }
         );
       }
@@ -150,15 +155,28 @@ const findSystemSelectedSellers = async (condition, queryData) => {
         type: "fm-seller",
         "data.country.label": condition.country,
         "data.city.label": condition.city,
-        "data.currency_type.label": queryData.loan_currency.label,
-        "data.range.min_value": {
-          [Op.lte]: parseInt(queryData.outstanding_loan_amount),
-        },
-        "data.range.max_value": {
-          [Op.gte]: parseInt(queryData.outstanding_loan_amount),
-        },
       },
     };
+    if (queryData.outstanding_loan_amount) {
+      constraints.where["data.currency_type.label"] =
+        queryData.loan_currency.label;
+
+      constraints.where["data.range.min_value"] = {
+        [Op.lte]: parseInt(queryData.outstanding_loan_amount),
+      };
+
+      constraints.where["data.range.max_value"] = {
+        [Op.gte]: parseInt(queryData.outstanding_loan_amount),
+      };
+    }
+
+    if (queryData.product) {
+      constraints.where["data"] = {
+        [Op.contains]: {
+          offered_products: [queryData.product],
+        },
+      };
+    }
 
     console.log("chck here constraints", constraints);
 
