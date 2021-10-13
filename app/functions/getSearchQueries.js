@@ -6,25 +6,16 @@ module.exports = (searchItem, user_uuid) => {
     
     */
   console.log("searchItem:", searchItem);
-  let queries = searchItem
-    ? [
-        // { : { [Op.like]: `%${searchItem}%` } },
-        { name: { [Op.like]: `%${searchItem}%` } },
-        // { : { [Op.like]: `%${searchItem}%` } },
-      ]
-    : [];
+  let queries = searchItem ? [{ name: { [Op.like]: `%${searchItem}%` } }] : [];
 
   const whereOptions = queries.length
     ? {
         where: {
-        //   user_uuid: user_uuid,
           [Op.or]: queries,
         },
       }
     : {
-        where: {
-        //   user_uuid: user_uuid,
-        },
+        where: {},
       };
   return whereOptions;
 };

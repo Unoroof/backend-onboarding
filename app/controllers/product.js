@@ -41,12 +41,10 @@ module.exports = {
           exclude: ["createdAt", "updatedAt"],
         },
         include: categoryUuidOptions,
-        ...getSearchQueries(
-          req.query.search
-        ),
+        ...getSearchQueries(req.query.search),
         distinct: true,
       });
-      
+
       return products;
     } catch (error) {
       consumeError(error);
