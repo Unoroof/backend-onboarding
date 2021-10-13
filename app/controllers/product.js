@@ -3,6 +3,7 @@ const Product = require("../models").Product;
 const Category = require("../models").Category;
 const sequelize = require("../models").sequelize;
 const { Op, QueryTypes } = require("sequelize");
+const getSearchQueries = require("../functions/getSearchQueries");
 
 module.exports = {
   async index(req, res) {
@@ -40,9 +41,12 @@ module.exports = {
           exclude: ["createdAt", "updatedAt"],
         },
         include: categoryUuidOptions,
+        ...getSearchQueries(
+          req.query.search
+        ),
         distinct: true,
       });
-
+      
       return products;
     } catch (error) {
       consumeError(error);
