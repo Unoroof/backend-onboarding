@@ -3,8 +3,7 @@ const QueryResponse = models.QueryResponse;
 const Profile = models.Profile;
 const consumeError = require("../functions/consumeError");
 const { Op, Sequelize } = require("sequelize");
-const getAddressbookContacts = require("../functions/getAddressbookContacts");
-const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
+const getBuyersLeads = require("../functions/getBuyersLeads");
 
 module.exports = {
   async index(req, res) {
@@ -98,107 +97,27 @@ module.exports = {
       consumeError(error);
     }
   },
-};
 
-const getBuyersLeads = async (token, queryResponses) => {
-  try {
-    const addressbookContacts = await getAddressbookContacts(token);
-
-    let addressbookUserProfileUuids = await getAddressbookUserProfilUuids(
-      token,
-      addressbookContacts
-    );
-
-    console.log(
-      "check here:addressbookUserProfileUuids:",
-      addressbookUserProfileUuids
-    );
-    let coreBuyerLeads = [];
-
-    await queryResponses.map(async (response) => {
-      await addressbookUserProfileUuids.map((profileUuid) => {
-        if (response.profile_uuid === profileUuid) {
-          coreBuyerLeads.push(response);
-        }
-      });
-    });
-
-    console.log("check here coreBuyerLeads:", coreBuyerLeads);
-
-    let wiredUpGeneratedLeads = await diffArray(queryResponses, coreBuyerLeads);
-
-    console.log("check here wiredUpGeneratedLeads:", wiredUpGeneratedLeads);
-
-    let buyers = {
-      coreBuyerLeads: coreBuyerLeads,
-      wiredUpGeneratedLeads: wiredUpGeneratedLeads,
-    };
-
-    return buyers;
-  } catch (error) {
-    consumeError(error);
-  }
-};
-
-const getAddressbookUserProfilUuids = async (token, addressbookContacts) => {
-  try {
-    let addressbookUserProfileUuids = [];
-    await Promise.all(
-      await addressbookContacts.map(async (contact) => {
-        if (contact.email) {
+  async autoReject(req, res) {
+    try {
+      let data = [];
+      await Promise.all(
+        await req.body.queryResponses.map(async (response) => {
+          let queryResponse = await QueryResponse.findOne({
+            where: {
+              uuid: response.uuid,
+            },
+          });
           let payload = {
-            email: contact.email,
+            status: "rejected",
           };
-
-          await findUserByEmailMobile(token, payload)
-            .then(async (res) => {
-              let buyerProfile = await Profile.findOne({
-                where: {
-                  user_uuid: res.user_uuid,
-                  type: "fm-buyer",
-                },
-              });
-              if (buyerProfile) {
-                addressbookUserProfileUuids.push(buyerProfile.uuid);
-              }
-            })
-            .catch((error) => {
-              console.log("error", error);
-            });
-        }
-
-        if (contact.mobile) {
-          let payload = {
-            mobile: contact.mobile,
-          };
-
-          await findUserByEmailMobile(token, payload)
-            .then(async (res) => {
-              let buyerProfile = await Profile.findOne({
-                where: {
-                  user_uuid: res.user_uuid,
-                  type: "fm-buyer",
-                },
-              });
-              if (buyerProfile) {
-                addressbookUserProfileUuids.push(buyerProfile.uuid);
-              }
-            })
-            .catch((error) => {
-              console.log("error", error);
-            });
-        }
-      })
-    );
-
-    return addressbookUserProfileUuids;
-  } catch (error) {
-    consumeError(error);
-  }
-};
-
-const diffArray = (arr1, arr2) => {
-  return arr1
-    .concat(arr2)
-    .filter((item) => !arr1.includes(item) || !arr2.includes(item));
+          queryResponse = await queryResponse.update(payload);
+          data.push(queryResponse);
+        })
+      );
+      return data;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
 };

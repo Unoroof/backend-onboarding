@@ -123,13 +123,16 @@ router.get(
   executeForResult(ResponseController.index, "queryResponse"),
   executeForResponse(responseCollectionResponse)
 );
-
 router.put(
   "/response/:response_uuid/quote",
   executeForResult(ResponseController.update),
   executeForResponse(responseResourceResponse)
 );
-
+router.post(
+  "/auto-reject",
+  executeForResult(ResponseController.autoReject),
+  executeForResponse(responseResourceResponse)
+);
 router.post(
   "/auto-assign-conditions",
   createAutoAssignConditionRequest,
@@ -149,11 +152,6 @@ router.put(
 router.delete(
   "/auto-assign-conditions/:criteria_uuid",
   executeForResult(AutoAssignConditionController.delete),
-  executeForResponse(AutoAssignConditionResourceResponse)
-);
-router.post(
-  "/auto-assign/:criteria_uuid",
-  executeForResult(AutoAssignConditionController.autoAssign),
   executeForResponse(AutoAssignConditionResourceResponse)
 );
 
