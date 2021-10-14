@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-module.exports = (searchItem, user_uuid) => {
+module.exports = (searchItem) => {
   /*  getSearchQuery is a function created to get the where object 
         with the filter by LIKE clause for email/mobile/name search
         and only including contacts of a particular user uuid 

@@ -1,10 +1,14 @@
 // Controller of Product Categories
 const consumeError = require("../functions/consumeError");
 const Category = require("../models").Category;
+const getSearchQueries = require("../functions/getSearchQueries");
+
 module.exports = {
   async index(req, res) {
     try {
-      const productCategories = await Category.findAll();
+      const productCategories = await Category.findAll({
+        ...getSearchQueries(req.query.search),
+      });
       return productCategories;
     } catch (error) {
       consumeError(error);
