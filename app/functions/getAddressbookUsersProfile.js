@@ -15,14 +15,14 @@ module.exports = async (token, addressbookContacts, type = "fm-buyer") => {
 
         await findUserByEmailMobile(token, payload)
           .then(async (res) => {
-            let buyerProfile = await Profile.findOne({
+            let profile = await Profile.findOne({
               where: {
                 user_uuid: res.user_uuid,
                 type: type,
               },
             });
-            if (buyerProfile) {
-              addressbookUserProfile.push(buyerProfile);
+            if (profile) {
+              addressbookUserProfile.push(profile);
             }
           })
           .catch((error) => {

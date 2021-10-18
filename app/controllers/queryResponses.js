@@ -4,6 +4,7 @@ const Profile = models.Profile;
 const consumeError = require("../functions/consumeError");
 const { Op, Sequelize } = require("sequelize");
 const getBuyersLeads = require("../functions/getBuyersLeads");
+const getAddressbookUsersProfile = require("../functions/getAddressbookUsersProfile");
 
 module.exports = {
   async index(req, res) {
@@ -116,6 +117,32 @@ module.exports = {
         })
       );
       return data;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async reAssign(req, res) {
+    try {
+      let type = "fm-seller";
+
+      let sellerProfile = await getAddressbookUsersProfile(
+        req.token,
+        [req.body.seller],
+        type
+      );
+
+      let queryResponse = await QueryResponse.findOne({
+        where: {
+          uuid: req.body.query_response_uuid,
+        },
+      });
+
+      queryResponse = await queryResponse.update({
+        assigned_uuid: sellerProfile[0].uuid,
+      });
+
+      return queryResponse;
     } catch (error) {
       consumeError(error);
     }

@@ -129,11 +129,6 @@ router.put(
   executeForResponse(responseResourceResponse)
 );
 router.post(
-  "/auto-reject",
-  executeForResult(ResponseController.autoReject),
-  executeForResponse(responseResourceResponse)
-);
-router.post(
   "/auto-assign-conditions",
   createAutoAssignConditionRequest,
   executeForResult(AutoAssignConditionController.create),
@@ -153,6 +148,16 @@ router.delete(
   "/auto-assign-conditions/:criteria_uuid",
   executeForResult(AutoAssignConditionController.delete),
   executeForResponse(AutoAssignConditionResourceResponse)
+);
+router.post(
+  "/auto-reject",
+  executeForResult(ResponseController.autoReject),
+  executeForResponse(responseResourceResponse)
+);
+router.post(
+  "/re-assign",
+  executeForResult(ResponseController.reAssign),
+  executeForResponse(responseResourceResponse)
 );
 
 module.exports = router;
