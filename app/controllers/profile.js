@@ -13,9 +13,28 @@ module.exports = {
         },
       };
 
+      if (req.query.profile_uuid)
+        constraints.where.uuid = req.query.profile_uuid;
+
       if (req.query.type) constraints.where.type = req.query.type;
       let profiles = await Profile.findAll(constraints);
       return profiles;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async showById(req, res) {
+    try {
+      console.log("checvk here ", req.params.profile_uuid);
+      let constraints = {
+        where: {
+          uuid: req.params.profile_uuid,
+        },
+      };
+
+      let profile = await Profile.findAll(constraints);
+      return profile;
     } catch (error) {
       consumeError(error);
     }

@@ -52,6 +52,12 @@ router.get(
   executeForResponse(profileCollectionResponse)
 );
 
+router.get(
+  "/profile/:profile_uuid",
+  executeForResult(profileController.showById, "profileList"),
+  executeForResponse(profileCollectionResponse)
+);
+
 router.post(
   "/profiles",
   createProfileRequest,
