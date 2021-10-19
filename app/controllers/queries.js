@@ -64,18 +64,19 @@ module.exports = {
         // create empty row in query_response
         eligibleResponders.wired_up_users.forEach(
           async (sellersProfileUuid) => {
-            let queryResponse = await QueryResponse.create({
+            await QueryResponse.create({
               profile_uuid: query.profile_uuid, // query creator
               query_uuid: query.uuid,
               status: "pending",
               data: query.data,
+              assigned_uuid: sellersProfileUuid,
               owner_uuid: sellersProfileUuid,
               query_type: query.type,
             });
 
-            if (queryResponse) {
-              await autoAssign(req.token, queryResponse);
-            }
+            // if (queryResponse) {
+            //   await autoAssign(req.token, queryResponse);
+            // }
           }
         );
       }
