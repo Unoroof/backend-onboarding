@@ -59,8 +59,8 @@ module.exports = {
           query.sellers,
           query.data
         );
-        console.log("check here eligibleResponders", eligibleResponders);
 
+        console.log("check here eligibleResponders", eligibleResponders);
         // create empty row in query_response
         eligibleResponders.wired_up_users.forEach(
           async (sellersProfileUuid) => {
@@ -69,14 +69,13 @@ module.exports = {
               query_uuid: query.uuid,
               status: "pending",
               data: query.data,
-              assigned_uuid: sellersProfileUuid,
               owner_uuid: sellersProfileUuid,
               query_type: query.type,
             });
 
-            // if (queryResponse) {
-            //   await autoAssign(req.token, queryResponse);
-            // }
+            if (queryResponse) {
+              await autoAssign(req.token, queryResponse);
+            }
           }
         );
       }

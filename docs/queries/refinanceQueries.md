@@ -212,25 +212,29 @@ wired up generated leads(responses)
     ===================
 
     ```
+        {
+            "type": "corporate_finance_product",
+            "data": {
+                "product": {
+                    "label": "Financial",
+                    "value": "935e0f46-3785-42c0-8cd4-91dcfd50b84d"
+                },
+                "details":"",
+                "expiry_detail":{
+                    "validity": "",
+                    "response_restriction": ""
+                }
+            },
+            "sellers": {
+                "system_selected_sellers": {
+                    "country": "India",
+                    "city": "Hyderabad"
+                }
+            },
+            "status": "open"
+        }
 
-{
-"type": "corporate_finance_product",
-"data": {
-"product": {
-"label": "Financial",
-"value": "935e0f46-3785-42c0-8cd4-91dcfd50b84d"
-},
-"details":"",
-"expiry_detail":{
-"validity": "",
-"response_restriction": ""
-}
-},
-"sellers": {
-"system_selected_sellers": {
-"country": "India",
-"city": "Hyderabad"
-}
-},
-"status": "open"
-}```
+```
+
+
+```
