@@ -64,7 +64,7 @@ module.exports = {
         // create empty row in query_response
         eligibleResponders.wired_up_users.forEach(
           async (sellersProfileUuid) => {
-            await QueryResponse.create({
+            let queryResponse = await QueryResponse.create({
               profile_uuid: query.profile_uuid, // query creator
               query_uuid: query.uuid,
               status: "pending",
@@ -74,6 +74,7 @@ module.exports = {
             });
 
             if (queryResponse) {
+              console.log("autoassign start here");
               await autoAssign(req.token, queryResponse);
             }
           }
