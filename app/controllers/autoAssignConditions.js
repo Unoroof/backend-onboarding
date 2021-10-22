@@ -41,6 +41,14 @@ module.exports = {
         },
       });
 
+      if (req.body.assign_to.type === "team_member") {
+        req.body.assign_to.name = profile.data.full_name;
+        req.body.assign_to.location = {
+          country: profile.data.country,
+          city: profile.data.city,
+        };
+      }
+
       let autoAssignCondition = await AutoAssignCondition.create({
         profile_uuid: profile.uuid,
         matching_criteria: req.body.matching_criteria,
