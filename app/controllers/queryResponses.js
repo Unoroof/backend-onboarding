@@ -93,7 +93,7 @@ module.exports = {
       }
 
       queryResponse = await queryResponse.update(payload);
-      return true;
+      return queryResponse;
     } catch (error) {
       consumeError(error);
     }
