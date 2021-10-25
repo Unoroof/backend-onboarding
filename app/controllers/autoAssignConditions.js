@@ -65,19 +65,33 @@ module.exports = {
     try {
       let payload = {};
 
-      if (req.body.matching_criteria) {
-        payload.matching_criteria = req.body.matching_criteria;
-      }
-
-      if (req.body.assign_to) {
-        payload.assign_to = req.body.assign_to;
-      }
-
       let autoAssignCondition = await AutoAssignCondition.findOne({
         where: {
           uuid: req.params.criteria_uuid,
         },
       });
+
+      if (req.body.matching_criteria) {
+        payload.matching_criteria = Object.assign(
+          req.body.matching_criteria,
+          autoAssignCondition.matching_criteria
+        );
+      }
+
+      if (req.body.assign_to) {
+        payload.assign_to = Object.assign(
+          req.body.assign_to,
+          autoAssignCondition.assign_to
+        );
+      }
+
+      if (req.body.assign_to.type === "team_member") {
+        req.body.assign_to.name = profile.data.full_name;
+        req.body.assign_to.location = {
+          country: profile.data.country,
+          city: profile.data.city,
+        };
+      }
 
       console.log("check here update autoAssignCondition", autoAssignCondition);
 
