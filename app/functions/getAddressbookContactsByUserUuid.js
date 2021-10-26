@@ -1,6 +1,7 @@
 var axios = require("axios");
 
 module.exports = (token, user_uuid) => {
+  console.log("getAddressBookContactsByUserUuid", user_uuid);
   return new Promise((resolve, reject) => {
     var config = {
       method: "get",
@@ -14,9 +15,17 @@ module.exports = (token, user_uuid) => {
 
     axios(config)
       .then((response) => {
+        console.log(
+          "getAddressBookContactsByUserUuidResponse",
+          JSON.stringify(response.data)
+        );
         resolve(response.data.data);
       })
       .catch((error) => {
+        console.log(
+          "getAddressBookContactsByUserUuidError",
+          JSON.stringify(error)
+        );
         reject(error.response.data);
       });
   });

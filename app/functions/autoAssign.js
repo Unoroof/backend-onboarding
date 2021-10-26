@@ -162,6 +162,7 @@ module.exports = async (token, queryResponse) => {
 
     return queryResponse;
   } catch (error) {
+    console.log("AutoAssignCheckError", JSON.stringify(error));
     consumeError(error);
   }
 };
