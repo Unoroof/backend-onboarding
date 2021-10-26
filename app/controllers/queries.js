@@ -60,27 +60,29 @@ module.exports = {
           query.data
         );
 
-        console.log("check here eligibleResponders", eligibleResponders);
+        console.log(
+          "QueriesEligibleResponders",
+          JSON.stringify(eligibleResponders)
+        );
         // create empty row in query_response
+        eligibleResponders.wired_up_users.forEach(
+          async (sellersProfileUuid) => {
+            let queryResponse = await QueryResponse.create({
+              profile_uuid: query.profile_uuid, // query creator
+              query_uuid: query.uuid,
+              status: "pending",
+              data: query.data,
+              owner_uuid: sellersProfileUuid,
+              query_type: query.type,
+            });
 
-        await Promise.all(
-          await eligibleResponders.wired_up_users.map(
-            async (sellersProfileUuid) => {
-              let queryResponse = await QueryResponse.create({
-                profile_uuid: query.profile_uuid, // query creator
-                query_uuid: query.uuid,
-                status: "pending",
-                data: query.data,
-                owner_uuid: sellersProfileUuid,
-                query_type: query.type,
-              });
+            console.log("QueriesQueryResponse", JSON.stringify(queryResponse));
 
-              if (queryResponse) {
-                console.log("autoassign start here");
-                await autoAssign(req.token, queryResponse);
-              }
+            if (queryResponse) {
+              console.log("AutoassignStartHere");
+              await autoAssign(req.token, queryResponse);
             }
-          )
+          }
         );
       }
       return query;

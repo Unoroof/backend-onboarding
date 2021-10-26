@@ -14,13 +14,16 @@ module.exports = async (token, queryResponse) => {
       },
     });
 
-    console.log("check here ownerProfile", ownerProfile.user_uuid);
+    console.log("AutoAssignOwnerProfileUuid", ownerProfile.user_uuid);
     let addressbookContacts = await getAddressbookContactsByUserUuid(
       token,
       ownerProfile.user_uuid
     );
 
-    console.log("check addressbookContacts", addressbookContacts);
+    console.log(
+      "AutoAssignAddressbookContacts",
+      JSON.stringify(addressbookContacts)
+    );
 
     let addressbookUserProfile = [];
     if (addressbookContacts.length > 0) {
@@ -30,7 +33,11 @@ module.exports = async (token, queryResponse) => {
       );
     }
 
-    console.log("check addressbookUserProfile", addressbookUserProfile);
+    console.log(
+      "AddressbookUserProfile",
+      JSON.stringify(addressbookUserProfile)
+    );
+
     let coreBuyer = false;
     if (addressbookUserProfile.length > 0) {
       await addressbookUserProfile.forEach((profile) => {
@@ -40,7 +47,7 @@ module.exports = async (token, queryResponse) => {
       });
     }
 
-    console.log("check here condition:", coreBuyer);
+    console.log("coreBuyerValue", coreBuyer);
     if (coreBuyer) {
       let payload = {
         assigned_uuid: queryResponse.owner_uuid,
