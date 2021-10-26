@@ -20,14 +20,19 @@ module.exports = async (token, queryResponse) => {
       ownerProfile.user_uuid
     );
 
-    let addressbookUserProfile = await getAddressbookUsersProfile(
-      token,
-      addressbookContacts
-    );
+    console.log("check addressbookContacts", addressbookContacts);
+
+    let addressbookUserProfile = [];
+    if (addressbookContacts.length > 0) {
+      addressbookUserProfile = await getAddressbookUsersProfile(
+        token,
+        addressbookContacts
+      );
+    }
 
     console.log("check addressbookUserProfile", addressbookUserProfile);
     let coreBuyer = false;
-    if (addressbookUserProfile) {
+    if (addressbookUserProfile.length > 0) {
       await addressbookUserProfile.forEach((profile) => {
         if (profile.uuid === queryResponse.profile_uuid) {
           return (coreBuyer = true);
