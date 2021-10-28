@@ -100,8 +100,8 @@ module.exports = {
           },
         });
 
-        req.body.assign_to.name = profile.data.full_name;
-        req.body.assign_to.location = {
+        payload.assign_to.name = profile.data.full_name;
+        payload.assign_to.location = {
           country: profile.data.country,
           city: profile.data.city,
         };
