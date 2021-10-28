@@ -79,17 +79,11 @@ module.exports = {
       });
 
       if (req.body.matching_criteria) {
-        payload.matching_criteria = Object.assign(
-          req.body.matching_criteria,
-          autoAssignCondition.matching_criteria
-        );
+        payload.matching_criteria = req.body.matching_criteria;
       }
 
       if (req.body.assign_to) {
-        payload.assign_to = Object.assign(
-          req.body.assign_to,
-          autoAssignCondition.assign_to
-        );
+        payload.assign_to = req.body.assign_to;
       }
 
       if (req.body.assign_to.type === "team_member") {
