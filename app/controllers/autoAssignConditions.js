@@ -42,10 +42,17 @@ module.exports = {
       });
 
       if (req.body.assign_to.type === "team_member") {
-        req.body.assign_to.name = profile.data.full_name;
+        let selectedSellerProfile = await Profile.findOne({
+          where: {
+            user_uuid: req.body.assign_to.user_uuid,
+            type: "fm-seller",
+          },
+        });
+
+        req.body.assign_to.name = selectedSellerProfile.data.full_name;
         req.body.assign_to.location = {
-          country: profile.data.country,
-          city: profile.data.city,
+          country: selectedSellerProfile.data.country,
+          city: selectedSellerProfile.data.city,
         };
       }
 
@@ -86,6 +93,13 @@ module.exports = {
       }
 
       if (req.body.assign_to.type === "team_member") {
+        let profile = await Profile.findOne({
+          where: {
+            user_uuid: req.body.assign_to.user_uuid,
+            type: "fm-seller",
+          },
+        });
+
         req.body.assign_to.name = profile.data.full_name;
         req.body.assign_to.location = {
           country: profile.data.country,
