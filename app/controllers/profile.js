@@ -51,17 +51,19 @@ module.exports = {
         constraints.where["data.country.label"] = req.body.country;
       if (req.body.city) constraints.where["data.city.label"] = req.body.city;
       if (req.body.currency)
-        constraints.where["data.currency_type.label"] = req.body.currency;
-      if (req.body.loan_amount) {
-        constraints.where["data.range.min_value"] = {
-          [Op.lte]: parseInt(req.body.loan_amount),
-        };
-        constraints.where["data.range.max_value"] = {
-          [Op.gte]: parseInt(req.body.loan_amount),
-        };
-      }
+        constraints.where["data.currency_type.value"] = req.body.currency.value;
+
+      // if (req.body.loan_amount) {
+      //   constraints.where["data.range.min_value"] = {
+      //     [Op.lte]: parseInt(req.body.loan_amount),
+      //   };
+      //   constraints.where["data.range.max_value"] = {
+      //     [Op.gte]: parseInt(req.body.loan_amount),
+      //   };
+      // }
+
       if (req.body.range)
-        constraints.where["data.range.value"] = req.body.range;
+        constraints.where["data.range.value"] = req.body.range.value;
 
       if (req.body.product)
         constraints.where["data"] = {
@@ -69,6 +71,8 @@ module.exports = {
             offered_products: [req.body.product],
           },
         };
+
+      if (req.body.user_uuid) constraints.where.user_uuid = req.body.user_uuid;
 
       let profiles = await Profile.findAll(constraints);
       return profiles;

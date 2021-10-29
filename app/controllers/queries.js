@@ -57,7 +57,8 @@ module.exports = {
         const eligibleResponders = await getEligibleResponders(
           req.token,
           query.sellers,
-          query.data
+          query.data,
+          profile
         );
 
         console.log(
@@ -113,7 +114,7 @@ module.exports = {
   },
 };
 
-const getEligibleResponders = async (token, sellers, queryData) => {
+const getEligibleResponders = async (token, sellers, queryData, profile) => {
   try {
     let eligibleResponders = {};
     let wired_up_users = [];
@@ -128,7 +129,8 @@ const getEligibleResponders = async (token, sellers, queryData) => {
     if (sellers.system_selected_sellers) {
       let sellerProfiles = await findSystemSelectedSellers(
         sellers.system_selected_sellers,
-        queryData
+        queryData,
+        profile
       );
       console.log("check here system selected seller", sellerProfiles);
       sellerProfiles.forEach((item) => {
@@ -155,7 +157,7 @@ const getEligibleResponders = async (token, sellers, queryData) => {
   }
 };
 
-const findSystemSelectedSellers = async (condition, queryData) => {
+const findSystemSelectedSellers = async (condition, queryData, profile) => {
   try {
     let constraints = {
       where: {
@@ -164,20 +166,21 @@ const findSystemSelectedSellers = async (condition, queryData) => {
         "data.city.label": condition.city,
       },
     };
-    if (queryData.outstanding_loan_amount) {
-      constraints.where["data.currency_type.label"] =
-        queryData.loan_currency.label;
+    if (queryData.type === "refinance_existing_loan") {
+      constraints.where["data.currency_type.value"] =
+        profile.data.currency_type.value;
+      constraints.where["data.range.value"] = profile.data.range.value;
 
-      constraints.where["data.range.min_value"] = {
-        [Op.lte]: parseInt(queryData.outstanding_loan_amount),
-      };
+      // constraints.where["data.range.min_value"] = {
+      //   [Op.lte]: parseInt(queryData.outstanding_loan_amount),
+      // };
 
-      constraints.where["data.range.max_value"] = {
-        [Op.gte]: parseInt(queryData.outstanding_loan_amount),
-      };
+      // constraints.where["data.range.max_value"] = {
+      //   [Op.gte]: parseInt(queryData.outstanding_loan_amount),
+      // };
     }
 
-    if (queryData.product) {
+    if (queryData.type === "corporate_finance_product") {
       constraints.where["data"] = {
         [Op.contains]: {
           offered_products: [queryData.product],
