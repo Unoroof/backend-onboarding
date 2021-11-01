@@ -124,14 +124,6 @@ module.exports = {
 
   async reAssign(req, res) {
     try {
-      let type = "fm-seller";
-
-      let sellerProfile = await getAddressbookUsersProfile(
-        req.token,
-        [req.body.seller],
-        type
-      );
-
       let queryResponse = await QueryResponse.findOne({
         where: {
           uuid: req.body.query_response_uuid,
@@ -139,7 +131,7 @@ module.exports = {
       });
 
       queryResponse = await queryResponse.update({
-        assigned_uuid: sellerProfile[0].uuid,
+        assigned_uuid: assignee_profile_uuid,
       });
 
       return queryResponse;
