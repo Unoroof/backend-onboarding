@@ -25,7 +25,10 @@ module.exports = {
 
       if (req.query.type) constraints.where.type = req.query.type;
       if (req.query.status) constraints.where.status = req.query.status;
-      let queries = await Queries.findAll(constraints);
+      let queries = await Queries.findAll({
+        includes: [constraints],
+        order: [["createdAt", "DESC"]],
+      });
       return queries;
     } catch (error) {
       consumeError(error);
