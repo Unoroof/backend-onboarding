@@ -115,6 +115,13 @@ module.exports = async (token, queryResponse) => {
             }
           } else if (criteria.assign_to.type === "location_based") {
             const type = "fm-seller";
+
+            let buyerProfile = await Profile.findOne({
+              where: {
+                uuid: queryResponse.profile_uuid,
+              },
+            });
+
             let addressbookUserProfile = await getAddressbookUsersProfile(
               token,
               addressbookContacts,
@@ -126,14 +133,10 @@ module.exports = async (token, queryResponse) => {
             let addressbookUserProfileUuid = await addressbookUserProfile.map(
               (profile) => {
                 if (
-                  parseInt(criteria.matching_criteria.range.min_value) ===
-                    parseInt(profile.data.range.min_value) &&
-                  parseInt(criteria.matching_criteria.range.max_value) ===
-                    parseInt(profile.data.range.max_value) &&
-                  criteria.matching_criteria.city.label ===
-                    profile.data.city.label &&
-                  criteria.matching_criteria.country.label ===
-                    profile.data.country.label
+                  criteria.matching_criteria.range.value ===
+                    profile.data.range.value &&
+                  buyerProfile.data.city.value === profile.data.city.value &&
+                  buyerProfile.data.country.value === profile.data.country.value
                 ) {
                   return profile.uuid;
                 }
@@ -144,8 +147,14 @@ module.exports = async (token, queryResponse) => {
               addressbookUserProfileUuid
             );
             if (addressbookUserProfileUuid.length !== 0) {
+              // there would be multiple seller, so picking random seller
               let payload = {
-                assigned_uuid: addressbookUserProfileUuid[0],
+                assigned_uuid:
+                  addressbookUserProfileUuid[
+                    Math.floor(
+                      Math.random() * addressbookUserProfileUuid.length
+                    )
+                  ],
               };
 
               queryResponse = await queryResponse.update(payload);

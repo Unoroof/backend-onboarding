@@ -53,15 +53,6 @@ module.exports = {
       if (req.body.currency)
         constraints.where["data.currency_type.value"] = req.body.currency.value;
 
-      // if (req.body.loan_amount) {
-      //   constraints.where["data.range.min_value"] = {
-      //     [Op.lte]: parseInt(req.body.loan_amount),
-      //   };
-      //   constraints.where["data.range.max_value"] = {
-      //     [Op.gte]: parseInt(req.body.loan_amount),
-      //   };
-      // }
-
       if (req.body.range)
         constraints.where["data.range.value"] = req.body.range.value;
 
