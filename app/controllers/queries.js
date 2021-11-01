@@ -27,7 +27,7 @@ module.exports = {
       if (req.query.status) constraints.where.status = req.query.status;
       let queries = await Queries.findAll({
         limit: req.query.limit || 100,
-        includes: [constraints],
+        ...constraints,
         order: [["createdAt", "DESC"]],
       });
       return queries;
