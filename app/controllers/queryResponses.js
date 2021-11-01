@@ -131,7 +131,7 @@ module.exports = {
       });
 
       queryResponse = await queryResponse.update({
-        assigned_uuid: assignee_profile_uuid,
+        assigned_uuid: req.body.assignee_profile_uuid,
       });
 
       return queryResponse;
