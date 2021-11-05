@@ -165,5 +165,10 @@ router.post(
   executeForResult(ResponseController.reAssign),
   executeForResponse(responseResourceResponse)
 );
+router.get(
+  "/get-unassigned-responses",
+  executeForResult(ResponseController.unassigned, "queryResponse"),
+  executeForResponse(responseCollectionResponse)
+);
 
 module.exports = router;

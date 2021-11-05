@@ -1,5 +1,6 @@
 const models = require("../models");
 const QueryResponse = models.QueryResponse;
+const AutoAssignCondition = models.AutoAssignConditions;
 const Profile = models.Profile;
 const consumeError = require("../functions/consumeError");
 const { Op, Sequelize } = require("sequelize");
@@ -135,6 +136,31 @@ module.exports = {
       });
 
       return queryResponse;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async unassigned(req, res) {
+    try {
+      console.log("check here", req.query.seller_profile_uuid);
+
+      let sellerProfile = await Profile.findOne({
+        where: {
+          user_uuid: req.user,
+          type: "fm-seller",
+        },
+      });
+
+      let queryResponses = await QueryResponse.findAll({
+        where: {
+          owner_uuid: sellerProfile.uuid,
+        },
+      });
+
+      let buyersLeads = await getBuyersLeads(req.token, queryResponses);
+
+      return buyersLeads.wiredUpGeneratedLeads;
     } catch (error) {
       consumeError(error);
     }
