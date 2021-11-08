@@ -143,8 +143,6 @@ module.exports = {
 
   async unassigned(req, res) {
     try {
-      console.log("check here", req.query.seller_profile_uuid);
-
       let sellerProfile = await Profile.findOne({
         where: {
           user_uuid: req.user,
@@ -158,9 +156,21 @@ module.exports = {
         },
       });
 
+      let unassignedResponses = [];
       let buyersLeads = await getBuyersLeads(req.token, queryResponses);
+      unassignedResponses = buyersLeads.wiredUpGeneratedLeads;
 
-      return buyersLeads.wiredUpGeneratedLeads;
+      if (buyersLeads.wiredUpGeneratedLeads.length > 0) {
+        unassignedResponses = await buyersLeads.wiredUpGeneratedLeads.filter(
+          (queryResponse) => {
+            if (queryResponse.assigned_uuid === sellerProfile.uuid) {
+              return queryResponse;
+            }
+          }
+        );
+      }
+
+      return unassignedResponses;
     } catch (error) {
       consumeError(error);
     }
