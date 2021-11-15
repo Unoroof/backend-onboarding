@@ -163,7 +163,7 @@ module.exports = {
       if (buyersLeads.wiredUpGeneratedLeads.length > 0) {
         unassignedResponses = await buyersLeads.wiredUpGeneratedLeads.filter(
           (queryResponse) => {
-            if (queryResponse.assigned_uuid === sellerProfile.uuid) {
+            if (queryResponse.assigned_uuid === null) {
               return queryResponse;
             }
           }

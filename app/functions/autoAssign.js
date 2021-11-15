@@ -156,14 +156,15 @@ module.exports = async (token, queryResponse) => {
                     )
                   ],
               };
-
-              queryResponse = await queryResponse.update(payload);
-            } else {
-              let payload = {
-                assigned_uuid: queryResponse.owner_uuid,
-              };
               queryResponse = await queryResponse.update(payload);
             }
+            // response will be unassigned if there is no seller based on location
+            // else {
+            //   let payload = {
+            //     assigned_uuid: queryResponse.owner_uuid,
+            //   };
+            //   queryResponse = await queryResponse.update(payload);
+            // }
           }
         });
       }
