@@ -136,7 +136,7 @@ module.exports = {
       };
       if (req.body.query_response_remark) {
         queryResponse.data["remark"] = req.body.query_response_remark;
-        payload["data"] = queryResponse.data;
+        payload.data = queryResponse.data;
       }
 
       queryResponse = await queryResponse.update(payload);
