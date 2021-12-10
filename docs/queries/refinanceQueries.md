@@ -236,5 +236,18 @@ wired up generated leads(responses)
 
 ```
 
+Auto assign refactoring:
+
+- store one variable in profile: 'assign_to'
+    - me (default)
+    - reject
+    - auto_assign
+
+- when buyer create query and assign to seller
+- query response created
+- wiredup leads should assign to
+    if(assign_to==='me') assign to seller
+    if(assign_to==='reject') don't assign, just reject it
+    if(assign_to==='auto_assign') auto_assign based on criteria
 
 ```

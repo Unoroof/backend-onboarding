@@ -131,6 +131,10 @@ module.exports = {
         },
       });
 
+      if (req.body.query_response_remark) {
+        queryResponse.data["remark"] = req.body.query_response_remark;
+      }
+
       queryResponse = await queryResponse.update({
         assigned_uuid: req.body.assignee_profile_uuid,
       });
