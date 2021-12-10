@@ -134,8 +134,9 @@ module.exports = {
       let payload = {
         assigned_uuid: req.body.assignee_profile_uuid,
       };
+
       if (req.body.query_response_remark) {
-        queryResponse.data["remark"] = req.body.query_response_remark;
+        queryResponse.data["remark_by_seller"] = req.body.query_response_remark;
         payload.data = queryResponse.data;
       }
 
