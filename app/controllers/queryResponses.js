@@ -136,12 +136,15 @@ module.exports = {
       };
 
       if (req.body.query_response_remark) {
-        queryResponse.data["remark_by_seller"] = req.body.query_response_remark;
-        payload.data = queryResponse.data;
+        payload.data = {
+          ...queryResponse.data,
+          ...{
+            remarks_by_seller: req.body.query_response_remark,
+          },
+        };
       }
 
       queryResponse = await queryResponse.update(payload);
-
       return queryResponse;
     } catch (error) {
       consumeError(error);
