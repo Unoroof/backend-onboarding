@@ -54,119 +54,136 @@ module.exports = async (token, queryResponse) => {
       };
       queryResponse = await queryResponse.update(payload);
     } else {
-      let autoAssignCondition = await AutoAssignCondition.findAll({
-        where: {
-          profile_uuid: queryResponse.owner_uuid,
-        },
-      });
-
-      console.log("check here autoAssignCondition123:", autoAssignCondition);
-      if (autoAssignCondition.length === 0) {
+      if (ownerProfile.data.assign_wiredup_leads_to === "me") {
         let payload = {
           assigned_uuid: queryResponse.owner_uuid,
         };
         queryResponse = await queryResponse.update(payload);
-      } else {
-        console.log("check here inside else check");
-        await autoAssignCondition.forEach(async (criteria) => {
-          if (criteria.assign_to.type === "team_member") {
-            console.log("check here inside team mem");
-            let payload = {
-              email: criteria.assign_to.email,
-              mobile: criteria.assign_to.mobile,
-            };
+      } else if (ownerProfile.data.assign_wiredup_leads_to === "reject") {
+        let payload = {
+          assigned_uuid: queryResponse.owner_uuid,
+          status: "rejected",
+        };
+        queryResponse = await queryResponse.update(payload);
+      } else if (ownerProfile.data.assign_wiredup_leads_to === "auto_assign") {
+        let autoAssignCondition = await AutoAssignCondition.findAll({
+          where: {
+            profile_uuid: queryResponse.owner_uuid,
+          },
+        });
 
-            let user = await findUserByEmailMobile(token, payload).catch(
-              (error) => {
-                console.log("error", error);
-              }
-            );
-            console.log("check here insdie team_mem user", user);
-            if (user) {
-              let sellerProfile = await Profile.findOne({
-                where: {
-                  user_uuid: user.user_uuid,
-                  type: "fm-seller",
-                },
-              });
+        console.log("check here autoAssignCondition123:", autoAssignCondition);
+        if (autoAssignCondition.length === 0) {
+          let payload = {
+            assigned_uuid: queryResponse.owner_uuid,
+          };
+          queryResponse = await queryResponse.update(payload);
+        } else {
+          console.log("check here inside else check");
+          await autoAssignCondition.forEach(async (criteria) => {
+            if (criteria.assign_to.type === "team_member") {
+              console.log("check here inside team mem");
+              let payload = {
+                email: criteria.assign_to.email,
+                mobile: criteria.assign_to.mobile,
+              };
 
-              console.log("check here sellerProfile:", sellerProfile);
+              let user = await findUserByEmailMobile(token, payload).catch(
+                (error) => {
+                  console.log("error", error);
+                }
+              );
+              console.log("check here insdie team_mem user", user);
+              if (user) {
+                let sellerProfile = await Profile.findOne({
+                  where: {
+                    user_uuid: user.user_uuid,
+                    type: "fm-seller",
+                  },
+                });
 
-              if (
-                parseInt(criteria.matching_criteria.range.min_value) <=
-                parseInt(queryResponse.data.outstanding_loan_amount) <=
-                parseInt(criteria.matching_criteria.range.max_value)
-              ) {
-                let payload = {
-                  assigned_uuid: sellerProfile.uuid,
-                };
-                queryResponse = await queryResponse.update(payload);
+                console.log("check here sellerProfile:", sellerProfile);
+
+                if (
+                  parseInt(criteria.matching_criteria.range.min_value) <=
+                  parseInt(queryResponse.data.outstanding_loan_amount) <=
+                  parseInt(criteria.matching_criteria.range.max_value)
+                ) {
+                  let payload = {
+                    assigned_uuid: sellerProfile.uuid,
+                  };
+                  queryResponse = await queryResponse.update(payload);
+                } else {
+                  let payload = {
+                    assigned_uuid: queryResponse.owner_uuid,
+                  };
+                  queryResponse = await queryResponse.update(payload);
+                }
               } else {
                 let payload = {
                   assigned_uuid: queryResponse.owner_uuid,
                 };
                 queryResponse = await queryResponse.update(payload);
               }
-            } else {
-              let payload = {
-                assigned_uuid: queryResponse.owner_uuid,
-              };
-              queryResponse = await queryResponse.update(payload);
-            }
-          } else if (criteria.assign_to.type === "location_based") {
-            const type = "fm-seller";
+            } else if (criteria.assign_to.type === "location_based") {
+              const type = "fm-seller";
 
-            let buyerProfile = await Profile.findOne({
-              where: {
-                uuid: queryResponse.profile_uuid,
-              },
-            });
+              let buyerProfile = await Profile.findOne({
+                where: {
+                  uuid: queryResponse.profile_uuid,
+                },
+              });
 
-            let addressbookUserProfile = await getAddressbookUsersProfile(
-              token,
-              addressbookContacts,
-              type
-            );
+              let addressbookUserProfile = await getAddressbookUsersProfile(
+                token,
+                addressbookContacts,
+                type
+              );
 
-            console.log("check addressbookUserProfile", addressbookUserProfile);
+              console.log(
+                "check addressbookUserProfile",
+                addressbookUserProfile
+              );
 
-            let addressbookUserProfileUuid = await addressbookUserProfile.map(
-              (profile) => {
-                if (
-                  criteria.matching_criteria.range.value ===
-                    profile.data.range.value &&
-                  buyerProfile.data.city.value === profile.data.city.value &&
-                  buyerProfile.data.country.value === profile.data.country.value
-                ) {
-                  return profile.uuid;
+              let addressbookUserProfileUuid = await addressbookUserProfile.map(
+                (profile) => {
+                  if (
+                    criteria.matching_criteria.range.value ===
+                      profile.data.range.value &&
+                    buyerProfile.data.city.value === profile.data.city.value &&
+                    buyerProfile.data.country.value ===
+                      profile.data.country.value
+                  ) {
+                    return profile.uuid;
+                  }
                 }
+              );
+              console.log(
+                "check addressbookUserProfileUuid",
+                addressbookUserProfileUuid
+              );
+              if (addressbookUserProfileUuid.length !== 0) {
+                // there would be multiple seller, so picking random seller
+                let payload = {
+                  assigned_uuid:
+                    addressbookUserProfileUuid[
+                      Math.floor(
+                        Math.random() * addressbookUserProfileUuid.length
+                      )
+                    ],
+                };
+                queryResponse = await queryResponse.update(payload);
               }
-            );
-            console.log(
-              "check addressbookUserProfileUuid",
-              addressbookUserProfileUuid
-            );
-            if (addressbookUserProfileUuid.length !== 0) {
-              // there would be multiple seller, so picking random seller
-              let payload = {
-                assigned_uuid:
-                  addressbookUserProfileUuid[
-                    Math.floor(
-                      Math.random() * addressbookUserProfileUuid.length
-                    )
-                  ],
-              };
-              queryResponse = await queryResponse.update(payload);
+              // response will be unassigned if there is no seller based on location
+              // else {
+              //   let payload = {
+              //     assigned_uuid: queryResponse.owner_uuid,
+              //   };
+              //   queryResponse = await queryResponse.update(payload);
+              // }
             }
-            // response will be unassigned if there is no seller based on location
-            // else {
-            //   let payload = {
-            //     assigned_uuid: queryResponse.owner_uuid,
-            //   };
-            //   queryResponse = await queryResponse.update(payload);
-            // }
-          }
-        });
+          });
+        }
       }
     }
 
