@@ -245,3 +245,13 @@ Auto assign refactoring:
     if(assign_wiredup_leads_to==='auto_assign') auto_assign based on criteria
 
 ```
+
+-----------------=========
+seller onboarding: - [*] replace entity status to industry clasification
+
+buyer queries: - have to add CIN number field - change refinancing to financing - while creating query refinanc = cin number - attachments: balance sheet , rating documanet, company document, financing document: Add financials
+
+buyer queries - more info will take in product queries(will discuss)
+seller queries - product queries wont have : - remove input field - keep reassign button - buyer name in
+
+other services: - will have new design and feature(will discuss and need design)
