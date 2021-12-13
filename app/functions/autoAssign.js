@@ -51,18 +51,54 @@ module.exports = async (token, queryResponse) => {
     if (coreBuyer) {
       let payload = {
         assigned_uuid: queryResponse.owner_uuid,
+        data: {
+          ...queryResponse.data,
+          ...{
+            seller_detail: {
+              user_uuid: ownerProfile.user_uuid,
+              email: ownerProfile.data.email,
+              mobile: ownerProfile.data.mobile,
+              full_name: ownerProfile.data.full_name,
+              company_name: ownerProfile.data.company_name,
+            },
+          },
+        },
       };
       queryResponse = await queryResponse.update(payload);
     } else {
       if (ownerProfile.data.assign_wiredup_leads_to === "me") {
         let payload = {
           assigned_uuid: queryResponse.owner_uuid,
+          data: {
+            ...queryResponse.data,
+            ...{
+              seller_detail: {
+                user_uuid: ownerProfile.user_uuid,
+                email: ownerProfile.data.email,
+                mobile: ownerProfile.data.mobile,
+                full_name: ownerProfile.data.full_name,
+                company_name: ownerProfile.data.company_name,
+              },
+            },
+          },
         };
         queryResponse = await queryResponse.update(payload);
       } else if (ownerProfile.data.assign_wiredup_leads_to === "reject") {
         let payload = {
           assigned_uuid: queryResponse.owner_uuid,
           status: "rejected",
+          data: {
+            ...queryResponse.data,
+            ...{
+              seller_detail: {
+                user_uuid: ownerProfile.user_uuid,
+                email: ownerProfile.data.email,
+                mobile: ownerProfile.data.mobile,
+                full_name: ownerProfile.data.full_name,
+                company_name: ownerProfile.data.company_name,
+              },
+            },
+          },
         };
         queryResponse = await queryResponse.update(payload);
       } else if (ownerProfile.data.assign_wiredup_leads_to === "auto_assign") {
@@ -76,6 +112,18 @@ module.exports = async (token, queryResponse) => {
         if (autoAssignCondition.length === 0) {
           let payload = {
             assigned_uuid: queryResponse.owner_uuid,
+            data: {
+              ...queryResponse.data,
+              ...{
+                seller_detail: {
+                  user_uuid: ownerProfile.user_uuid,
+                  email: ownerProfile.data.email,
+                  mobile: ownerProfile.data.mobile,
+                  full_name: ownerProfile.data.full_name,
+                  company_name: ownerProfile.data.company_name,
+                },
+              },
+            },
           };
           queryResponse = await queryResponse.update(payload);
         } else {
@@ -111,17 +159,53 @@ module.exports = async (token, queryResponse) => {
                 ) {
                   let payload = {
                     assigned_uuid: sellerProfile.uuid,
+                    data: {
+                      ...queryResponse.data,
+                      ...{
+                        seller_detail: {
+                          user_uuid: sellerProfile.user_uuid,
+                          email: sellerProfile.data.email,
+                          mobile: sellerProfile.data.mobile,
+                          full_name: sellerProfile.data.full_name,
+                          company_name: sellerProfile.data.company_name,
+                        },
+                      },
+                    },
                   };
                   queryResponse = await queryResponse.update(payload);
                 } else {
                   let payload = {
                     assigned_uuid: queryResponse.owner_uuid,
+                    data: {
+                      ...queryResponse.data,
+                      ...{
+                        seller_detail: {
+                          user_uuid: ownerProfile.user_uuid,
+                          email: ownerProfile.data.email,
+                          mobile: ownerProfile.data.mobile,
+                          full_name: ownerProfile.data.full_name,
+                          company_name: ownerProfile.data.company_name,
+                        },
+                      },
+                    },
                   };
                   queryResponse = await queryResponse.update(payload);
                 }
               } else {
                 let payload = {
                   assigned_uuid: queryResponse.owner_uuid,
+                  data: {
+                    ...queryResponse.data,
+                    ...{
+                      seller_detail: {
+                        user_uuid: ownerProfile.user_uuid,
+                        email: ownerProfile.data.email,
+                        mobile: ownerProfile.data.mobile,
+                        full_name: ownerProfile.data.full_name,
+                        company_name: ownerProfile.data.company_name,
+                      },
+                    },
+                  },
                 };
                 queryResponse = await queryResponse.update(payload);
               }
@@ -164,23 +248,33 @@ module.exports = async (token, queryResponse) => {
               );
               if (addressbookUserProfileUuid.length !== 0) {
                 // there would be multiple seller, so picking random seller
-                let payload = {
-                  assigned_uuid:
-                    addressbookUserProfileUuid[
+                let sellerProfile = await Profile.findOne({
+                  where: {
+                    uuid: addressbookUserProfileUuid[
                       Math.floor(
                         Math.random() * addressbookUserProfileUuid.length
                       )
                     ],
+                  },
+                });
+                let payload = {
+                  assigned_uuid: sellerProfile.uuid,
+                  data: {
+                    ...queryResponse.data,
+                    ...{
+                      seller_detail: {
+                        user_uuid: sellerProfile.user_uuid,
+                        email: sellerProfile.data.email,
+                        mobile: sellerProfile.data.mobile,
+                        full_name: sellerProfile.data.full_name,
+                        company_name: sellerProfile.data.company_name,
+                      },
+                    },
+                  },
                 };
                 queryResponse = await queryResponse.update(payload);
               }
               // response will be unassigned if there is no seller based on location
-              // else {
-              //   let payload = {
-              //     assigned_uuid: queryResponse.owner_uuid,
-              //   };
-              //   queryResponse = await queryResponse.update(payload);
-              // }
             }
           });
         }
