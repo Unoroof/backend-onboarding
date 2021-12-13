@@ -45,8 +45,8 @@ module.exports = {
         },
       });
 
-      // req.body.data["company_name"] = profile.data.company_name;
-      // req.body.data["buyer_full_name"] = profile.data.full_name;
+      req.body.data["company_name"] = profile.data.company_name;
+      req.body.data["buyer_full_name"] = profile.data.full_name;
       req.body.data["buyer_detail"] = {
         user_uuid: profile.user_uuid,
         email: profile.data.email,
