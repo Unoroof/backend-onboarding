@@ -6,6 +6,7 @@ const consumeError = require("../functions/consumeError");
 const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
 const { Op } = require("sequelize");
 const autoAssign = require("../functions/autoAssign");
+const calculateTenor = require("../functions/calculateTenor");
 
 module.exports = {
   async index(req, res) {
@@ -54,6 +55,12 @@ module.exports = {
         full_name: profile.data.full_name,
         company_name: profile.data.company_name,
       };
+      if (req.body.type === "refinance_existing_loan") {
+        req.body.data["tenor"] = await calculateTenor(
+          req.body.data.loan_taken_date,
+          req.body.data.maturity_date
+        );
+      }
 
       const query = await Queries.create({
         profile_uuid: profile.uuid,
