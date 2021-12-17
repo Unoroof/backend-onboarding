@@ -4,3 +4,6 @@ Dockerfile
 .dockerignore
 README.md
 .env
+docs
+kube-manifests
+node_modules/
