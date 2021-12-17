@@ -60,6 +60,11 @@ module.exports = async (token, queryResponse) => {
               mobile: ownerProfile.data.mobile,
               full_name: ownerProfile.data.full_name,
               company_name: ownerProfile.data.company_name,
+              bank_name:
+                ownerProfile.data.additional_company_details &&
+                ownerProfile.data.additional_company_details.bank_name
+                  ? ownerProfile.data.additional_company_details.bank_name
+                  : "",
             },
           },
         },
@@ -78,6 +83,11 @@ module.exports = async (token, queryResponse) => {
                 mobile: ownerProfile.data.mobile,
                 full_name: ownerProfile.data.full_name,
                 company_name: ownerProfile.data.company_name,
+                bank_name:
+                  ownerProfile.data.additional_company_details &&
+                  ownerProfile.data.additional_company_details.bank_name
+                    ? ownerProfile.data.additional_company_details.bank_name
+                    : "",
               },
             },
           },
@@ -96,6 +106,11 @@ module.exports = async (token, queryResponse) => {
                 mobile: ownerProfile.data.mobile,
                 full_name: ownerProfile.data.full_name,
                 company_name: ownerProfile.data.company_name,
+                bank_name:
+                  ownerProfile.data.additional_company_details &&
+                  ownerProfile.data.additional_company_details.bank_name
+                    ? ownerProfile.data.additional_company_details.bank_name
+                    : "",
               },
             },
           },
@@ -121,6 +136,11 @@ module.exports = async (token, queryResponse) => {
                   mobile: ownerProfile.data.mobile,
                   full_name: ownerProfile.data.full_name,
                   company_name: ownerProfile.data.company_name,
+                  bank_name:
+                    ownerProfile.data.additional_company_details &&
+                    ownerProfile.data.additional_company_details.bank_name
+                      ? ownerProfile.data.additional_company_details.bank_name
+                      : "",
                 },
               },
             },
@@ -168,6 +188,13 @@ module.exports = async (token, queryResponse) => {
                           mobile: sellerProfile.data.mobile,
                           full_name: sellerProfile.data.full_name,
                           company_name: sellerProfile.data.company_name,
+                          bank_name:
+                            sellerProfile.data.additional_company_details &&
+                            sellerProfile.data.additional_company_details
+                              .bank_name
+                              ? sellerProfile.data.additional_company_details
+                                  .bank_name
+                              : "",
                         },
                       },
                     },
@@ -185,6 +212,13 @@ module.exports = async (token, queryResponse) => {
                           mobile: ownerProfile.data.mobile,
                           full_name: ownerProfile.data.full_name,
                           company_name: ownerProfile.data.company_name,
+                          bank_name:
+                            ownerProfile.data.additional_company_details &&
+                            ownerProfile.data.additional_company_details
+                              .bank_name
+                              ? ownerProfile.data.additional_company_details
+                                  .bank_name
+                              : "",
                         },
                       },
                     },
@@ -203,6 +237,12 @@ module.exports = async (token, queryResponse) => {
                         mobile: ownerProfile.data.mobile,
                         full_name: ownerProfile.data.full_name,
                         company_name: ownerProfile.data.company_name,
+                        bank_name:
+                          ownerProfile.data.additional_company_details &&
+                          ownerProfile.data.additional_company_details.bank_name
+                            ? ownerProfile.data.additional_company_details
+                                .bank_name
+                            : "",
                       },
                     },
                   },
@@ -268,6 +308,13 @@ module.exports = async (token, queryResponse) => {
                         mobile: sellerProfile.data.mobile,
                         full_name: sellerProfile.data.full_name,
                         company_name: sellerProfile.data.company_name,
+                        bank_name:
+                          sellerProfile.data.additional_company_details &&
+                          sellerProfile.data.additional_company_details
+                            .bank_name
+                            ? sellerProfile.data.additional_company_details
+                                .bank_name
+                            : "",
                       },
                     },
                   },
