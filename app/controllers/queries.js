@@ -37,6 +37,30 @@ module.exports = {
     }
   },
 
+  async getAll(req, res) {
+    try {
+      let constraints = {
+        where: {},
+      };
+
+      if (req.query.search) {
+        constraints.where["data.product.label"] = {
+          [Op.like]: `${req.query.search}%`,
+        };
+      }
+
+      let queries = await Queries.findAll({
+        limit: req.query.limit || 100,
+        ...constraints,
+        order: [["createdAt", "DESC"]],
+      });
+
+      return queries;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
   async create(req, res) {
     try {
       let profile = await Profile.findOne({
