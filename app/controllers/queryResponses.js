@@ -40,7 +40,11 @@ module.exports = {
         };
       }
 
-      console.log("check constraints", constraints);
+      if (req.query.search) {
+        constraints.where["data.buyer_detail.company_name"] = {
+          [Op.like]: `${req.query.search}%`,
+        };
+      }
 
       let queryResponses = await QueryResponse.findAll(constraints);
 

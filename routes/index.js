@@ -124,6 +124,13 @@ router.get(
   executeForResult(QueryController.index, "queries"),
   executeForResponse(queryCollectionResponse)
 );
+
+router.get(
+  "/all-queries",
+  executeForResult(QueryController.getAll, "queries"),
+  executeForResponse(queryCollectionResponse)
+);
+
 router.get(
   "/response",
   executeForResult(ResponseController.index, "queryResponse"),
