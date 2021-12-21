@@ -1,8 +1,10 @@
 const consumeError = require("../functions/consumeError");
 const models = require("../models");
 const Profile = models.Profile;
+const Queries = models.Queries;
 const ProfileRevision = models.ProfileRevision;
 const { Op } = require("sequelize");
+const getBuyerUuidForProduct = require("../functions/getBuyerUuidForProduct");
 
 module.exports = {
   async index(req, res) {
@@ -115,6 +117,28 @@ module.exports = {
         });
       }
       return profile;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async getBuyerForProduct(req, res) {
+    try {
+      let constraints = {
+        where: {},
+      };
+
+      const profileUuids = await getBuyerUuidForProduct(req.query.product);
+
+      if (req.query.product)
+        constraints.where = {
+          uuid: {
+            [Op.in]: profileUuids,
+          },
+        };
+
+      let profiles = await Profile.findAll(constraints);
+      return profiles;
     } catch (error) {
       consumeError(error);
     }
