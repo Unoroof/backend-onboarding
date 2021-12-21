@@ -40,6 +40,10 @@ const createAutoAssignConditionRequest = require("../app/requests/createAutoAssi
 const AutoAssignConditionCollectionResponse = require("../app/responses/autoAssignConditionsCollection");
 const AutoAssignConditionResourceResponse = require("../app/responses/autoAssignConditionResources");
 
+const EnquiryController = require('../app/controllers').EnquiryController
+const createEnquiryRequest = require('../app/requests/createEnquiries');
+const enquiryResourceResponse = require('../app/responses/enquiryResource');
+
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
     status: "ok",
@@ -176,6 +180,13 @@ router.get(
   "/get-unassigned-responses",
   executeForResult(ResponseController.unassigned, "queryResponse"),
   executeForResponse(responseCollectionResponse)
+);
+
+router.post(
+  "/enquiries",
+  createEnquiryRequest,
+  executeForResult(EnquiryController.create),
+  executeForResponse(enquiryResourceResponse)
 );
 
 module.exports = router;
