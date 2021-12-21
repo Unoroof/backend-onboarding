@@ -72,6 +72,12 @@ router.post(
 );
 
 router.get(
+  "/buyer-profiles",
+  executeForResult(profileController.getBuyerForProduct, "profileList"),
+  executeForResponse(profileCollectionResponse)
+);
+
+router.get(
   "/countries",
   executeForResult(countryAndCityController.getAllCountries, "countries"),
   executeForResponse(countryCollectionResponse)
