@@ -135,6 +135,9 @@ module.exports = {
           uuid: {
             [Op.in]: profileUuids,
           },
+          data: {
+            privacy_preference: false,
+          },
         };
 
       let profiles = await Profile.findAll(constraints);
