@@ -17,8 +17,6 @@ module.exports = async (product) => {
       },
     };
 
-    // constraints.where["data.product.label"] = product;
-
     let queries = await Queries.findAll(constraints);
 
     await Promise.all(
