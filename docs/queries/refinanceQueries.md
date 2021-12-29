@@ -244,75 +244,7 @@ Auto assign refactoring:
     if(assign_wiredup_leads_to==='reject') don't assign, just reject it
     if(assign_wiredup_leads_to==='auto_assign') auto_assign based on criteria
 
-```
-
------------------=========
-seller onboarding: - [*] replace entity status to industry clasification
-
-buyer queries: - have to add CIN number field - change refinancing to financing - while creating query refinanc = cin number - attachments: balance sheet , rating documanet, company document, financing document: Add financials
-
-buyer queries - more info will take in product queries(will discuss)
-seller queries - product queries wont have : - remove input field - keep reassign button - buyer name in
-
-other services: - will have new design and feature(will discuss and need design)
-
-===================================
-product categories:
-
-Accounting Services
-Banking for E-Commerce/Digital Companies
-Banking Operations Outsourcing
-Brokerage Services
-Capital Market Products
-Cash Management Services
-Channel Financing
-Corporate Cards
-Credit Rating
-Dealer Financing
-Depository Services
-Digital Banking
-Foreign Remittances
-Insurance
-Investments
-Loan against property
-Money Changer and transfer services
-New Entity Incorporation
-Off Balance Sheet Financing
-Others ( Service provider will add Service Category)
-Overseas Financing
-Project Finance
-Regulatory/Compliance Services
-Taxation/Auditing Services
-Trade Finance
-Trade Flows
-Transaction Banking Accounts
-Transaction Banking Services
-Treasury Services
-Vendor Financing
-Virtual CFO services
-Wealth Management
-
-=======================
-
-```
-- loan amount:
-    - currency
-    - text feild
-- your chosen product:
-    - drop down
-    - if value is already selected then prefill
-    - else give option to select product
-- collateral: user will enter some percentage(50%)
-    - immovable asset: 30%
-    - cash equivalent: 70%
-    - total will be 100%
-- for questions in the form, if user select yes then only show fields which user have to fill
-- in buyer profile add a button `check buyer credit`:
-    - user will click `check buyer credit`
-    - user will pay 100 rupee fee
-    - and this request will go to wiredup via mail
-    - and wired up will share this info via email
-======================================================
+======================================
 1.  *- usecase:
        - user selected product type in refinance query
        - redirected to askwiredupforpartner screen
@@ -320,9 +252,4 @@ Wealth Management
        master list of product which is non financing products and user has selected financing product  (loantype/producttype)
        - need to handle this case: we can merge both financing and non-financing products
 2.  *- correct the api call which is in seller dashboard for showing query reponses
-========================================================
-
-- api to add product with category(refactoring required)
-- product is not selecting in product queries
-- person name should be name
 ```
