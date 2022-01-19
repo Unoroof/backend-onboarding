@@ -40,9 +40,10 @@ const createAutoAssignConditionRequest = require("../app/requests/createAutoAssi
 const AutoAssignConditionCollectionResponse = require("../app/responses/autoAssignConditionsCollection");
 const AutoAssignConditionResourceResponse = require("../app/responses/autoAssignConditionResources");
 
-const EnquiryController = require('../app/controllers').EnquiryController
-const createEnquiryRequest = require('../app/requests/createEnquiries');
-const enquiryResourceResponse = require('../app/responses/enquiryResource');
+const EnquiryController = require("../app/controllers").EnquiryController;
+const createEnquiryRequest = require("../app/requests/createEnquiries");
+const enquiryResourceResponse = require("../app/responses/enquiryResource");
+const enquiryCollectionResponse = require("../app/responses/enquiryCollection");
 
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
@@ -192,6 +193,11 @@ router.post(
   "/enquiries",
   createEnquiryRequest,
   executeForResult(EnquiryController.create),
+  executeForResponse(enquiryResourceResponse)
+);
+router.put(
+  "/enquiries/:enquiry_uuid",
+  executeForResult(EnquiryController.update),
   executeForResponse(enquiryResourceResponse)
 );
 
