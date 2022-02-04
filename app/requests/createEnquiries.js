@@ -6,10 +6,7 @@ const constraints = {
     custom_callback: {
       message: "Invalid Value of Type",
       callback: (req) => {
-        const validTypes = [
-          "for_product",
-          "for_partner",
-        ];
+        const validTypes = ["for_product", "for_partner", "for_credit_profile"];
         return validTypes.includes(req.body.type);
       },
     },
