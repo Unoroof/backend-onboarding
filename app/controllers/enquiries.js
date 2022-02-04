@@ -1,6 +1,7 @@
 const models = require("../models");
 const Enquiries = models.Enquiries;
 const consumeError = require("../functions/consumeError");
+const sendEmail = require("../functions/sendEmail");
 
 module.exports = {
   async create(req, res) {
@@ -35,6 +36,11 @@ module.exports = {
           ? req.body.payment_status
           : enquiry.payment_status,
       });
+
+      if (req.body.payment_status === "paid") {
+        await sendEmail(enquiry);
+      }
+
       return enquiry;
     } catch (error) {
       consumeError(error);
