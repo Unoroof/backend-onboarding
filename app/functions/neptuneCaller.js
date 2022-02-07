@@ -7,6 +7,7 @@ module.exports = async function (payload) {
     version: 1,
     message_id: process.env.NEPTUNE_ENV + "-" + uuid.v4(),
     timestamp: dayjs().unix(),
+    ignore_user_contacts: true,
     contact_infos: [
       {
         type: "email",
