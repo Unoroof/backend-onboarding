@@ -1,4 +1,4 @@
-const sendPushNotification = require("./neptuneCaller");
+const sendPushNotification = require("./neptune/neptuneCaller");
 
 module.exports = async (enquiry) => {
   try {
@@ -11,6 +11,23 @@ module.exports = async (enquiry) => {
           name: "Rajesh", // enquiry.data.name,
           company_name: "Betalectic", // enquiry.data.company_name,
         },
+        ignore_user_contacts: true,
+        contact_infos: [
+          {
+            type: "email",
+            value: "sonali@unoroof.in",
+          },
+          {
+            type: "email",
+            value: "manasa@betalectic.com",
+            cc: true,
+          },
+          {
+            type: "email",
+            value: "rajesh@betalectic.com",
+            cc: true,
+          },
+        ],
       });
     } else if (enquiry.type === "for_product") {
       await sendPushNotification({
@@ -20,6 +37,23 @@ module.exports = async (enquiry) => {
           name: "Rajesh", // enquiry.data.name,
           company_name: "Betalectic", // enquiry.data.company_name,
         },
+        ignore_user_contacts: true,
+        contact_infos: [
+          {
+            type: "email",
+            value: "sonali@unoroof.in",
+          },
+          {
+            type: "email",
+            value: "manasa@betalectic.com",
+            cc: true,
+          },
+          {
+            type: "email",
+            value: "rajesh@betalectic.com",
+            cc: true,
+          },
+        ],
       });
     } else if (enquiry.type === "for_credit_profile") {
       await sendPushNotification({
@@ -30,6 +64,23 @@ module.exports = async (enquiry) => {
           company_name: "Betalectic", // enquiry.data.company_name,
           buyer_name: "Shubham",
         },
+        ignore_user_contacts: true,
+        contact_infos: [
+          {
+            type: "email",
+            value: "sonali@unoroof.in",
+          },
+          {
+            type: "email",
+            value: "manasa@betalectic.com",
+            cc: true,
+          },
+          {
+            type: "email",
+            value: "rajesh@betalectic.com",
+            cc: true,
+          },
+        ],
       });
     }
   } catch (error) {

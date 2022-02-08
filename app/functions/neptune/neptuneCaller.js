@@ -7,23 +7,6 @@ module.exports = async function (payload) {
     version: 1,
     message_id: process.env.NEPTUNE_ENV + "-" + uuid.v4(),
     timestamp: dayjs().unix(),
-    ignore_user_contacts: true,
-    contact_infos: [
-      {
-        type: "email",
-        value: "sonali@unoroof.in",
-      },
-      {
-        type: "email",
-        value: "manasa@betalectic.com",
-        cc: true,
-      },
-      {
-        type: "email",
-        value: "rajesh@betalectic.com",
-        cc: true,
-      },
-    ],
   };
   data = JSON.stringify({ ...data, ...payload });
 
