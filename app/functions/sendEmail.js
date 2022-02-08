@@ -1,10 +1,10 @@
-const sendPushNotification = require("./neptune/neptuneCaller");
+const sendEvent = require("./neptune/neptuneCaller");
 
 module.exports = async (enquiry) => {
   try {
     console.log("check", enquiry);
     if (enquiry.type === "for_partner") {
-      await sendPushNotification({
+      await sendEvent({
         event_type: "user_raised_partner_enquiry",
         user_id: enquiry.user_uuid,
         data: {
@@ -30,7 +30,7 @@ module.exports = async (enquiry) => {
         ],
       });
     } else if (enquiry.type === "for_product") {
-      await sendPushNotification({
+      await sendEvent({
         event_type: "user_raised_product_enquiry",
         user_id: enquiry.user_uuid,
         data: {
@@ -56,7 +56,7 @@ module.exports = async (enquiry) => {
         ],
       });
     } else if (enquiry.type === "for_credit_profile") {
-      await sendPushNotification({
+      await sendEvent({
         event_type: "user_raised_credit_enquiry",
         user_id: enquiry.user_uuid,
         data: {
