@@ -77,8 +77,7 @@ module.exports = async (token, queryResponse) => {
         },
       };
       queryResponse = await queryResponse.update(payload);
-      // send push notification to seller whom query is assigned
-
+      console.log("checkhereownerProfile.user_uuid", ownerProfile.user_uuid);
       await sendPushNotification({
         event_type: "user_have_assigned_a_query",
         user_id: ownerProfile.user_uuid, // user id of person whome to send query
