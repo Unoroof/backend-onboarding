@@ -5,12 +5,19 @@ const consumeError = require("./consumeError");
 const findUserByEmailMobile = require("./findUserByEmailMobile");
 const getAddressbookUsersProfile = require("./getAddressbookUsersProfile");
 const getAddressbookContactsByUserUuid = require("./getAddressbookContactsByUserUuid");
+const sendPushNotification = require("./neptune/neptuneCaller");
 
 module.exports = async (token, queryResponse) => {
   try {
     let ownerProfile = await Profile.findOne({
       where: {
         uuid: queryResponse.owner_uuid,
+      },
+    });
+
+    let buyerProfile = await Profile.findOne({
+      where: {
+        uuid: queryResponse.profile_uuid,
       },
     });
 
@@ -70,6 +77,19 @@ module.exports = async (token, queryResponse) => {
         },
       };
       queryResponse = await queryResponse.update(payload);
+      // send push notification to seller whom query is assigned
+
+      await sendPushNotification({
+        event_type: "user_have_assigned_a_query",
+        user_id: ownerProfile.user_uuid, // user id of person whome to send query
+        data: {
+          name: buyerProfile.data.full_name, // enquiry.data.name,
+          query_type: queryResponse.query_type,
+          product_type: queryResponse.data.loan_type.label,
+          loan_amount: queryResponse.data.outstanding_loan_amount,
+          notification_type: "user_have_assigned_a_query", //query detail page
+        },
+      });
     } else {
       if (ownerProfile.data.assign_wiredup_leads_to === "me") {
         let payload = {
@@ -93,6 +113,17 @@ module.exports = async (token, queryResponse) => {
           },
         };
         queryResponse = await queryResponse.update(payload);
+        await sendPushNotification({
+          event_type: "user_have_assigned_a_query",
+          user_id: ownerProfile.user_uuid, // user id of person whome to send query
+          data: {
+            name: buyerProfile.data.full_name, // enquiry.data.name,
+            query_type: queryResponse.query_type,
+            product_type: queryResponse.data.loan_type.label,
+            loan_amount: queryResponse.data.outstanding_loan_amount,
+            notification_type: "user_have_assigned_a_query", //query detail page
+          },
+        });
       } else if (ownerProfile.data.assign_wiredup_leads_to === "reject") {
         let payload = {
           assigned_uuid: queryResponse.owner_uuid,
@@ -116,6 +147,17 @@ module.exports = async (token, queryResponse) => {
           },
         };
         queryResponse = await queryResponse.update(payload);
+        await sendPushNotification({
+          event_type: "user_have_assigned_a_query",
+          user_id: ownerProfile.user_uuid, // user id of person whome to send query
+          data: {
+            name: buyerProfile.data.full_name, // enquiry.data.name,
+            query_type: queryResponse.query_type,
+            product_type: queryResponse.data.loan_type.label,
+            loan_amount: queryResponse.data.outstanding_loan_amount,
+            notification_type: "user_have_assigned_a_query", //query detail page
+          },
+        });
       } else if (ownerProfile.data.assign_wiredup_leads_to === "auto_assign") {
         let autoAssignCondition = await AutoAssignCondition.findAll({
           where: {
@@ -146,6 +188,17 @@ module.exports = async (token, queryResponse) => {
             },
           };
           queryResponse = await queryResponse.update(payload);
+          await sendPushNotification({
+            event_type: "user_have_assigned_a_query",
+            user_id: ownerProfile.user_uuid, // user id of person whome to send query
+            data: {
+              name: buyerProfile.data.full_name, // enquiry.data.name,
+              query_type: queryResponse.query_type,
+              product_type: queryResponse.data.loan_type.label,
+              loan_amount: queryResponse.data.outstanding_loan_amount,
+              notification_type: "user_have_assigned_a_query", //query detail page
+            },
+          });
         } else {
           console.log("check here inside else check");
           await autoAssignCondition.forEach(async (criteria) => {
@@ -200,6 +253,17 @@ module.exports = async (token, queryResponse) => {
                     },
                   };
                   queryResponse = await queryResponse.update(payload);
+                  await sendPushNotification({
+                    event_type: "user_have_assigned_a_query",
+                    user_id: sellerProfile.user_uuid, // user id of person whome to send query
+                    data: {
+                      name: buyerProfile.data.full_name, // enquiry.data.name,
+                      query_type: queryResponse.query_type,
+                      product_type: queryResponse.data.loan_type.label,
+                      loan_amount: queryResponse.data.outstanding_loan_amount,
+                      notification_type: "user_have_assigned_a_query", //query detail page
+                    },
+                  });
                 } else {
                   let payload = {
                     assigned_uuid: queryResponse.owner_uuid,
@@ -224,6 +288,17 @@ module.exports = async (token, queryResponse) => {
                     },
                   };
                   queryResponse = await queryResponse.update(payload);
+                  await sendPushNotification({
+                    event_type: "user_have_assigned_a_query",
+                    user_id: ownerProfile.user_uuid, // user id of person whome to send query
+                    data: {
+                      name: buyerProfile.data.full_name, // enquiry.data.name,
+                      query_type: queryResponse.query_type,
+                      product_type: queryResponse.data.loan_type.label,
+                      loan_amount: queryResponse.data.outstanding_loan_amount,
+                      notification_type: "user_have_assigned_a_query", //query detail page
+                    },
+                  });
                 }
               } else {
                 let payload = {
@@ -248,15 +323,20 @@ module.exports = async (token, queryResponse) => {
                   },
                 };
                 queryResponse = await queryResponse.update(payload);
+                await sendPushNotification({
+                  event_type: "user_have_assigned_a_query",
+                  user_id: ownerProfile.user_uuid, // user id of person whome to send query
+                  data: {
+                    name: buyerProfile.data.full_name, // enquiry.data.name,
+                    query_type: queryResponse.query_type,
+                    product_type: queryResponse.data.loan_type.label,
+                    loan_amount: queryResponse.data.outstanding_loan_amount,
+                    notification_type: "user_have_assigned_a_query", //query detail page
+                  },
+                });
               }
             } else if (criteria.assign_to.type === "location_based") {
               const type = "fm-seller";
-
-              let buyerProfile = await Profile.findOne({
-                where: {
-                  uuid: queryResponse.profile_uuid,
-                },
-              });
 
               let addressbookUserProfile = await getAddressbookUsersProfile(
                 token,
@@ -320,6 +400,17 @@ module.exports = async (token, queryResponse) => {
                   },
                 };
                 queryResponse = await queryResponse.update(payload);
+                await sendPushNotification({
+                  event_type: "user_have_assigned_a_query",
+                  user_id: sellerProfile.user_uuid, // user id of person whome to send query
+                  data: {
+                    name: buyerProfile.data.full_name, // enquiry.data.name,
+                    query_type: queryResponse.query_type,
+                    product_type: queryResponse.data.loan_type.label,
+                    loan_amount: queryResponse.data.outstanding_loan_amount,
+                    notification_type: "user_have_assigned_a_query", //query detail page
+                  },
+                });
               }
               // response will be unassigned if there is no seller based on location
             }
