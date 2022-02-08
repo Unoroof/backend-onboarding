@@ -3,9 +3,18 @@ var express = require("express");
 var path = require("path");
 var logger = require("morgan");
 const Sentry = require("@sentry/node");
+var dotenv = require("dotenv");
+
+dotenv.config({ path: ".env" });
+
+
 Sentry.init({
-  dsn: process.env.SENTRY_DNS,
+  dsn: process.env.SENTRY_DSN,
+  environment: process.env.NODE_ENV
 });
+
+Sentry.setTag('app-name', process.env.APP_NAME);
+
 
 var indexRouter = require("./routes/index");
 var auth = require("./app/middlewares/auth");
@@ -30,8 +39,8 @@ app.use(function (req, res, next) {
 // error handler
 app.use(async function (err, req, res, next) {
   console.log("I am gonna catch");
-  // Sentry.captureException(err);
-  // await Sentry.flush();
+  Sentry.captureException(err);
+  await Sentry.flush();
   if (process.env.DEBUG === "true") {
     console.log("Global error handler", err.message, err.status);
     return res.status(err.status || 500).send({ message: err.message });
