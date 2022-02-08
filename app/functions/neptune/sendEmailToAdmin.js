@@ -1,7 +1,10 @@
 var sendEvent = require("./neptuneCaller");
 
-module.exports = async function () {
+module.exports = async function (data) {
   var payload = {
+    event_type: data.event_type,
+    user_id: data.user_id,
+    data: data.data,
     ignore_user_contacts: true,
     contact_infos: [
       {
