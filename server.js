@@ -7,14 +7,12 @@ var dotenv = require("dotenv");
 
 dotenv.config({ path: ".env" });
 
-
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.ENVIRONMENT
 });
 
-Sentry.setTag('app-name', process.env.APP_NAME);
-
+Sentry.setTag("app-name", process.env.APP_NAME);
 
 var indexRouter = require("./routes/index");
 var auth = require("./app/middlewares/auth");

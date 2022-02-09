@@ -3,26 +3,12 @@ var uuid = require("uuid");
 var dayjs = require("dayjs");
 
 module.exports = async function (payload) {
+  console.log("checkherepayloadinneptunecaller", JSON.stringify(payload));
+
   var data = {
     version: 1,
     message_id: process.env.NEPTUNE_ENV + "-" + uuid.v4(),
     timestamp: dayjs().unix(),
-    contact_infos: [
-      {
-        type: "email",
-        value: "sonali@unoroof.in",
-      },
-      {
-        type: "email",
-        value: "manasa@betalectic.com",
-        cc: true,
-      },
-      {
-        type: "email",
-        value: "rajesh@betalectic.com",
-        cc: true,
-      },
-    ],
   };
   data = JSON.stringify({ ...data, ...payload });
 
