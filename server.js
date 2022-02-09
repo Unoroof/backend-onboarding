@@ -10,7 +10,7 @@ dotenv.config({ path: ".env" });
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
-  environment: process.env.NODE_ENV
+  environment: process.env.ENVIRONMENT
 });
 
 Sentry.setTag('app-name', process.env.APP_NAME);
