@@ -86,6 +86,8 @@ module.exports = async (token, queryResponse) => {
           query_type: queryResponse.query_type,
           product_type: queryResponse.data.loan_type.label,
           loan_amount: queryResponse.data.outstanding_loan_amount,
+          query_response_uuid: queryResponse.uuid,
+          buyer_profile_uuid: queryResponse.profile_uuid,
           notification_type: "user_have_assigned_a_query", //query detail page
         },
       });
@@ -120,6 +122,8 @@ module.exports = async (token, queryResponse) => {
             query_type: queryResponse.query_type,
             product_type: queryResponse.data.loan_type.label,
             loan_amount: queryResponse.data.outstanding_loan_amount,
+            query_response_uuid: queryResponse.uuid,
+            buyer_profile_uuid: queryResponse.profile_uuid,
             notification_type: "user_have_assigned_a_query", //query detail page
           },
         });
@@ -154,6 +158,8 @@ module.exports = async (token, queryResponse) => {
             query_type: queryResponse.query_type,
             product_type: queryResponse.data.loan_type.label,
             loan_amount: queryResponse.data.outstanding_loan_amount,
+            query_response_uuid: queryResponse.uuid,
+            buyer_profile_uuid: queryResponse.profile_uuid,
             notification_type: "user_have_assigned_a_query", //query detail page
           },
         });
@@ -195,6 +201,8 @@ module.exports = async (token, queryResponse) => {
               query_type: queryResponse.query_type,
               product_type: queryResponse.data.loan_type.label,
               loan_amount: queryResponse.data.outstanding_loan_amount,
+              query_response_uuid: queryResponse.uuid,
+              buyer_profile_uuid: queryResponse.profile_uuid,
               notification_type: "user_have_assigned_a_query", //query detail page
             },
           });
@@ -260,6 +268,8 @@ module.exports = async (token, queryResponse) => {
                       query_type: queryResponse.query_type,
                       product_type: queryResponse.data.loan_type.label,
                       loan_amount: queryResponse.data.outstanding_loan_amount,
+                      query_response_uuid: queryResponse.uuid,
+                      buyer_profile_uuid: queryResponse.profile_uuid,
                       notification_type: "user_have_assigned_a_query", //query detail page
                     },
                   });
@@ -295,6 +305,8 @@ module.exports = async (token, queryResponse) => {
                       query_type: queryResponse.query_type,
                       product_type: queryResponse.data.loan_type.label,
                       loan_amount: queryResponse.data.outstanding_loan_amount,
+                      query_response_uuid: queryResponse.uuid,
+                      buyer_profile_uuid: queryResponse.profile_uuid,
                       notification_type: "user_have_assigned_a_query", //query detail page
                     },
                   });
@@ -330,6 +342,8 @@ module.exports = async (token, queryResponse) => {
                     query_type: queryResponse.query_type,
                     product_type: queryResponse.data.loan_type.label,
                     loan_amount: queryResponse.data.outstanding_loan_amount,
+                    query_response_uuid: queryResponse.uuid,
+                    buyer_profile_uuid: queryResponse.profile_uuid,
                     notification_type: "user_have_assigned_a_query", //query detail page
                   },
                 });
@@ -407,6 +421,8 @@ module.exports = async (token, queryResponse) => {
                     query_type: queryResponse.query_type,
                     product_type: queryResponse.data.loan_type.label,
                     loan_amount: queryResponse.data.outstanding_loan_amount,
+                    query_response_uuid: queryResponse.uuid,
+                    buyer_profile_uuid: queryResponse.profile_uuid,
                     notification_type: "user_have_assigned_a_query", //query detail page
                   },
                 });
