@@ -79,7 +79,7 @@ module.exports = async (token, queryResponse) => {
       queryResponse = await queryResponse.update(payload);
       console.log("checkhereownerProfile.user_uuid", ownerProfile.user_uuid);
       await sendPushNotification({
-        event_type: "user_have_assigned_a_query",
+        event_type: "user_recieved_query_a_query",
         user_id: ownerProfile.user_uuid, // user id of person whome to send query
         data: {
           name: buyerProfile.data.full_name, // enquiry.data.name,
@@ -88,7 +88,7 @@ module.exports = async (token, queryResponse) => {
           loan_amount: queryResponse.data.outstanding_loan_amount,
           query_response_uuid: queryResponse.uuid,
           buyer_profile_uuid: queryResponse.profile_uuid,
-          notification_type: "user_have_assigned_a_query", //query detail page
+          notification_type: "user_recieved_query_a_query", //query detail page
         },
       });
     } else {
@@ -115,7 +115,7 @@ module.exports = async (token, queryResponse) => {
         };
         queryResponse = await queryResponse.update(payload);
         await sendPushNotification({
-          event_type: "user_have_assigned_a_query",
+          event_type: "user_recieved_query_a_query",
           user_id: ownerProfile.user_uuid, // user id of person whome to send query
           data: {
             name: buyerProfile.data.full_name, // enquiry.data.name,
@@ -124,7 +124,7 @@ module.exports = async (token, queryResponse) => {
             loan_amount: queryResponse.data.outstanding_loan_amount,
             query_response_uuid: queryResponse.uuid,
             buyer_profile_uuid: queryResponse.profile_uuid,
-            notification_type: "user_have_assigned_a_query", //query detail page
+            notification_type: "user_recieved_query_a_query", //query detail page
           },
         });
       } else if (ownerProfile.data.assign_wiredup_leads_to === "reject") {
@@ -151,7 +151,7 @@ module.exports = async (token, queryResponse) => {
         };
         queryResponse = await queryResponse.update(payload);
         await sendPushNotification({
-          event_type: "user_have_assigned_a_query",
+          event_type: "user_recieved_query_a_query",
           user_id: ownerProfile.user_uuid, // user id of person whome to send query
           data: {
             name: buyerProfile.data.full_name, // enquiry.data.name,
@@ -160,7 +160,7 @@ module.exports = async (token, queryResponse) => {
             loan_amount: queryResponse.data.outstanding_loan_amount,
             query_response_uuid: queryResponse.uuid,
             buyer_profile_uuid: queryResponse.profile_uuid,
-            notification_type: "user_have_assigned_a_query", //query detail page
+            notification_type: "user_recieved_query_a_query", //query detail page
           },
         });
       } else if (ownerProfile.data.assign_wiredup_leads_to === "auto_assign") {
@@ -194,7 +194,7 @@ module.exports = async (token, queryResponse) => {
           };
           queryResponse = await queryResponse.update(payload);
           await sendPushNotification({
-            event_type: "user_have_assigned_a_query",
+            event_type: "user_recieved_query_a_query",
             user_id: ownerProfile.user_uuid, // user id of person whome to send query
             data: {
               name: buyerProfile.data.full_name, // enquiry.data.name,
@@ -203,7 +203,7 @@ module.exports = async (token, queryResponse) => {
               loan_amount: queryResponse.data.outstanding_loan_amount,
               query_response_uuid: queryResponse.uuid,
               buyer_profile_uuid: queryResponse.profile_uuid,
-              notification_type: "user_have_assigned_a_query", //query detail page
+              notification_type: "user_recieved_query_a_query", //query detail page
             },
           });
         } else {
@@ -261,7 +261,7 @@ module.exports = async (token, queryResponse) => {
                   };
                   queryResponse = await queryResponse.update(payload);
                   await sendPushNotification({
-                    event_type: "user_have_assigned_a_query",
+                    event_type: "user_recieved_query_a_query",
                     user_id: sellerProfile.user_uuid, // user id of person whome to send query
                     data: {
                       name: buyerProfile.data.full_name, // enquiry.data.name,
@@ -270,7 +270,7 @@ module.exports = async (token, queryResponse) => {
                       loan_amount: queryResponse.data.outstanding_loan_amount,
                       query_response_uuid: queryResponse.uuid,
                       buyer_profile_uuid: queryResponse.profile_uuid,
-                      notification_type: "user_have_assigned_a_query", //query detail page
+                      notification_type: "user_recieved_query_a_query", //query detail page
                     },
                   });
                 } else {
@@ -298,7 +298,7 @@ module.exports = async (token, queryResponse) => {
                   };
                   queryResponse = await queryResponse.update(payload);
                   await sendPushNotification({
-                    event_type: "user_have_assigned_a_query",
+                    event_type: "user_recieved_query_a_query",
                     user_id: ownerProfile.user_uuid, // user id of person whome to send query
                     data: {
                       name: buyerProfile.data.full_name, // enquiry.data.name,
@@ -307,7 +307,7 @@ module.exports = async (token, queryResponse) => {
                       loan_amount: queryResponse.data.outstanding_loan_amount,
                       query_response_uuid: queryResponse.uuid,
                       buyer_profile_uuid: queryResponse.profile_uuid,
-                      notification_type: "user_have_assigned_a_query", //query detail page
+                      notification_type: "user_recieved_query_a_query", //query detail page
                     },
                   });
                 }
@@ -335,7 +335,7 @@ module.exports = async (token, queryResponse) => {
                 };
                 queryResponse = await queryResponse.update(payload);
                 await sendPushNotification({
-                  event_type: "user_have_assigned_a_query",
+                  event_type: "user_recieved_query_a_query",
                   user_id: ownerProfile.user_uuid, // user id of person whome to send query
                   data: {
                     name: buyerProfile.data.full_name, // enquiry.data.name,
@@ -344,7 +344,7 @@ module.exports = async (token, queryResponse) => {
                     loan_amount: queryResponse.data.outstanding_loan_amount,
                     query_response_uuid: queryResponse.uuid,
                     buyer_profile_uuid: queryResponse.profile_uuid,
-                    notification_type: "user_have_assigned_a_query", //query detail page
+                    notification_type: "user_recieved_query_a_query", //query detail page
                   },
                 });
               }
@@ -414,7 +414,7 @@ module.exports = async (token, queryResponse) => {
                 };
                 queryResponse = await queryResponse.update(payload);
                 await sendPushNotification({
-                  event_type: "user_have_assigned_a_query",
+                  event_type: "user_recieved_query_a_query",
                   user_id: sellerProfile.user_uuid, // user id of person whome to send query
                   data: {
                     name: buyerProfile.data.full_name, // enquiry.data.name,
@@ -423,7 +423,7 @@ module.exports = async (token, queryResponse) => {
                     loan_amount: queryResponse.data.outstanding_loan_amount,
                     query_response_uuid: queryResponse.uuid,
                     buyer_profile_uuid: queryResponse.profile_uuid,
-                    notification_type: "user_have_assigned_a_query", //query detail page
+                    notification_type: "user_recieved_query_a_query", //query detail page
                   },
                 });
               }
