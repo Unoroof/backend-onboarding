@@ -6,6 +6,8 @@ const consumeError = require("../functions/consumeError");
 const { Op, Sequelize } = require("sequelize");
 const getBuyersLeads = require("../functions/getBuyersLeads");
 const getAddressbookUsersProfile = require("../functions/getAddressbookUsersProfile");
+const sendPushNotification = require("../functions/neptune/neptuneCaller");
+const sendEventOnResponse = require("../functions/sendEventOnResponse");
 
 module.exports = {
   async index(req, res) {
@@ -98,6 +100,11 @@ module.exports = {
       }
 
       queryResponse = await queryResponse.update(payload);
+
+      if (req.body.status) {
+        await sendEventOnResponse(req.body.status, queryResponse);
+      }
+
       return queryResponse;
     } catch (error) {
       consumeError(error);
