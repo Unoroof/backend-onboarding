@@ -426,8 +426,20 @@ module.exports = async (token, queryResponse) => {
                     notification_type: "user_recieved_a_query", //query detail page
                   },
                 });
+              } else {
+                // response will be unassigned if there is no seller based on location
+                await sendPushNotification({
+                  event_type: "user_auto_assign_criteria_mismatched",
+                  user_id: queryResponse.data.seller_detail.user_uuid, // user id of person whome to send query
+                  data: {
+                    name: buyerProfile.data.full_name, // enquiry.data.name,
+                    query_type: queryResponse.query_type,
+                    product_type: queryResponse.data.loan_type.label,
+                    loan_amount: queryResponse.data.outstanding_loan_amount,
+                    notification_type: "user_auto_assign_criteria_mismatched", //query detail page
+                  },
+                });
               }
-              // response will be unassigned if there is no seller based on location
             }
           });
         }
