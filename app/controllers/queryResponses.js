@@ -100,21 +100,35 @@ module.exports = {
 
       queryResponse = await queryResponse.update(payload);
 
-      let sellerProfile = await Profile.findOne({
-        where: {
-          uuid: queryResponse.assigned_uuid,
-        },
-      });
-
       if (req.body.status === "responded") {
         await sendPushNotification({
           event_type: "user_have_responded_to_a_query",
           user_id: queryResponse.data.buyer_detail.user_uuid, // user id of person whome to send pushnotification
           data: {
-            name: sellerProfile.data.full_name,
-            query_type: queryResponse.query_type,
+            name: queryResponse.data.seller_detail.full_name,
+            query_type:
+              queryResponse.query_type === "refinance_existing_loan"
+                ? "financing"
+                : "non-financing",
             product_type: queryResponse.data.loan_type.label,
             loan_amount: queryResponse.data.outstanding_loan_amount,
+            profile_type: "fm-buyer",
+            notification_type: "user_have_responded_to_a_query", //query detail page
+          },
+        });
+      } else if (req.body.status === "accepted") {
+        await sendPushNotification({
+          event_type: "user_have_responded_to_a_query",
+          user_id: queryResponse.data.seller_detail.user_uuid, // user id of person whome to send pushnotification
+          data: {
+            name: queryResponse.data.buyer_detail.full_name,
+            query_type:
+              queryResponse.query_type === "refinance_existing_loan"
+                ? "financing"
+                : "non-financing",
+            product_type: queryResponse.data.loan_type.label,
+            loan_amount: queryResponse.data.outstanding_loan_amount,
+            profile_type: "fm-seller",
             notification_type: "user_have_responded_to_a_query", //query detail page
           },
         });
