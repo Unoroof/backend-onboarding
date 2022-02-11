@@ -68,7 +68,7 @@ module.exports = {
       if (req.body.user_uuid) constraints.where.user_uuid = req.body.user_uuid;
 
       let profiles = await Profile.findAll({
-        constraints,
+        ...constraints,
         order: [["createdAt", "DESC"]],
       });
       return profiles;
