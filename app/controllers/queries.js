@@ -7,6 +7,7 @@ const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
 const { Op } = require("sequelize");
 const autoAssign = require("../functions/autoAssign");
 const calculateTenor = require("../functions/calculateTenor");
+const sendPushNotification = require("../functions/neptune/neptuneCaller");
 
 module.exports = {
   async index(req, res) {
@@ -95,6 +96,33 @@ module.exports = {
       });
 
       if (query) {
+        if (query.query_type === "refinance_existing_loan") {
+          await sendPushNotification({
+            event_type: "buyer_sent_a_financing_query",
+            user_id: profile.user_uuid,
+            data: {
+              query_type: query.type,
+              query_uuid: query.uuid,
+              buyer_profile_uuid: query.profile_uuid,
+              sellers: query.sellers,
+              ...query.data,
+              notification_type: "buyer_sent_a_financing_query",
+            },
+          });
+        } else {
+          await sendPushNotification({
+            event_type: "buyer_sent_a_non_financing_query",
+            user_id: profile.user_uuid,
+            data: {
+              query_type: query.type,
+              query_uuid: query.uuid,
+              buyer_profile_uuid: query.profile_uuid,
+              sellers: query.sellers,
+              ...query.data,
+              notification_type: "buyer_sent_a_non_financing_query",
+            },
+          });
+        }
         // after creating query find eligible responders
         const eligibleResponders = await getEligibleResponders(
           req.token,
