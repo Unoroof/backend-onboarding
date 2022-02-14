@@ -96,7 +96,7 @@ module.exports = {
       });
 
       if (query) {
-        if (query.query_type === "refinance_existing_loan") {
+        if (query.type === "refinance_existing_loan") {
           await sendPushNotification({
             event_type: "buyer_sent_a_financing_query",
             user_id: profile.user_uuid,
