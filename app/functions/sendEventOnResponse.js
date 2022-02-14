@@ -6,48 +6,52 @@ module.exports = async (status, queryResponse) => {
       if (queryResponse.query_type === "refinance_existing_loan") {
         await callNeptune({
           event_type: "seller_sent_quote_to_a_financing_query",
-          user_id: queryResponse.data.seller_detail.user_uuid, // user id of person whome to send pushnotification
+          user_id: queryResponse.data.seller_detail.user_uuid,
           data: {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "financing",
-            product_type: queryResponse.data.loan_type.label,
-            loan_amount: queryResponse.data.outstanding_loan_amount,
-            notification_type: "seller_sent_quote_to_a_financing_query", //query detail page
+            query_uuid: queryResponse.query_uuid,
+            query_response_uuid: queryResponse.uuid,
+            ...queryResponse.data,
+            notification_type: "seller_sent_quote_to_a_financing_query",
           },
         });
         await callNeptune({
           event_type: "buyer_received_quote_to_a_financing_query",
-          user_id: queryResponse.data.buyer_detail.user_uuid, // user id of person whome to send pushnotification
+          user_id: queryResponse.data.buyer_detail.user_uuid,
           data: {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "financing",
-            product_type: queryResponse.data.loan_type.label,
-            loan_amount: queryResponse.data.outstanding_loan_amount,
-            notification_type: "buyer_received_quote_to_a_financing_query", //query detail page
+            query_uuid: queryResponse.query_uuid,
+            query_response_uuid: queryResponse.uuid,
+            ...queryResponse.data,
+            notification_type: "buyer_received_quote_to_a_financing_query",
           },
         });
       } else {
         await callNeptune({
           event_type: "seller_sent_quote_to_a_non_financing_query",
-          user_id: queryResponse.data.seller_detail.user_uuid, // user id of person whome to send pushnotification
+          user_id: queryResponse.data.seller_detail.user_uuid,
           data: {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "non-financing",
-            product_type: queryResponse.data.loan_type.label,
-            loan_amount: queryResponse.data.outstanding_loan_amount,
-            notification_type: "seller_sent_quote_to_a_non_financing_query", //query detail page
+            query_uuid: queryResponse.query_uuid,
+            query_response_uuid: queryResponse.uuid,
+            ...queryResponse.data,
+            notification_type: "seller_sent_quote_to_a_non_financing_query",
           },
         });
 
         await callNeptune({
           event_type: "buyer_received_quote_to_a_non_financing_query",
-          user_id: queryResponse.data.buyer_detail.user_uuid, // user id of person whome to send pushnotification
+          user_id: queryResponse.data.buyer_detail.user_uuid,
           data: {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "non-financing",
-            product_type: queryResponse.data.loan_type.label,
-            loan_amount: queryResponse.data.outstanding_loan_amount,
-            notification_type: "buyer_received_quote_to_a_non_financing_query", //query detail page
+            query_uuid: queryResponse.query_uuid,
+            query_response_uuid: queryResponse.uuid,
+            ...queryResponse.data,
+            notification_type: "buyer_received_quote_to_a_non_financing_query",
           },
         });
       }
@@ -59,8 +63,9 @@ module.exports = async (status, queryResponse) => {
           data: {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "financing",
-            product_type: queryResponse.data.loan_type.label,
-            loan_amount: queryResponse.data.outstanding_loan_amount,
+            query_uuid: queryResponse.query_uuid,
+            query_response_uuid: queryResponse.uuid,
+            ...queryResponse.data,
             notification_type: "buyer_accepted_a_financing_query", //query detail page
           },
         });
@@ -70,8 +75,9 @@ module.exports = async (status, queryResponse) => {
           data: {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "financing",
-            product_type: queryResponse.data.loan_type.label,
-            loan_amount: queryResponse.data.outstanding_loan_amount,
+            query_uuid: queryResponse.query_uuid,
+            query_response_uuid: queryResponse.uuid,
+            ...queryResponse.data,
             notification_type:
               "seller_received_accepted_response_to_a_financing_query", //query detail page
           },
@@ -85,8 +91,9 @@ module.exports = async (status, queryResponse) => {
           data: {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "financing",
-            product_type: queryResponse.data.loan_type.label,
-            loan_amount: queryResponse.data.outstanding_loan_amount,
+            query_uuid: queryResponse.query_uuid,
+            query_response_uuid: queryResponse.uuid,
+            ...queryResponse.data,
             notification_type: "buyer_rejected_a_financing_query", //query detail page
           },
         });
@@ -96,8 +103,9 @@ module.exports = async (status, queryResponse) => {
           data: {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "financing",
-            product_type: queryResponse.data.loan_type.label,
-            loan_amount: queryResponse.data.outstanding_loan_amount,
+            query_uuid: queryResponse.query_uuid,
+            query_response_uuid: queryResponse.uuid,
+            ...queryResponse.data,
             notification_type:
               "seller_received_rejected_response_to_a_financing_query", //query detail page
           },
@@ -111,8 +119,9 @@ module.exports = async (status, queryResponse) => {
           data: {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "financing",
-            product_type: queryResponse.data.loan_type.label,
-            loan_amount: queryResponse.data.outstanding_loan_amount,
+            query_uuid: queryResponse.query_uuid,
+            query_response_uuid: queryResponse.uuid,
+            ...queryResponse.data,
             notification_type: "buyer_requested_to_requote_a_financing_query", //query detail page
           },
         });
@@ -122,8 +131,9 @@ module.exports = async (status, queryResponse) => {
           data: {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "financing",
-            product_type: queryResponse.data.loan_type.label,
-            loan_amount: queryResponse.data.outstanding_loan_amount,
+            query_uuid: queryResponse.query_uuid,
+            query_response_uuid: queryResponse.uuid,
+            ...queryResponse.data,
             notification_type:
               "seller_received_requote_request_to_a_financing_query", //query detail page
           },
@@ -137,8 +147,9 @@ module.exports = async (status, queryResponse) => {
           data: {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "financing",
-            product_type: queryResponse.data.loan_type.label,
-            loan_amount: queryResponse.data.outstanding_loan_amount,
+            query_uuid: queryResponse.query_uuid,
+            query_response_uuid: queryResponse.uuid,
+            ...queryResponse.data,
             notification_type: "seller_sent_requote_to_a_financing_query", //query detail page
           },
         });
@@ -148,8 +159,9 @@ module.exports = async (status, queryResponse) => {
           data: {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "financing",
-            product_type: queryResponse.data.loan_type.label,
-            loan_amount: queryResponse.data.outstanding_loan_amount,
+            query_uuid: queryResponse.query_uuid,
+            query_response_uuid: queryResponse.uuid,
+            ...queryResponse.data,
             notification_type: "buyer_received_requote_to_a_financing_query", //query detail page
           },
         });
