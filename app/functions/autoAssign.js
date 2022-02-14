@@ -84,11 +84,11 @@ module.exports = async (token, queryResponse) => {
           user_id: ownerProfile.user_uuid, // user id of person whome to send query
           data: {
             name: buyerProfile.data.full_name, // enquiry.data.name,
-            query_type: queryResponse.query_type,
-            product_type: queryResponse.data.loan_type.label,
-            loan_amount: queryResponse.data.outstanding_loan_amount,
+            query_type: "financing",
+            query_uuid: queryResponse.query_uuid,
             query_response_uuid: queryResponse.uuid,
             buyer_profile_uuid: queryResponse.profile_uuid,
+            ...queryResponse.data,
             notification_type: "seller_received_a_financing_query", //query detail page
           },
         });
@@ -98,11 +98,11 @@ module.exports = async (token, queryResponse) => {
           user_id: ownerProfile.user_uuid, // user id of person whome to send query
           data: {
             name: buyerProfile.data.full_name, // enquiry.data.name,
-            query_type: queryResponse.query_type,
-            product_type: queryResponse.data.loan_type.label,
-            loan_amount: queryResponse.data.outstanding_loan_amount,
+            query_type: "non-financing",
+            query_uuid: queryResponse.query_uuid,
             query_response_uuid: queryResponse.uuid,
             buyer_profile_uuid: queryResponse.profile_uuid,
+            ...queryResponse.data,
             notification_type: "seller_received_a_non_financing_query", //query detail page
           },
         });
@@ -136,11 +136,11 @@ module.exports = async (token, queryResponse) => {
             user_id: ownerProfile.user_uuid, // user id of person whome to send query
             data: {
               name: buyerProfile.data.full_name, // enquiry.data.name,
-              query_type: queryResponse.query_type,
-              product_type: queryResponse.data.loan_type.label,
-              loan_amount: queryResponse.data.outstanding_loan_amount,
+              query_type: "financing",
+              query_uuid: queryResponse.query_uuid,
               query_response_uuid: queryResponse.uuid,
               buyer_profile_uuid: queryResponse.profile_uuid,
+              ...queryResponse.data,
               notification_type: "seller_received_a_financing_query", //query detail page
             },
           });
@@ -150,11 +150,11 @@ module.exports = async (token, queryResponse) => {
             user_id: ownerProfile.user_uuid, // user id of person whome to send query
             data: {
               name: buyerProfile.data.full_name, // enquiry.data.name,
-              query_type: queryResponse.query_type,
-              product_type: queryResponse.data.loan_type.label,
-              loan_amount: queryResponse.data.outstanding_loan_amount,
+              query_type: "non-financing",
+              query_uuid: queryResponse.query_uuid,
               query_response_uuid: queryResponse.uuid,
               buyer_profile_uuid: queryResponse.profile_uuid,
+              ...queryResponse.data,
               notification_type: "seller_received_a_non_financing_query", //query detail page
             },
           });
@@ -188,11 +188,11 @@ module.exports = async (token, queryResponse) => {
             user_id: ownerProfile.user_uuid, // user id of person whome to send query
             data: {
               name: buyerProfile.data.full_name, // enquiry.data.name,
-              query_type: queryResponse.query_type,
-              product_type: queryResponse.data.loan_type.label,
-              loan_amount: queryResponse.data.outstanding_loan_amount,
+              query_type: "financing",
+              query_uuid: queryResponse.query_uuid,
               query_response_uuid: queryResponse.uuid,
               buyer_profile_uuid: queryResponse.profile_uuid,
+              ...queryResponse.data,
               notification_type: "seller_received_a_financing_query", //query detail page
             },
           });
@@ -202,11 +202,11 @@ module.exports = async (token, queryResponse) => {
             user_id: ownerProfile.user_uuid, // user id of person whome to send query
             data: {
               name: buyerProfile.data.full_name, // enquiry.data.name,
-              query_type: queryResponse.query_type,
-              product_type: queryResponse.data.loan_type.label,
-              loan_amount: queryResponse.data.outstanding_loan_amount,
+              query_type: "non-financing",
+              query_uuid: queryResponse.query_uuid,
               query_response_uuid: queryResponse.uuid,
               buyer_profile_uuid: queryResponse.profile_uuid,
+              ...queryResponse.data,
               notification_type: "seller_received_a_non_financing_query", //query detail page
             },
           });
@@ -247,11 +247,11 @@ module.exports = async (token, queryResponse) => {
               user_id: ownerProfile.user_uuid, // user id of person whome to send query
               data: {
                 name: buyerProfile.data.full_name, // enquiry.data.name,
-                query_type: queryResponse.query_type,
-                product_type: queryResponse.data.loan_type.label,
-                loan_amount: queryResponse.data.outstanding_loan_amount,
+                query_type: "financing",
+                query_uuid: queryResponse.query_uuid,
                 query_response_uuid: queryResponse.uuid,
                 buyer_profile_uuid: queryResponse.profile_uuid,
+                ...queryResponse.data,
                 notification_type: "seller_received_a_financing_query", //query detail page
               },
             });
@@ -261,11 +261,11 @@ module.exports = async (token, queryResponse) => {
               user_id: ownerProfile.user_uuid, // user id of person whome to send query
               data: {
                 name: buyerProfile.data.full_name, // enquiry.data.name,
-                query_type: queryResponse.query_type,
-                product_type: queryResponse.data.loan_type.label,
-                loan_amount: queryResponse.data.outstanding_loan_amount,
+                query_type: "non-financing",
+                query_uuid: queryResponse.query_uuid,
                 query_response_uuid: queryResponse.uuid,
                 buyer_profile_uuid: queryResponse.profile_uuid,
+                ...queryResponse.data,
                 notification_type: "seller_received_a_non_financing_query", //query detail page
               },
             });
@@ -330,11 +330,11 @@ module.exports = async (token, queryResponse) => {
                       user_id: sellerProfile.user_uuid, // user id of person whome to send query
                       data: {
                         name: buyerProfile.data.full_name, // enquiry.data.name,
-                        query_type: queryResponse.query_type,
-                        product_type: queryResponse.data.loan_type.label,
-                        loan_amount: queryResponse.data.outstanding_loan_amount,
+                        query_type: "financing",
+                        query_uuid: queryResponse.query_uuid,
                         query_response_uuid: queryResponse.uuid,
                         buyer_profile_uuid: queryResponse.profile_uuid,
+                        ...queryResponse.data,
                         notification_type: "seller_received_a_financing_query", //query detail page
                       },
                     });
@@ -344,13 +344,13 @@ module.exports = async (token, queryResponse) => {
                       user_id: sellerProfile.user_uuid, // user id of person whome to send query
                       data: {
                         name: buyerProfile.data.full_name, // enquiry.data.name,
-                        query_type: queryResponse.query_type,
-                        product_type: queryResponse.data.loan_type.label,
-                        loan_amount: queryResponse.data.outstanding_loan_amount,
+                        query_type: "non-financing",
+                        query_uuid: queryResponse.query_uuid,
                         query_response_uuid: queryResponse.uuid,
                         buyer_profile_uuid: queryResponse.profile_uuid,
+                        ...queryResponse.data,
                         notification_type:
-                          "seller_received_a_non_financing_query", //query detail page
+                          "seller_received_a_non_financing_query",
                       },
                     });
                   }
@@ -384,11 +384,11 @@ module.exports = async (token, queryResponse) => {
                       user_id: ownerProfile.user_uuid, // user id of person whome to send query
                       data: {
                         name: buyerProfile.data.full_name, // enquiry.data.name,
-                        query_type: queryResponse.query_type,
-                        product_type: queryResponse.data.loan_type.label,
-                        loan_amount: queryResponse.data.outstanding_loan_amount,
+                        query_type: "financing",
+                        query_uuid: queryResponse.query_uuid,
                         query_response_uuid: queryResponse.uuid,
                         buyer_profile_uuid: queryResponse.profile_uuid,
+                        ...queryResponse.data,
                         notification_type: "seller_received_a_financing_query", //query detail page
                       },
                     });
@@ -398,11 +398,11 @@ module.exports = async (token, queryResponse) => {
                       user_id: ownerProfile.user_uuid, // user id of person whome to send query
                       data: {
                         name: buyerProfile.data.full_name, // enquiry.data.name,
-                        query_type: queryResponse.query_type,
-                        product_type: queryResponse.data.loan_type.label,
-                        loan_amount: queryResponse.data.outstanding_loan_amount,
+                        query_type: "non-financing",
+                        query_uuid: queryResponse.query_uuid,
                         query_response_uuid: queryResponse.uuid,
                         buyer_profile_uuid: queryResponse.profile_uuid,
+                        ...queryResponse.data,
                         notification_type:
                           "seller_received_a_non_financing_query", //query detail page
                       },
@@ -438,27 +438,27 @@ module.exports = async (token, queryResponse) => {
                     user_id: ownerProfile.user_uuid, // user id of person whome to send query
                     data: {
                       name: buyerProfile.data.full_name, // enquiry.data.name,
-                      query_type: queryResponse.query_type,
-                      product_type: queryResponse.data.loan_type.label,
-                      loan_amount: queryResponse.data.outstanding_loan_amount,
+                      query_type: "financing",
+                      query_uuid: queryResponse.query_uuid,
                       query_response_uuid: queryResponse.uuid,
                       buyer_profile_uuid: queryResponse.profile_uuid,
+                      ...queryResponse.data,
                       notification_type: "seller_received_a_financing_query", //query detail page
                     },
                   });
                 } else {
                   await sendPushNotification({
                     event_type: "seller_received_a_non_financing_query",
-                    user_id: ownerProfile.user_uuid, // user id of person whome to send query
+                    user_id: ownerProfile.user_uuid,
                     data: {
-                      name: buyerProfile.data.full_name, // enquiry.data.name,
-                      query_type: queryResponse.query_type,
-                      product_type: queryResponse.data.loan_type.label,
-                      loan_amount: queryResponse.data.outstanding_loan_amount,
+                      name: buyerProfile.data.full_name,
+                      query_type: "non-financing",
+                      query_uuid: queryResponse.query_uuid,
                       query_response_uuid: queryResponse.uuid,
                       buyer_profile_uuid: queryResponse.profile_uuid,
+                      ...queryResponse.data,
                       notification_type:
-                        "seller_received_a_non_financing_query", //query detail page
+                        "seller_received_a_non_financing_query",
                     },
                   });
                 }
@@ -531,30 +531,30 @@ module.exports = async (token, queryResponse) => {
                 if (queryResponse.query_type === "refinance_existing_loan") {
                   await sendPushNotification({
                     event_type: "seller_received_a_financing_query",
-                    user_id: sellerProfile.user_uuid, // user id of person whome to send query
+                    user_id: sellerProfile.user_uuid,
                     data: {
-                      name: buyerProfile.data.full_name, // enquiry.data.name,
-                      query_type: queryResponse.query_type,
-                      product_type: queryResponse.data.loan_type.label,
-                      loan_amount: queryResponse.data.outstanding_loan_amount,
+                      name: buyerProfile.data.full_name,
+                      query_type: "financing",
+                      query_uuid: queryResponse.query_uuid,
                       query_response_uuid: queryResponse.uuid,
                       buyer_profile_uuid: queryResponse.profile_uuid,
-                      notification_type: "seller_received_a_financing_query", //query detail page
+                      ...queryResponse.data,
+                      notification_type: "seller_received_a_financing_query",
                     },
                   });
                 } else {
                   await sendPushNotification({
                     event_type: "seller_received_a_non_financing_query",
-                    user_id: sellerProfile.user_uuid, // user id of person whome to send query
+                    user_id: sellerProfile.user_uuid,
                     data: {
-                      name: buyerProfile.data.full_name, // enquiry.data.name,
-                      query_type: queryResponse.query_type,
-                      product_type: queryResponse.data.loan_type.label,
-                      loan_amount: queryResponse.data.outstanding_loan_amount,
+                      name: buyerProfile.data.full_name,
+                      query_type: "non-financing",
+                      query_uuid: queryResponse.query_uuid,
                       query_response_uuid: queryResponse.uuid,
                       buyer_profile_uuid: queryResponse.profile_uuid,
+                      ...queryResponse.data,
                       notification_type:
-                        "seller_received_a_non_financing_query", //query detail page
+                        "seller_received_a_non_financing_query",
                     },
                   });
                 }
@@ -564,14 +564,14 @@ module.exports = async (token, queryResponse) => {
                   await sendPushNotification({
                     event_type:
                       "seller_auto_assign_criteria_mismatched_for_a_financing_query",
-                    user_id: queryResponse.data.seller_detail.user_uuid, // user id of person whome to send query
+                    user_id: queryResponse.data.seller_detail.user_uuid,
                     data: {
-                      name: buyerProfile.data.full_name, // enquiry.data.name,
-                      query_type: queryResponse.query_type,
-                      product_type: queryResponse.data.loan_type.label,
-                      loan_amount: queryResponse.data.outstanding_loan_amount,
+                      name: buyerProfile.data.full_name,
+                      query_type: "financing",
+                      query_uuid: queryResponse.query_uuid,
+                      ...queryResponse.data,
                       notification_type:
-                        "seller_auto_assign_criteria_mismatched_for_a_financing_query", //query detail page
+                        "seller_auto_assign_criteria_mismatched_for_a_financing_query",
                     },
                   });
                 } else {
@@ -581,9 +581,9 @@ module.exports = async (token, queryResponse) => {
                     user_id: queryResponse.data.seller_detail.user_uuid, // user id of person whome to send query
                     data: {
                       name: buyerProfile.data.full_name, // enquiry.data.name,
-                      query_type: queryResponse.query_type,
-                      product_type: queryResponse.data.loan_type.label,
-                      loan_amount: queryResponse.data.outstanding_loan_amount,
+                      query_type: "non-financing",
+                      query_uuid: queryResponse.query_uuid,
+                      ...queryResponse.data,
                       notification_type:
                         "seller_auto_assign_criteria_mismatched_for_a_non_financing_query", //query detail page
                     },
