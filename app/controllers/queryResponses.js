@@ -8,7 +8,6 @@ const getBuyersLeads = require("../functions/getBuyersLeads");
 const getAddressbookUsersProfile = require("../functions/getAddressbookUsersProfile");
 const sendPushNotification = require("../functions/neptune/neptuneCaller");
 const sendEventOnResponse = require("../functions/sendEventOnResponse");
-const sendPushNotification = require("../functions/neptune/neptuneCaller");
 
 module.exports = {
   async index(req, res) {
