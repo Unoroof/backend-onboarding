@@ -64,6 +64,7 @@ module.exports = async (status, queryResponse) => {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "financing",
             query_uuid: queryResponse.query_uuid,
+            status: "accepted",
             query_response_uuid: queryResponse.uuid,
             ...queryResponse.data,
             notification_type: "buyer_accepted_a_financing_query", //query detail page
@@ -76,6 +77,7 @@ module.exports = async (status, queryResponse) => {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "financing",
             query_uuid: queryResponse.query_uuid,
+            status: "accepted",
             query_response_uuid: queryResponse.uuid,
             ...queryResponse.data,
             notification_type:
@@ -92,6 +94,7 @@ module.exports = async (status, queryResponse) => {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "financing",
             query_uuid: queryResponse.query_uuid,
+            status: "rejected",
             query_response_uuid: queryResponse.uuid,
             ...queryResponse.data,
             notification_type: "buyer_rejected_a_financing_query", //query detail page
@@ -104,6 +107,7 @@ module.exports = async (status, queryResponse) => {
             name: queryResponse.data.seller_detail.full_name,
             query_type: "financing",
             query_uuid: queryResponse.query_uuid,
+            status: "rejected",
             query_response_uuid: queryResponse.uuid,
             ...queryResponse.data,
             notification_type:
