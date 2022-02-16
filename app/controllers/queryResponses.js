@@ -136,6 +136,12 @@ module.exports = {
 
   async reAssign(req, res) {
     try {
+      let sellerProfile = await Profile.findOne({
+        where: {
+          uuid: req.body.assignee_profile_uuid,
+        },
+      });
+
       let queryResponse = await QueryResponse.findOne({
         where: {
           uuid: req.body.query_response_uuid,
@@ -156,6 +162,36 @@ module.exports = {
       }
 
       queryResponse = await queryResponse.update(payload);
+
+      if (queryResponse.query_type === "refinance_existing_loan") {
+        await sendPushNotification({
+          event_type: "seller_received_a_financing_query",
+          user_id: sellerProfile.user_uuid,
+          data: {
+            name: queryResponse.data.buyer_detail.full_name,
+            query_type: "financing",
+            query_uuid: queryResponse.query_uuid,
+            query_response_uuid: queryResponse.uuid,
+            buyer_profile_uuid: queryResponse.profile_uuid,
+            ...queryResponse.data,
+            notification_type: "seller_received_a_financing_query",
+          },
+        });
+      } else {
+        await sendPushNotification({
+          event_type: "seller_received_a_non_financing_query",
+          user_id: sellerProfile.user_uuid,
+          data: {
+            name: queryResponse.data.buyer_detail.full_name,
+            query_type: "non-financing",
+            query_uuid: queryResponse.query_uuid,
+            query_response_uuid: queryResponse.uuid,
+            buyer_profile_uuid: queryResponse.profile_uuid,
+            ...queryResponse.data,
+            notification_type: "seller_received_a_non_financing_query",
+          },
+        });
+      }
       return queryResponse;
     } catch (error) {
       consumeError(error);
