@@ -1,5 +1,6 @@
 const models = require("../models");
 const Enquiries = models.Enquiries;
+const Profile = models.Profile;
 const consumeError = require("../functions/consumeError");
 const sendEmail = require("../functions/sendEmail");
 
@@ -20,11 +21,19 @@ module.exports = {
 
   async update(req, res) {
     try {
+      let buyerProfile = await Profile.findOne({
+        where: {
+          user_uuid: req.user,
+          type: "fm-buyer",
+        },
+      });
+
       let enquiry = await Enquiries.findOne({
         where: {
           uuid: req.params.enquiry_uuid,
         },
       });
+
       console.log("query", enquiry);
 
       enquiry = await enquiry.update({
@@ -38,7 +47,7 @@ module.exports = {
       });
 
       if (req.body.payment_status === "paid") {
-        await sendEmail(enquiry);
+        await sendEmail(enquiry, buyerProfile);
       }
 
       return enquiry;
