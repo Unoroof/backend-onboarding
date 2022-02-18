@@ -201,4 +201,10 @@ router.put(
   executeForResponse(enquiryResourceResponse)
 );
 
+router.post(
+  "/update-city",
+  executeForResult(profileController.updateCity, "profileList"),
+  executeForResponse(profileCollectionResponse)
+);
+
 module.exports = router;

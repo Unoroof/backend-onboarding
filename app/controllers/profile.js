@@ -51,6 +51,7 @@ module.exports = {
       if (req.body.type) constraints.where.type = req.body.type;
       if (req.body.country)
         constraints.where["data.country.label"] = req.body.country;
+      // city: either it will be an array or a single value
       if (req.body.city) constraints.where["data.city.label"] = req.body.city;
       if (req.body.currency)
         constraints.where["data.currency_type.value"] = req.body.currency.value;
@@ -144,6 +145,35 @@ module.exports = {
         };
 
       let profiles = await Profile.findAll(constraints);
+      return profiles;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async updateCity(req, res) {
+    try {
+      let constraints = {
+        where: {
+          type: req.body.type,
+        },
+      };
+      let profiles = await Profile.findAll(constraints);
+
+      profiles.forEach(async (item) => {
+        if (item.data.city && !item.data.city.length) {
+          let profile = await Profile.findOne({
+            where: {
+              user_uuid: item.user_uuid,
+              type: item.type,
+            },
+          });
+          item.data.city = [item.data.city];
+          await profile.update({
+            data: item.data,
+          });
+        }
+      });
       return profiles;
     } catch (error) {
       consumeError(error);
