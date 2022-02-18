@@ -232,10 +232,18 @@ const findSystemSelectedSellers = async (condition, queryData, profile) => {
     let constraints = {
       where: {
         type: "fm-seller",
-        "data.country.label": condition.country,
-        "data.city.label": condition.city,
+        "data.country.label": condition.country, // complex have match array with array
+        // "data.city.label": condition.city,
       },
     };
+    if (condition.city) {
+      constraints.where["data"] = {
+        [Op.contains]: {
+          city: [{ label: condition.city, value: condition.city }],
+        },
+      };
+    }
+
     if (queryData.type === "refinance_existing_loan") {
       constraints.where["data.currency_type.value"] =
         profile.data.currency_type.value;

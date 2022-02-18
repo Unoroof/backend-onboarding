@@ -52,7 +52,13 @@ module.exports = {
       if (req.body.country)
         constraints.where["data.country.label"] = req.body.country;
       // city: either it will be an array or a single value
-      if (req.body.city) constraints.where["data.city.label"] = req.body.city;
+      // array with array
+      if (req.body.city)
+        constraints.where["data"] = {
+          [Op.contains]: {
+            city: req.body.city.length ? req.body.city : [req.body.city],
+          },
+        };
       if (req.body.currency)
         constraints.where["data.currency_type.value"] = req.body.currency.value;
 
