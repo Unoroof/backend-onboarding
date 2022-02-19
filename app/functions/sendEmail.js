@@ -1,6 +1,6 @@
 const sendEmailToAdmin = require("./neptune/neptuneCaller");
 
-module.exports = async (enquiry) => {
+module.exports = async (enquiry, profile) => {
   try {
     console.log("check", enquiry);
     if (enquiry.type === "for_partner") {
@@ -8,10 +8,7 @@ module.exports = async (enquiry) => {
         event_type: "user_raised_partner_enquiry",
         user_id: enquiry.user_uuid,
         data: {
-          name: "Rajesh", // enquiry.data.name,
-          company_name: "Betalectic", // enquiry.data.company_name,
-          // these values we have to pass in data
-          // "name": "rajesh",
+          name: profile.name,
           // "currency": "INR",
           // "domestic": "yes",
           // "exporter": "Yes",

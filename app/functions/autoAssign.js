@@ -477,12 +477,15 @@ module.exports = async (token, queryResponse) => {
                 addressbookUserProfile
               );
 
+              // buyerProfile.data.city.value === profile.data.city.value
               let addressbookUserProfileUuid = await addressbookUserProfile.map(
                 (profile) => {
                   if (
                     criteria.matching_criteria.range.value ===
                       profile.data.range.value &&
-                    buyerProfile.data.city.value === profile.data.city.value &&
+                    buyerProfile.data.city.some((item) =>
+                      profile.data.city.some((i) => i.label === item.label)
+                    ) &&
                     buyerProfile.data.country.value ===
                       profile.data.country.value
                   ) {
