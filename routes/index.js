@@ -25,8 +25,12 @@ const createProduct = require("../app/requests/createProduct");
 const productCollectionResponse = require("../app/responses/productCollection");
 
 const QueryController = require("../app/controllers").QueryController;
+const ProductRequestController = require("../app/controllers").ProductRequestController;
 const createQueryRequest = require("../app/requests/createQuery");
+const createProductRequest = require("../app/requests/createProductRequest");
 const queryResourceResponse = require("../app/responses/queryResources");
+const productRequestResourceResponse = require("../app/responses/productRequestResource");
+const productRequestCollectionResponse = require("../app/responses/productRequestCollection");
 const queryCollectionResponse = require("../app/responses/queryCollection");
 
 const ResponseController =
@@ -118,6 +122,29 @@ router.get(
   executeForResult(productController.index),
   executeForResponse(productCollectionResponse)
 );
+
+
+
+router.get(
+  "/product-request",
+  executeForResult(ProductRequestController.getAll),
+  executeForResponse(productRequestCollectionResponse)
+);
+
+router.post(
+  "/product-request",
+  createProductRequest,
+  executeForResult(ProductRequestController.create),
+  executeForResponse(productRequestResourceResponse)
+);
+
+router.put(
+  "/product-request/:product_request_uuid",
+  executeForResult(ProductRequestController.update),
+  executeForResponse(productRequestResourceResponse)
+);
+
+
 
 router.post(
   "/queries",
