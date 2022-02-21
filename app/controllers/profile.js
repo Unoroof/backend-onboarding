@@ -56,7 +56,13 @@ module.exports = {
       if (req.body.city)
         constraints.where["data"] = {
           [Op.contains]: {
-            city: req.body.city.length ? req.body.city : [req.body.city],
+            city: req.body.city.length
+              ? req.body.city
+              : [
+                  typeof req.body.city === "string"
+                    ? { label: req.body.city, value: req.body.city }
+                    : req.body.city,
+                ],
           },
         };
       if (req.body.currency)
