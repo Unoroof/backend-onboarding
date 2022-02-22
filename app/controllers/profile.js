@@ -72,6 +72,14 @@ module.exports = {
           },
         };
 
+      if (req.body.product && req.body.city)
+        constraints.where["data"] = {
+          [Op.contains]: {
+            offered_products: [req.body.product],
+            city: [{ label: req.body.city, value: req.body.city }],
+          },
+        };
+
       if (req.body.user_uuid) constraints.where.user_uuid = req.body.user_uuid;
 
       let profiles = await Profile.findAll({
@@ -151,35 +159,6 @@ module.exports = {
         };
 
       let profiles = await Profile.findAll(constraints);
-      return profiles;
-    } catch (error) {
-      consumeError(error);
-    }
-  },
-
-  async updateCity(req, res) {
-    try {
-      let constraints = {
-        where: {
-          type: req.body.type,
-        },
-      };
-      let profiles = await Profile.findAll(constraints);
-
-      profiles.forEach(async (item) => {
-        if (item.data.city && !item.data.city.length) {
-          let profile = await Profile.findOne({
-            where: {
-              user_uuid: item.user_uuid,
-              type: item.type,
-            },
-          });
-          item.data.city = [item.data.city];
-          await profile.update({
-            data: item.data,
-          });
-        }
-      });
       return profiles;
     } catch (error) {
       consumeError(error);
