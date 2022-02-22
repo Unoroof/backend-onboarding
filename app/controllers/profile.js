@@ -72,6 +72,14 @@ module.exports = {
           },
         };
 
+      if (req.body.product && req.body.city)
+        constraints.where["data"] = {
+          [Op.contains]: {
+            offered_products: [req.body.product],
+            city: [{ label: req.body.city, value: req.body.city }],
+          },
+        };
+
       if (req.body.user_uuid) constraints.where.user_uuid = req.body.user_uuid;
 
       let profiles = await Profile.findAll({
