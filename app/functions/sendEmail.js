@@ -18,7 +18,7 @@ module.exports = async (enquiry, profile) => {
             ? enquiry.data.buyer_segment
             : "-",
           product_name: enquiry.data.current_products
-            ? enquiry.data.current_products
+            ? enquiry.data.current_products.toString()
             : "-",
           currency: enquiry.data.currency_type.value
             ? enquiry.data.currency_type.value
@@ -68,25 +68,25 @@ module.exports = async (enquiry, profile) => {
             ? enquiry.data.total_current_credit_volume
             : "-",
           credit_currency: enquiry.data.total_current_credit_currency
-            ? enquiry.data.total_current_credit_currency
+            ? enquiry.data.total_current_credit_currency.label
             : "-",
           credit_funded_limit: enquiry.data.funded_credit
-            ? enquiry.data.funded_credit
+            ? enquiry.data.funded_credit.label
             : "-",
           credit_non_funded_limit: enquiry.data.non_funded_credit
-            ? enquiry.data.non_funded_credit
+            ? enquiry.data.non_funded_credit.label
             : "-",
           current_amount: enquiry.data.current_utilization_volume
             ? enquiry.data.current_utilization_volume
             : "-",
           current_currency: enquiry.data.current_utilization_currency
-            ? enquiry.data.current_utilization_currency
+            ? enquiry.data.current_utilization_currency.label
             : "-",
           current_funded_limit: enquiry.data.funded_utilization
-            ? enquiry.data.funded_utilization
+            ? enquiry.data.funded_utilization.label
             : "-",
           current_non_funded_limit: enquiry.data.non_funded_utilization
-            ? enquiry.data.non_funded_utilization
+            ? enquiry.data.non_funded_utilization.label
             : "-",
         },
         ignore_user_contacts: true,
@@ -119,10 +119,10 @@ module.exports = async (enquiry, profile) => {
           cin_number: enquiry.data.cin ? enquiry.data.cin : "-",
           turnover: enquiry.data.range ? enquiry.data.range : "-",
           buyer_segment: enquiry.data.buyer_segment
-            ? enquiry.data.buyer_segment
+            ? enquiry.data.buyer_segment.label
             : "-",
           product_name: enquiry.data.current_products
-            ? enquiry.data.current_products
+            ? enquiry.data.current_products.toString()
             : "-",
           currency: enquiry.data.currency_type.value
             ? enquiry.data.currency_type.value
@@ -172,25 +172,25 @@ module.exports = async (enquiry, profile) => {
             ? enquiry.data.total_current_credit_volume
             : "-",
           credit_currency: enquiry.data.total_current_credit_currency
-            ? enquiry.data.total_current_credit_currency
+            ? enquiry.data.total_current_credit_currency.label
             : "-",
           credit_funded_limit: enquiry.data.funded_credit
-            ? enquiry.data.funded_credit
+            ? enquiry.data.funded_credit.label
             : "-",
           credit_non_funded_limit: enquiry.data.non_funded_credit
-            ? enquiry.data.non_funded_credit
+            ? enquiry.data.non_funded_credit.label
             : "-",
           current_amount: enquiry.data.current_utilization_volume
             ? enquiry.data.current_utilization_volume
             : "-",
           current_currency: enquiry.data.current_utilization_currency
-            ? enquiry.data.current_utilization_currency
+            ? enquiry.data.current_utilization_currency.label
             : "-",
           current_funded_limit: enquiry.data.funded_utilization
-            ? enquiry.data.funded_utilization
+            ? enquiry.data.funded_utilization.label
             : "-",
           current_non_funded_limit: enquiry.data.non_funded_utilization
-            ? enquiry.data.non_funded_utilization
+            ? enquiry.data.non_funded_utilization.label
             : "-",
         },
         ignore_user_contacts: true,
