@@ -164,33 +164,4 @@ module.exports = {
       consumeError(error);
     }
   },
-
-  async updateCity(req, res) {
-    try {
-      let constraints = {
-        where: {
-          type: req.body.type,
-        },
-      };
-      let profiles = await Profile.findAll(constraints);
-
-      profiles.forEach(async (item) => {
-        if (item.data.city && !item.data.city.length) {
-          let profile = await Profile.findOne({
-            where: {
-              user_uuid: item.user_uuid,
-              type: item.type,
-            },
-          });
-          item.data.city = [item.data.city];
-          await profile.update({
-            data: item.data,
-          });
-        }
-      });
-      return profiles;
-    } catch (error) {
-      consumeError(error);
-    }
-  },
 };

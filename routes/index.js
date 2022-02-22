@@ -25,7 +25,8 @@ const createProduct = require("../app/requests/createProduct");
 const productCollectionResponse = require("../app/responses/productCollection");
 
 const QueryController = require("../app/controllers").QueryController;
-const ProductRequestController = require("../app/controllers").ProductRequestController;
+const ProductRequestController =
+  require("../app/controllers").ProductRequestController;
 const createQueryRequest = require("../app/requests/createQuery");
 const createProductRequest = require("../app/requests/createProductRequest");
 const queryResourceResponse = require("../app/responses/queryResources");
@@ -123,8 +124,6 @@ router.get(
   executeForResponse(productCollectionResponse)
 );
 
-
-
 router.get(
   "/product-request",
   executeForResult(ProductRequestController.getAll),
@@ -143,8 +142,6 @@ router.put(
   executeForResult(ProductRequestController.update),
   executeForResponse(productRequestResourceResponse)
 );
-
-
 
 router.post(
   "/queries",
@@ -226,12 +223,6 @@ router.put(
   "/enquiries/:enquiry_uuid",
   executeForResult(EnquiryController.update),
   executeForResponse(enquiryResourceResponse)
-);
-
-router.post(
-  "/update-city",
-  executeForResult(profileController.updateCity, "profileList"),
-  executeForResponse(profileCollectionResponse)
 );
 
 module.exports = router;
