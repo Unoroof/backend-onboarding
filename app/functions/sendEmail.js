@@ -1,3 +1,4 @@
+const enquiries = require("../controllers/enquiries");
 const sendEmailToAdmin = require("./neptune/neptuneCaller");
 
 module.exports = async (enquiry, profile) => {
@@ -216,9 +217,22 @@ module.exports = async (enquiry, profile) => {
         event_type: "user_raised_credit_enquiry",
         user_id: enquiry.user_uuid,
         data: {
-          name: "Rajesh", // enquiry.data.name,
-          company_name: "Betalectic", // enquiry.data.company_name,
-          buyer_name: "Shubham",
+          name: profile.data.full_name ? profile.data.full_name : "-",
+          email: profile.data.email ? profile.data.email : "-",
+          mobile: profile.data.mobile ? profile.data.mobile : "-",
+          designation: profile.data.designation
+            ? profile.data.designation
+            : "-",
+          company_name: profile.data.company_name
+            ? profile.data.company_name
+            : "-",
+          buyer_name: enquiry.data.data.name ? enquiry.data.data.name : "-",
+          buyer_cin_number: enquiry.data.cin_number
+            ? enquiry.data.cin_number
+            : "-",
+          buyer_company_name: enquiry.data.data.company_name
+            ? enquiry.data.data.company_name
+            : "-",
         },
         ignore_user_contacts: true,
         contact_infos: [
