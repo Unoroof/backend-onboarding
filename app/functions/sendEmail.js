@@ -16,7 +16,7 @@ module.exports = async (enquiry, profile) => {
           cin_number: enquiry.data.cin ? enquiry.data.cin : "-",
           turnover: enquiry.data.range ? enquiry.data.range : "-",
           buyer_segment: enquiry.data.buyer_segment
-            ? enquiry.data.buyer_segment
+            ? enquiry.data.buyer_segment.label
             : "-",
           product_name: enquiry.data.current_products
             ? enquiry.data.current_products.toString()
