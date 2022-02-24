@@ -154,7 +154,7 @@ module.exports = {
             [Op.in]: profileUuids,
           },
           data: {
-            privacy_preference: false,
+            privacy_preference: true,
           },
         };
 

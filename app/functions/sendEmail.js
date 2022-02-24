@@ -1,3 +1,4 @@
+const enquiries = require("../controllers/enquiries");
 const sendEmailToAdmin = require("./neptune/neptuneCaller");
 
 module.exports = async (enquiry, profile) => {
@@ -15,7 +16,7 @@ module.exports = async (enquiry, profile) => {
           cin_number: enquiry.data.cin ? enquiry.data.cin : "-",
           turnover: enquiry.data.range ? enquiry.data.range : "-",
           buyer_segment: enquiry.data.buyer_segment
-            ? enquiry.data.buyer_segment
+            ? enquiry.data.buyer_segment.label
             : "-",
           product_name: enquiry.data.current_products
             ? enquiry.data.current_products.toString()
@@ -27,10 +28,10 @@ module.exports = async (enquiry, profile) => {
             ? enquiry.data.financing_amount
             : enquiry.data.financing_amount,
           max_interest_rate_inr: enquiry.data.inr_cost
-            ? enquiry.data.inr_cost
+            ? `${enquiry.data.inr_cost}%`
             : "-", // %
           max_interest_rate_usd: enquiry.data.usd_cost
-            ? enquiry.data.usd_cost
+            ? `${enquiry.data.usd_cost}%`
             : "-", // %
           description: enquiry.data.requirements
             ? enquiry.data.requirements
@@ -42,7 +43,7 @@ module.exports = async (enquiry, profile) => {
             ? enquiry.data.borrowing_type
             : "Unsecured",
           borrowing_cost: enquiry.data.collateral
-            ? enquiry.data.collateral
+            ? `${enquiry.data.collateral}%`
             : "-",
           credit_rating_long:
             enquiry.data.credit_rating_long_term.length > 0
@@ -54,7 +55,7 @@ module.exports = async (enquiry, profile) => {
               : "-",
           current_financial_partner:
             enquiry.data.financial_Patners.length > 0
-              ? enquiry.data.financial_Patners
+              ? enquiry.data.financial_Patners.toString()
               : "-",
           sblc_limit: enquiry.data.sblc_limit ? enquiry.data.sblc_limit : "No", // yes/no
           lc_limit: enquiry.data.lc_limit ? enquiry.data.lc_limit : "No", // yes/no
@@ -71,10 +72,10 @@ module.exports = async (enquiry, profile) => {
             ? enquiry.data.total_current_credit_currency.label
             : "-",
           credit_funded_limit: enquiry.data.funded_credit
-            ? enquiry.data.funded_credit.label
+            ? `${enquiry.data.funded_credit.label}%`
             : "-",
           credit_non_funded_limit: enquiry.data.non_funded_credit
-            ? enquiry.data.non_funded_credit.label
+            ? `${enquiry.data.non_funded_credit.label}%`
             : "-",
           current_amount: enquiry.data.current_utilization_volume
             ? enquiry.data.current_utilization_volume
@@ -83,10 +84,10 @@ module.exports = async (enquiry, profile) => {
             ? enquiry.data.current_utilization_currency.label
             : "-",
           current_funded_limit: enquiry.data.funded_utilization
-            ? enquiry.data.funded_utilization.label
+            ? `${enquiry.data.funded_utilization.label}%`
             : "-",
           current_non_funded_limit: enquiry.data.non_funded_utilization
-            ? enquiry.data.non_funded_utilization.label
+            ? `${enquiry.data.non_funded_utilization.label}%`
             : "-",
         },
         ignore_user_contacts: true,
@@ -131,10 +132,10 @@ module.exports = async (enquiry, profile) => {
             ? enquiry.data.financing_amount
             : enquiry.data.financing_amount,
           max_interest_rate_inr: enquiry.data.inr_cost
-            ? enquiry.data.inr_cost
+            ? `${enquiry.data.inr_cost}%`
             : "-", // %
           max_interest_rate_usd: enquiry.data.usd_cost
-            ? enquiry.data.usd_cost
+            ? `${enquiry.data.usd_cost}%`
             : "-", // %
           description: enquiry.data.requirements
             ? enquiry.data.requirements
@@ -146,7 +147,7 @@ module.exports = async (enquiry, profile) => {
             ? enquiry.data.borrowing_type
             : "Unsecured",
           borrowing_cost: enquiry.data.collateral
-            ? enquiry.data.collateral
+            ? `${enquiry.data.collateral}%`
             : "-",
           credit_rating_long:
             enquiry.data.credit_rating_long_term.length > 0
@@ -158,7 +159,7 @@ module.exports = async (enquiry, profile) => {
               : "-",
           current_financial_partner:
             enquiry.data.financial_Patners.length > 0
-              ? enquiry.data.financial_Patners
+              ? enquiry.data.financial_Patners.toString()
               : "-",
           sblc_limit: enquiry.data.sblc_limit ? enquiry.data.sblc_limit : "No", // yes/no
           lc_limit: enquiry.data.lc_limit ? enquiry.data.lc_limit : "No", // yes/no
@@ -175,10 +176,10 @@ module.exports = async (enquiry, profile) => {
             ? enquiry.data.total_current_credit_currency.label
             : "-",
           credit_funded_limit: enquiry.data.funded_credit
-            ? enquiry.data.funded_credit.label
+            ? `${enquiry.data.funded_credit.label}%`
             : "-",
           credit_non_funded_limit: enquiry.data.non_funded_credit
-            ? enquiry.data.non_funded_credit.label
+            ? `${enquiry.data.non_funded_credit.label}%`
             : "-",
           current_amount: enquiry.data.current_utilization_volume
             ? enquiry.data.current_utilization_volume
@@ -187,10 +188,10 @@ module.exports = async (enquiry, profile) => {
             ? enquiry.data.current_utilization_currency.label
             : "-",
           current_funded_limit: enquiry.data.funded_utilization
-            ? enquiry.data.funded_utilization.label
+            ? `${enquiry.data.funded_utilization.label}%`
             : "-",
           current_non_funded_limit: enquiry.data.non_funded_utilization
-            ? enquiry.data.non_funded_utilization.label
+            ? `${enquiry.data.non_funded_utilization.label}%`
             : "-",
         },
         ignore_user_contacts: true,
@@ -216,9 +217,22 @@ module.exports = async (enquiry, profile) => {
         event_type: "user_raised_credit_enquiry",
         user_id: enquiry.user_uuid,
         data: {
-          name: "Rajesh", // enquiry.data.name,
-          company_name: "Betalectic", // enquiry.data.company_name,
-          buyer_name: "Shubham",
+          name: profile.data.full_name ? profile.data.full_name : "-",
+          email: profile.data.email ? profile.data.email : "-",
+          mobile: profile.data.mobile ? profile.data.mobile : "-",
+          designation: profile.data.designation
+            ? profile.data.designation
+            : "-",
+          company_name: profile.data.company_name
+            ? profile.data.company_name
+            : "-",
+          buyer_name: enquiry.data.data.name ? enquiry.data.data.name : "-",
+          buyer_cin_number: enquiry.data.cin_number
+            ? enquiry.data.cin_number
+            : "-",
+          buyer_company_name: enquiry.data.data.company_name
+            ? enquiry.data.data.company_name
+            : "-",
         },
         ignore_user_contacts: true,
         contact_infos: [

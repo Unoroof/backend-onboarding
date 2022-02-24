@@ -21,12 +21,7 @@ module.exports = {
 
   async update(req, res) {
     try {
-      let buyerProfile = await Profile.findOne({
-        where: {
-          user_uuid: req.user,
-          type: "fm-buyer",
-        },
-      });
+      let profile;
 
       let enquiry = await Enquiries.findOne({
         where: {
@@ -46,8 +41,24 @@ module.exports = {
           : enquiry.payment_status,
       });
 
+      if (enquiry.type === "for_credit_profile") {
+        profile = await Profile.findOne({
+          where: {
+            user_uuid: req.user,
+            type: "fm-seller",
+          },
+        });
+      } else {
+        profile = await Profile.findOne({
+          where: {
+            user_uuid: req.user,
+            type: "fm-buyer",
+          },
+        });
+      }
+
       if (req.body.payment_status === "paid") {
-        await sendEmail(enquiry, buyerProfile);
+        await sendEmail(enquiry, profile);
       }
 
       return enquiry;
