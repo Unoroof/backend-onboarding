@@ -4,6 +4,10 @@ const getAddressbookUsersProfile = require("./getAddressbookUsersProfile");
 
 module.exports = async (token, queryResponses) => {
   try {
+    queryResponses = queryResponses.filter(
+      (item) => item.status !== "resolved"
+    );
+
     const addressbookContacts = await getAddressbookContacts(token);
 
     let addressbookUserProfile = await getAddressbookUsersProfile(
@@ -16,10 +20,7 @@ module.exports = async (token, queryResponses) => {
 
     await queryResponses.map(async (response) => {
       await addressbookUserProfile.map((profile) => {
-        if (
-          response.status !== "resolved" &&
-          response.profile_uuid === profile.uuid
-        ) {
+        if (response.profile_uuid === profile.uuid) {
           coreBuyerLeads.push(response);
         }
       });
