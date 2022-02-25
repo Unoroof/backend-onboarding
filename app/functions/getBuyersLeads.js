@@ -16,7 +16,10 @@ module.exports = async (token, queryResponses) => {
 
     await queryResponses.map(async (response) => {
       await addressbookUserProfile.map((profile) => {
-        if (response.profile_uuid === profile.uuid) {
+        if (
+          response.status !== "resolved" &&
+          response.profile_uuid === profile.uuid
+        ) {
           coreBuyerLeads.push(response);
         }
       });
