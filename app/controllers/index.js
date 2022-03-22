@@ -6,7 +6,9 @@ const ProductCategoryController = require("./category");
 const ProductController = require("./product");
 const QueryResponseController = require("./queryResponses");
 const AutoAssignConditionController = require("./autoAssignConditions");
-const EnquiryController = require('./enquiries')
+const EnquiryController = require("./enquiries");
+const GMProductController = require("./gmProduct");
+const GMCategoryController = require("./gmCategory");
 
 module.exports = {
   ProfileController,
@@ -17,5 +19,7 @@ module.exports = {
   ProductRequestController,
   QueryResponseController,
   AutoAssignConditionController,
-  EnquiryController
+  EnquiryController,
+  GMProductController,
+  GMCategoryController,
 };

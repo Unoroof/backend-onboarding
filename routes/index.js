@@ -50,6 +50,16 @@ const createEnquiryRequest = require("../app/requests/createEnquiries");
 const enquiryResourceResponse = require("../app/responses/enquiryResource");
 const enquiryCollectionResponse = require("../app/responses/enquiryCollection");
 
+const GMProductController = require("../app/controllers").GMProductController;
+const gmProductResourceResponse = require("../app/responses/gmProductResource");
+const createGMProduct = require("../app/requests/createGMProduct");
+const gmProductCollectionResponse = require("../app/responses/gmProductCollection");
+
+const GMCategoryController = require("../app/controllers").GMCategoryController;
+const gmCategoryResourceResponse = require("../app/responses/gmCategoryResource");
+const createGMCategory = require("../app/requests/createGMCategory");
+const gmCategoryCollectionResponse = require("../app/responses/gmCategoryCollection");
+
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
     status: "ok",
@@ -122,6 +132,32 @@ router.get(
   "/products",
   executeForResult(productController.index),
   executeForResponse(productCollectionResponse)
+);
+
+router.post(
+  "/global-market/categories",
+  createGMCategory,
+  executeForResult(GMCategoryController.store),
+  executeForResponse(gmCategoryResourceResponse)
+);
+
+router.get(
+  "/global-market/categories",
+  executeForResult(GMCategoryController.index),
+  executeForResponse(gmCategoryCollectionResponse)
+);
+
+router.post(
+  "/global-market/products",
+  createGMProduct,
+  executeForResult(GMProductController.store),
+  executeForResponse(gmProductResourceResponse)
+);
+
+router.get(
+  "/global-market/products",
+  executeForResult(GMProductController.index),
+  executeForResponse(gmProductCollectionResponse)
 );
 
 router.get(
