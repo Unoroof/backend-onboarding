@@ -3,14 +3,17 @@ const Product = require("../models").GMProduct;
 const Category = require("../models").GMCategory;
 const sequelize = require("../models").sequelize;
 const { Op, QueryTypes } = require("sequelize");
-const getSearchQueries = require("../functions/getSearchQueries");
+const getGMBidsSearchFilterQueries = require("../functions/getGMBidsSearchFilterQueries");
 
 module.exports = {
   async index(req, res) {
     try {
+      console.log("req.query", req.query);
       const categories = req.query.categories
         ? req.query.categories.split(",").filter((category) => category)
         : [];
+
+      console.log("gm-products: filter by these categories--> ", categories);
 
       const categoryUuidOptions =
         categories.length !== 0
@@ -21,9 +24,7 @@ module.exports = {
                 exclude: ["createdAt", "updatedAt"],
               },
               where: {
-                uuid: {
-                  [Op.in]: categories,
-                },
+                uuid: { [Op.in]: categories },
               },
               through: {
                 as: "gm_products_categories",
@@ -36,12 +37,18 @@ module.exports = {
                 exclude: ["createdAt", "updatedAt"],
               },
             };
+
+      console.log(
+        "gm-products: categoryUuidOptions====",
+        JSON.stringify(categoryUuidOptions)
+      );
+
       let products = await Product.findAll({
         attributes: {
           exclude: ["createdAt", "updatedAt"],
         },
         include: categoryUuidOptions,
-        ...getSearchQueries(req.query.search),
+        ...getGMBidsSearchFilterQueries(req.query),
         distinct: true,
       });
 
@@ -52,32 +59,31 @@ module.exports = {
   },
   async store(req, res) {
     try {
-      console.log("req.body of product add", req.body);
+      console.log("req.body of gm-product add", req.body);
       const newProduct = await Product.create({
         name: req.body.name,
         category: req.body.category,
         data: req.body.data,
       });
-      // const productCategory = newProduct
-      //   ? await Category.findAll({
-      //       where: {
-      //         uuid: {
-      //           [Op.or]: newProduct.category,
-      //         },
-      //       },
-      //       attributes: ["uuid", "name"],
-      //     })
-      //   : [];
+      console.log("category", req.body.category);
+      const productCategory = req.body.category
+        ? await Category.findAll({
+            where: {
+              uuid: req.body.category,
+            },
+            attributes: ["uuid", "name"],
+          })
+        : [];
 
-      // console.log("productCategory======", productCategory);
+      console.log("productCategory======", productCategory);
       // Todo
       // newProduct.setCategories([uuid1, uuid2]);
 
       // Todo
       // newProduct.setCategories([{}, {}]);
 
-      // newProduct.setCategories(productCategory);
-      // newProduct.categories = productCategory;
+      newProduct.setCategories(productCategory);
+      newProduct.categories = productCategory;
       return newProduct;
     } catch (error) {
       console.error(error);
