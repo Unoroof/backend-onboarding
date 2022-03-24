@@ -3,7 +3,7 @@ const Product = require("../models").GMProduct;
 const Category = require("../models").GMCategory;
 const sequelize = require("../models").sequelize;
 const { Op, QueryTypes } = require("sequelize");
-const getGMBidsSearchFilterQueries = require("../functions/getGMBidsSearchFilterQueries");
+const getSearchQueries = require("../functions/getSearchQueries");
 
 module.exports = {
   async index(req, res) {
@@ -48,7 +48,7 @@ module.exports = {
           exclude: ["createdAt", "updatedAt"],
         },
         include: categoryUuidOptions,
-        ...getGMBidsSearchFilterQueries(req.query),
+        ...getSearchQueries(req.query.search),
         distinct: true,
       });
 
@@ -65,25 +65,6 @@ module.exports = {
         category: req.body.category,
         data: req.body.data,
       });
-      console.log("category", req.body.category);
-      const productCategory = req.body.category
-        ? await Category.findAll({
-            where: {
-              uuid: req.body.category,
-            },
-            attributes: ["uuid", "name"],
-          })
-        : [];
-
-      console.log("productCategory======", productCategory);
-      // Todo
-      // newProduct.setCategories([uuid1, uuid2]);
-
-      // Todo
-      // newProduct.setCategories([{}, {}]);
-
-      newProduct.setCategories(productCategory);
-      newProduct.categories = productCategory;
       return newProduct;
     } catch (error) {
       console.error(error);
