@@ -12,7 +12,7 @@ module.exports = (query) => {
   const productNames = query?.product_names
     ?.split(",")
     ?.map((productName) => productName);
-  const brands = query?.brands?.split(",")?.map((productName) => productName);
+  const brands = query?.brands?.split(",")?.map((brand) => brand);
   const cities = query?.cities?.split(",")?.map((city) => city);
   const country = query?.country;
 
