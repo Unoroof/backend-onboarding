@@ -1,5 +1,5 @@
 module.exports = (instance) => {
-  const attributes = ["uuid", "name", "category", "data"];
+  const attributes = ["uuid", "name", "categories"];
   const result = {};
   for (const attribute of attributes) {
     result[attribute] = instance[attribute];

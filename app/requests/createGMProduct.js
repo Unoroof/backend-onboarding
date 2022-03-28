@@ -25,38 +25,33 @@ const constraints = {
       },
     },
   },
-  category: {
+  categories: {
     presence: {
-      allowEmpty: false,
+      allowEmpty: true,
     },
-    type: "string",
+    type: "array",
     custom_callback: {
       message: "One or more Categories are not valid",
       callback: (req) => {
-        const category = req.body.category;
+        const categories = req.body.categories;
         // check if the category is Uuid
         const uuidTestRegex =
           /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+        if (!categories || categories.length === 0) return true;
         // Check if the categories provided exist in the database
-        if (uuidTestRegex.test(category)) {
-          return true;
-        }
-        return false;
-      },
-    },
-  },
-  data: {
-    presence: {
-      allowEmpty: false,
-      message: "^Please enter data",
-    },
-    type: "object",
-    custom_callback: {
-      message: "Data should be object",
-      callback: async (req) => {
-        const data = req.body.data;
-        if (validate.isObject(data)) {
-          return true;
+        if (
+          validate.isArray(categories) &&
+          categories.every((category) => uuidTestRegex.test(category))
+        ) {
+          return Category.count({
+            where: {
+              uuid: {
+                [Op.or]: categories,
+              },
+            },
+          }).then((count) => {
+            return count === categories.length ? true : false;
+          });
         }
         return false;
       },

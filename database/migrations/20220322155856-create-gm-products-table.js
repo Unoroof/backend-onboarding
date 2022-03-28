@@ -19,14 +19,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      category: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      data: { 
-        allowNull: false,
-        type: Sequelize.JSONB,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

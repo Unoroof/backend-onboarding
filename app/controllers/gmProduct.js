@@ -62,9 +62,27 @@ module.exports = {
       console.log("req.body of gm-product add", req.body);
       const newProduct = await Product.create({
         name: req.body.name,
-        category: req.body.category,
-        data: req.body.data,
       });
+      const productCategories =
+        req.body.categories.length !== 0
+          ? await Category.findAll({
+              where: {
+                uuid: {
+                  [Op.or]: req.body.categories,
+                },
+              },
+              attributes: ["uuid", "name"],
+            })
+          : [];
+      console.log("gm-productCategories======", productCategories);
+      // Todo
+      // newProduct.setCategories([uuid1, uuid2]);
+
+      // Todo
+      // newProduct.setCategories([{}, {}]);
+
+      newProduct.setCategories(productCategories);
+      newProduct.categories = productCategories;
       return newProduct;
     } catch (error) {
       console.error(error);
