@@ -44,7 +44,6 @@ module.exports = {
 
   async getAllProfiles(req, res) {
     try {
-      console.log("REQUEST BODY", req.user);
       let constraints = {
         where: {},
       };
@@ -57,9 +56,7 @@ module.exports = {
       if (req.body.type === "fm-buyer") {
         if (req.body.city)
           constraints.where["data"] = {
-            [Op.contains]: {
-              city: { label: req.body.city, value: req.body.city },
-            },
+            city: { label: req.body.city, value: req.body.city },
           };
       } else {
         if (req.body.city)
