@@ -136,12 +136,10 @@ module.exports = {
       }
 
       if (toCreateRevision) {
-        console.log("WE ARE IN UPDATE OF PROFILE API");
         await ProfileRevision.create({
           profile_uuid: profile.uuid,
           data: profile.data,
         });
-        console.log("updated onboarded value", profile.onboarded);
       }
       return profile;
     } catch (error) {
