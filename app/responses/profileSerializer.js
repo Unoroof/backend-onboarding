@@ -5,6 +5,7 @@ module.exports = (instance) => {
     "type",
     "data",
     "status",
+    "onboarded",
     "createdAt",
     "updatedAt",
   ];
