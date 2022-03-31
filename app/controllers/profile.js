@@ -125,6 +125,7 @@ module.exports = {
         profile = await profile.update({
           type: req.body.type || profile.type,
           status: req.body.status || profile.status,
+          onboarded: profile.status === "completed" ? true : profile.onboarded,
           data: req.body.data
             ? { ...prevData, ...req.body.data }
             : profile.data,
@@ -135,11 +136,12 @@ module.exports = {
       }
 
       if (toCreateRevision) {
-        console.log("Creating New Revision");
+        console.log("WE ARE IN UPDATE OF PROFILE API");
         await ProfileRevision.create({
           profile_uuid: profile.uuid,
           data: profile.data,
         });
+        console.log("updated onboarded value", profile.onboarded);
       }
       return profile;
     } catch (error) {
