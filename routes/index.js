@@ -48,7 +48,16 @@ const AutoAssignConditionResourceResponse = require("../app/responses/autoAssign
 const EnquiryController = require("../app/controllers").EnquiryController;
 const createEnquiryRequest = require("../app/requests/createEnquiries");
 const enquiryResourceResponse = require("../app/responses/enquiryResource");
-const enquiryCollectionResponse = require("../app/responses/enquiryCollection");
+
+const GmCategoryController = require("../app/controllers").GmCategoryController;
+const createGmCategoryRequest = require("../app/requests/createGmCategory");
+const gmCategoryCollectionResponse = require("../app/responses/gmCategoryCollection");
+const gmCategoryResourceResponse = require("../app/responses/gmCategoryResource");
+
+const GmProductController = require("../app/controllers").GmProductController;
+const createGmProductRequest = require("../app/requests/createGmProduct");
+const gmProductCollectionResponse = require("../app/responses/gmProductCollection");
+const gmProductResourceResponse = require("../app/responses/gmProductResource");
 
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
@@ -223,6 +232,21 @@ router.put(
   "/enquiries/:enquiry_uuid",
   executeForResult(EnquiryController.update),
   executeForResponse(enquiryResourceResponse)
+);
+
+// global market products
+
+router.post(
+  "/gm-categories",
+  createGmCategoryRequest,
+  executeForResult(GmCategoryController.store),
+  executeForResponse(gmCategoryResourceResponse)
+);
+
+router.get(
+  "/gm-categories",
+  executeForResult(GmCategoryController.index),
+  executeForResponse(gmCategoryCollectionResponse)
 );
 
 module.exports = router;
