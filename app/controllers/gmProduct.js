@@ -1,6 +1,7 @@
 const consumeError = require("../functions/consumeError");
 const GmProduct = require("../models").GmProduct;
 const GmCategory = require("../models").GmCategory;
+const Profile = require("../models").Profile;
 const { Op } = require("sequelize");
 
 module.exports = {
@@ -13,30 +14,41 @@ module.exports = {
 
   async store(req, res) {
     try {
-      const gmProduct = await GmProduct.create({
-        name: req.body.name,
-        profile_uuid: "0561c8fa-9d59-4af3-a931-237062e592f5",
-        brand_name: req.body.brand_name,
-        price: req.body.price,
-        discount: req.body.discount,
+      let profile = await Profile.findOne({
+        where: {
+          user_uuid: req.user,
+          type: "fm-buyer",
+        },
       });
-      const productCategories =
-        req.body.categories.length !== 0
-          ? await GmCategory.findAll({
-              where: {
-                uuid: {
-                  [Op.or]: req.body.categories,
-                },
-              },
-              attributes: ["uuid", "name"],
-            })
-          : [];
 
-      gmProduct.setGmCategories(productCategories);
-      gmProduct.categories = productCategories;
-      return gmProduct;
+      if (profile) {
+        const gmProduct = await GmProduct.create({
+          name: req.body.name,
+          profile_uuid: profile.uuid,
+          brand_name: req.body.brand_name,
+          price: req.body.price,
+          discount: req.body.discount,
+        });
+        const productCategories =
+          req.body.categories.length !== 0
+            ? await GmCategory.findAll({
+                where: {
+                  uuid: {
+                    [Op.or]: req.body.categories,
+                  },
+                },
+                attributes: ["uuid", "name"],
+              })
+            : [];
+
+        gmProduct.setGmCategories(productCategories);
+        gmProduct.categories = productCategories;
+        return gmProduct;
+      } else {
+        throw new Error("To add product user has to be onboarded!");
+      }
     } catch (error) {
-      console.error(error);
+      consumeError(error);
     }
   },
 
