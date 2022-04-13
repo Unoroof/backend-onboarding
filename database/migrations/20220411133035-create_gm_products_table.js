@@ -15,7 +15,6 @@ module.exports = {
       },
       name: {
         allowNull: false,
-        unique: true,
         type: Sequelize.STRING,
       },
       brand_name: {

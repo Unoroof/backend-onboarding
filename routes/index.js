@@ -249,4 +249,11 @@ router.get(
   executeForResponse(gmCategoryCollectionResponse)
 );
 
+router.post(
+  "/gm-products",
+  createGmProductRequest,
+  executeForResult(GmProductController.store),
+  executeForResponse(gmProductResourceResponse)
+);
+
 module.exports = router;

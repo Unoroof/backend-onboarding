@@ -17,11 +17,6 @@ const constraints = {
       message: "^Please enter a Brand Name",
     },
   },
-  profile_uuid: {
-    presence: {
-      allowEmpty: false,
-    },
-  },
   price: {
     presence: {
       allowEmpty: false,

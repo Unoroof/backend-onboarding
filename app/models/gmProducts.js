@@ -39,8 +39,8 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "GmProduct",
       tableName: "gm_products",
       name: {
-        singular: "gm_product",
-        plural: "gm_products",
+        singular: "GmProduct",
+        plural: "GmProducts",
       },
     }
   );
@@ -49,8 +49,8 @@ module.exports = (sequelize, DataTypes) => {
       through: "gm_products_categories",
       foreignKey: "product_uuid",
       as: {
-        singular: "gm_category",
-        plural: "gm_categories",
+        singular: "gmCategory",
+        plural: "gmCategories",
       },
     });
   };
