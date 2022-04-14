@@ -8,7 +8,7 @@ module.exports = (instance) => {
     "discount",
     "data",
     "status",
-    "categories",
+    "gmCategories",
   ];
   const result = {};
   for (const attribute of attributes) {

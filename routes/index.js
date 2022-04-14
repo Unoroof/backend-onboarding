@@ -256,4 +256,16 @@ router.post(
   executeForResponse(gmProductResourceResponse)
 );
 
+router.put(
+  "/gm-products/:gm_product_uuid",
+  executeForResult(GmProductController.update),
+  executeForResponse(gmProductResourceResponse)
+);
+
+router.get(
+  "/gm-products",
+  executeForResult(GmProductController.index),
+  executeForResponse(gmProductCollectionResponse)
+);
+
 module.exports = router;
