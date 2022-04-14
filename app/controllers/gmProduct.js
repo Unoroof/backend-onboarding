@@ -8,64 +8,68 @@ const getSearchQueries = require("../functions/getSearchQueries");
 module.exports = {
   async index(req, res) {
     try {
-      let profile = await Profile.findOne({
-        where: {
-          user_uuid: req.user,
-          type: "fm-buyer",
+      // let profile = await Profile.findOne({
+      //   where: {
+      //     user_uuid: req.user,
+      //     type: "fm-buyer",
+      //   },
+      // });
+
+      // if (profile) {
+      let whereClouse = {};
+
+      if (req.query.profile_uuid) {
+        whereClouse = {
+          profile_uuid: req.query.profile_uuid,
+        };
+      }
+
+      if (req.query.status) {
+        whereClouse["status"] = req.query.status;
+      }
+
+      const gmCategories = req.query.gm_categories
+        ? req.query.categories.split(",").filter((category) => category)
+        : [];
+
+      const gmCategoryUuidOptions =
+        gmCategories.length !== 0
+          ? {
+              model: GmCategory,
+              as: "gmCategories",
+              attributes: {
+                exclude: ["createdAt", "updatedAt"],
+              },
+              where: {
+                uuid: {
+                  [Op.in]: gmCategories,
+                },
+              },
+              through: {
+                as: "gm_products_categories",
+              },
+            }
+          : {
+              model: GmCategory,
+              as: "gmCategories",
+              attributes: {
+                exclude: ["createdAt", "updatedAt", "deletedAt"],
+              },
+            };
+
+      let gmProducts = await GmProduct.findAll({
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
         },
+        include: gmCategoryUuidOptions,
+        ...getSearchQueries(req.query.search),
+        where: whereClouse,
       });
 
-      if (profile) {
-        let whereClouse = {
-          profile_uuid: profile.uuid,
-        };
-
-        if (req.query.status) {
-          whereClouse["status"] = req.query.status;
-        }
-
-        const gmCategories = req.query.gm_categories
-          ? req.query.categories.split(",").filter((category) => category)
-          : [];
-
-        const gmCategoryUuidOptions =
-          gmCategories.length !== 0
-            ? {
-                model: GmCategory,
-                as: "gmCategories",
-                attributes: {
-                  exclude: ["createdAt", "updatedAt"],
-                },
-                where: {
-                  uuid: {
-                    [Op.in]: gmCategories,
-                  },
-                },
-                through: {
-                  as: "gm_products_categories",
-                },
-              }
-            : {
-                model: GmCategory,
-                as: "gmCategories",
-                attributes: {
-                  exclude: ["createdAt", "updatedAt", "deletedAt"],
-                },
-              };
-
-        let gmProducts = await GmProduct.findAll({
-          attributes: {
-            exclude: ["createdAt", "updatedAt"],
-          },
-          include: gmCategoryUuidOptions,
-          ...getSearchQueries(req.query.search),
-          where: whereClouse,
-        });
-
-        return gmProducts;
-      } else {
-        throw new Error("To view product user has to be onboarded!");
-      }
+      return gmProducts;
+      // } else {
+      //   throw new Error("To view product user has to be onboarded!");
+      // }
     } catch (error) {
       consumeError(error);
     }
