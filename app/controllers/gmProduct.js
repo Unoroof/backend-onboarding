@@ -21,14 +21,21 @@ module.exports = {
         },
       });
 
+      let payload = {
+        name: req.body.name,
+        profile_uuid: profile.uuid,
+        brand_name: req.body.brand_name,
+        price: req.body.price,
+        discount: req.body.discount,
+        data: req.body.data,
+      };
+
+      if (req.body.status) {
+        payload["status"] = req.body.status;
+      }
+
       if (profile) {
-        const gmProduct = await GmProduct.create({
-          name: req.body.name,
-          profile_uuid: profile.uuid,
-          brand_name: req.body.brand_name,
-          price: req.body.price,
-          discount: req.body.discount,
-        });
+        const gmProduct = await GmProduct.create(payload);
         const productCategories =
           req.body.categories.length !== 0
             ? await GmCategory.findAll({
