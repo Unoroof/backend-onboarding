@@ -263,6 +263,12 @@ router.put(
 );
 
 router.get(
+  "/gm-products/:gm_product_uuid",
+  executeForResult(GmProductController.getProductById),
+  executeForResponse(gmProductResourceResponse)
+);
+
+router.get(
   "/gm-products",
   executeForResult(GmProductController.index),
   executeForResponse(gmProductCollectionResponse)

@@ -28,6 +28,10 @@ module.exports = {
         whereClouse["status"] = req.query.status;
       }
 
+      if (req.query.product_uuid) {
+        whereClouse["uuid"] = req.query.product_uuid;
+      }
+
       const gmCategories = req.query.gm_categories
         ? req.query.categories.split(",").filter((category) => category)
         : [];
@@ -160,6 +164,29 @@ module.exports = {
       return gmProduct;
     } catch (error) {
       console.error(error);
+    }
+  },
+
+  async getProductById(req, res) {
+    try {
+      let gmProduct = await GmProduct.findOne({
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
+        },
+        include: {
+          model: GmCategory,
+          as: "gmCategories",
+          attributes: {
+            exclude: ["createdAt", "updatedAt", "deletedAt"],
+          },
+        },
+        where: {
+          uuid: req.params.gm_product_uuid,
+        },
+      });
+      return gmProduct;
+    } catch (error) {
+      consumeError(error);
     }
   },
 };
