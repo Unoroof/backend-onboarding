@@ -1,17 +1,6 @@
 module.exports = (instance) => {
-  const attributes = [
-    "uuid",
-    "user_uuid",
-    "type",
-    "data",
-    "status",
-    "onboarded",
-    "createdAt",
-    "updatedAt",
-  ];
-
+  const attributes = ["uuid", "name"];
   const result = {};
-
   for (const attribute of attributes) {
     result[attribute] = instance[attribute];
   }
