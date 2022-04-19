@@ -4,6 +4,7 @@ const GmCategory = require("../models").GmCategory;
 const Profile = require("../models").Profile;
 const { Op } = require("sequelize");
 const getSearchQueries = require("../functions/getSearchQueries");
+const sequelize = require("../models").sequelize;
 
 module.exports = {
   async index(req, res) {
@@ -197,66 +198,88 @@ module.exports = {
   async getFilteredSellersProducts(req, res) {
     try {
       let where = {};
-      console.log("req body", req.body);
-      if (req.body.product_names) {
-        where = {
-          name: { [Op.in]: req.body.product_names },
-        };
+      if (req.body.product_names && req.body.product_names.length > 0) {
+        where["name"] = { [Op.in]: req.body.product_names };
       }
 
-      if (req.body.brand_names) {
-        where = {
-          ...where,
-          brand_name: { [Op.in]: req.body.brand_names },
-        };
+      if (req.body.brand_names && req.body.brand_names.length > 0) {
+        where["brand_name"] = { [Op.in]: req.body.brand_names };
       }
 
-      // if (req.body.delivery && req.body.delivery.country) {
-      //   where = {
-      //     ...where,
-      //     "data.delivery.country": req.body.delivery.country,
-      //   };
-      //   if (req.body.delivery.city) {
-      //     where = {
-      //       ...where,
-      //       "data.delivery.city": { [Op.in]: req.body.cities },
-      //     };
-      //   }
-      // }
+      if (req.body.country && req.body.country === "India") {
+        if (req.body.cities && req.body.cities.length > 0) {
+          where[Op.and] = [
+            { "data.logistics.india.delivery": true },
+            {
+              "data.logistics.india.exceptions": {
+                [Op.and]: req.body.cities.map((e) => {
+                  return { [Op.notLike]: `%${e}%` };
+                }),
+              },
+            },
+          ];
+        } else {
+          where["data.logistics.india"] = { delivery: true };
+        }
+      }
+
+      if (req.body.country && req.body.country !== "India") {
+        where[Op.and] = [
+          { "data.logistics.international.delivery": true },
+          {
+            "data.logistics.international.exceptions": {
+              [Op.and]: [req.body.country].map((e) => {
+                return { [Op.notLike]: `%${e}%` };
+              }),
+            },
+          },
+        ];
+      }
 
       const gmCategory = req.body.category;
-
-      const gmCategoryUuidOptions = gmCategory
-        ? {
-            model: GmCategory,
-            as: "gmCategories",
-            attributes: {
-              exclude: ["createdAt", "updatedAt"],
-            },
-            where: {
-              uuid: gmCategory,
-            },
-            through: {
-              as: "gm_products_categories",
-            },
-          }
-        : {
-            model: GmCategory,
-            as: "gmCategories",
-            attributes: {
-              exclude: ["createdAt", "updatedAt", "deletedAt"],
-            },
-          };
 
       let gmProducts = await GmProduct.findAll({
         attributes: {
           exclude: ["createdAt", "updatedAt"],
         },
-        include: gmCategoryUuidOptions,
+        include: {
+          model: GmCategory,
+          as: "gmCategories",
+          attributes: {
+            exclude: ["createdAt", "updatedAt"],
+            include: [
+              sequelize.literal(`(
+                SELECT "profiles"."data" FROM profiles
+                WHERE "profiles"."uuid" = "GmProduct"."profile_uuid"
+                )`),
+            ],
+          },
+          where: {
+            uuid: gmCategory,
+          },
+          through: {
+            as: "gm_products_categories",
+          },
+        },
         where: where,
       });
+      let arr = [];
 
-      return gmProducts;
+      await Promise.all(
+        gmProducts.map(async (product) => {
+          let obj = product;
+          const foundedProduct = await GmProduct.findOne({
+            where: { uuid: product.uuid },
+          });
+          obj = JSON.parse(JSON.stringify(obj));
+
+          arr.push({ ...obj, product_data: foundedProduct.data });
+        })
+      );
+
+      console.log("foundedProductarr", arr);
+
+      return arr;
     } catch (error) {
       consumeError(error);
     }
