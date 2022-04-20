@@ -2,20 +2,13 @@ const consumeError = require("../functions/consumeError");
 const GmProduct = require("../models").GmProduct;
 const GmCategory = require("../models").GmCategory;
 const Profile = require("../models").Profile;
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 const getSearchQueries = require("../functions/getSearchQueries");
+const { result } = require("validate.js");
 
 module.exports = {
   async index(req, res) {
     try {
-      // let profile = await Profile.findOne({
-      //   where: {
-      //     user_uuid: req.user,
-      //     type: "fm-buyer",
-      //   },
-      // });
-
-      // if (profile) {
       let whereClouse = {};
 
       if (req.query.profile_uuid) {
@@ -71,9 +64,6 @@ module.exports = {
       });
 
       return gmProducts;
-      // } else {
-      //   throw new Error("To view product user has to be onboarded!");
-      // }
     } catch (error) {
       consumeError(error);
     }
@@ -185,6 +175,28 @@ module.exports = {
         },
       });
       return gmProduct;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async getBrandNamesForProduct(req, res) {
+    try {
+      let gmProducts = await GmProduct.findAll({
+        attributes: [
+          [Sequelize.fn("DISTINCT", Sequelize.col("brand_name")), "brand_name"],
+        ],
+        where: {
+          name: {
+            [Op.iLike]: {
+              [Op.any]: req.body.products,
+            },
+          },
+        },
+        distinct: true,
+      });
+
+      return gmProducts;
     } catch (error) {
       consumeError(error);
     }

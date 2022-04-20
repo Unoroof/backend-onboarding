@@ -274,4 +274,10 @@ router.get(
   executeForResponse(gmProductCollectionResponse)
 );
 
+router.post(
+  "/gm-products/brand-names",
+  executeForResult(GmProductController.getBrandNamesForProduct),
+  executeForResponse(gmProductCollectionResponse)
+);
+
 module.exports = router;
