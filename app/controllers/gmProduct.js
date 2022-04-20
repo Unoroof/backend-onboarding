@@ -2,7 +2,7 @@ const consumeError = require("../functions/consumeError");
 const GmProduct = require("../models").GmProduct;
 const GmCategory = require("../models").GmCategory;
 const Profile = require("../models").Profile;
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 const getSearchQueries = require("../functions/getSearchQueries");
 const getSellersProducts = require("../functions/getSellersProducts");
 const getCompanyProducts = require("../functions/getCompanyProducts");
@@ -11,14 +11,6 @@ const sequelize = require("../models").sequelize;
 module.exports = {
   async index(req, res) {
     try {
-      // let profile = await Profile.findOne({
-      //   where: {
-      //     user_uuid: req.user,
-      //     type: "fm-buyer",
-      //   },
-      // });
-
-      // if (profile) {
       let whereClouse = {};
 
       if (req.query.profile_uuid) {
@@ -74,9 +66,6 @@ module.exports = {
       });
 
       return gmProducts;
-      // } else {
-      //   throw new Error("To view product user has to be onboarded!");
-      // }
     } catch (error) {
       consumeError(error);
     }
@@ -197,51 +186,81 @@ module.exports = {
     }
   },
 
-  async getFilteredSellersProducts(req, res) {
+  async getBrandNamesForProduct(req, res) {
+    try {
+      let gmProducts = await GmProduct.findAll({
+        attributes: [
+          [Sequelize.fn("DISTINCT", Sequelize.col("brand_name")), "brand_name"],
+        ],
+        where: {
+          name: {
+            [Op.iLike]: {
+              [Op.any]: req.body.products,
+            },
+          },
+        },
+        distinct: true,
+      });
+
+      return gmProducts;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async getFilteredProducts(req, res) {
     try {
       let where = {};
-      if (req.body.product_names && req.body.product_names.length > 0) {
+      if (req.body.product_names) {
         where["name"] = { [Op.in]: req.body.product_names };
       }
 
-      if (req.body.brand_names && req.body.brand_names.length > 0) {
+      if (req.body.brand_names) {
         where["brand_name"] = { [Op.in]: req.body.brand_names };
       }
 
-      if (req.body.country && req.body.country === "India") {
-        if (req.body.cities && req.body.cities.length > 0) {
+      if (req.body.country) {
+        if (req.body.country === "India") {
+          if (req.body.cities) {
+            where[Op.and] = [
+              { "data.logistics.india.delivery": true },
+              {
+                "data.logistics.india.exceptions": {
+                  [Op.and]: req.body.cities.map((e) => {
+                    return { [Op.notLike]: `%${e}%` };
+                  }),
+                },
+              },
+            ];
+          } else {
+            where["data.logistics.india"] = { delivery: true };
+          }
+        } else {
           where[Op.and] = [
-            { "data.logistics.india.delivery": true },
+            { "data.logistics.international.delivery": true },
             {
-              "data.logistics.india.exceptions": {
-                [Op.and]: req.body.cities.map((e) => {
+              "data.logistics.international.exceptions": {
+                [Op.and]: [req.body.country].map((e) => {
                   return { [Op.notLike]: `%${e}%` };
                 }),
               },
             },
           ];
-        } else {
-          where["data.logistics.india"] = { delivery: true };
         }
       }
 
-      if (req.body.country && req.body.country !== "India") {
-        where[Op.and] = [
-          { "data.logistics.international.delivery": true },
-          {
-            "data.logistics.international.exceptions": {
-              [Op.and]: [req.body.country].map((e) => {
-                return { [Op.notLike]: `%${e}%` };
-              }),
-            },
-          },
-        ];
-      }
-
-      const gmCategory = req.body.category;
-
       let gmProducts = await GmProduct.findAll({
         attributes: {
+          include: [
+            [
+              sequelize.literal(`(
+                SELECT "profiles"."data" 
+                FROM "profiles"
+                WHERE "profiles"."uuid" = "GmProduct"."profile_uuid"
+                )`),
+              "profile_data",
+            ],
+          ],
           exclude: ["createdAt", "updatedAt"],
         },
         include: {
@@ -249,15 +268,9 @@ module.exports = {
           as: "gmCategories",
           attributes: {
             exclude: ["createdAt", "updatedAt"],
-            include: [
-              sequelize.literal(`(
-                SELECT "profiles"."data" FROM profiles
-                WHERE "profiles"."uuid" = "GmProduct"."profile_uuid"
-                )`),
-            ],
           },
           where: {
-            uuid: gmCategory,
+            uuid: req.body.category,
           },
           through: {
             as: "gm_products_categories",
@@ -265,25 +278,9 @@ module.exports = {
         },
         where: where,
       });
-      let arr = [];
 
-      await Promise.all(
-        gmProducts.map(async (product) => {
-          let obj = product;
-          const foundedProduct = await GmProduct.findOne({
-            where: { uuid: product.uuid },
-          });
-          obj = JSON.parse(JSON.stringify(obj));
-
-          obj = { ...obj, data: foundedProduct.data, seller_data: obj.data };
-
-          arr.push(obj);
-        })
-      );
-
-      console.log("foundedProductarr", arr);
-
-      return arr;
+      gmProducts = JSON.parse(JSON.stringify(gmProducts));
+      return gmProducts;
     } catch (error) {
       consumeError(error);
     }

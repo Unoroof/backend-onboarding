@@ -281,8 +281,14 @@ router.get(
 );
 
 router.post(
-  "/gm-products/filter-sellers-products",
-  executeForResult(GmProductController.getFilteredSellersProducts),
+  "/gm-products/brand-names",
+  executeForResult(GmProductController.getBrandNamesForProduct),
+  executeForResponse(gmProductCollectionResponse)
+);
+
+router.post(
+  "/gm-products/filter-products",
+  executeForResult(GmProductController.getFilteredProducts),
   executeForResponse(gmProductCollectionResponse)
 );
 
