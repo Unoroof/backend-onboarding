@@ -282,7 +282,7 @@ router.post(
 
 router.post(
   "/gm-products/filter-products",
-  executeForResult(GmProductController.getFilteredSellersProducts),
+  executeForResult(GmProductController.getFilteredProducts),
   executeForResponse(gmProductCollectionResponse)
 );
 

@@ -206,7 +206,7 @@ module.exports = {
     }
   },
 
-  async getFilteredSellersProducts(req, res) {
+  async getFilteredProducts(req, res) {
     try {
       let where = {};
       if (req.body.product_names) {
