@@ -276,7 +276,7 @@ router.get(
 
 router.get(
   "/search-gm-products",
-  executeForResult(GmProductController.getSellersProductsBySearch),
+  executeForResult(GmProductController.getSearchProducts),
   executeForResponse(gmProductCollectionResponse)
 );
 

@@ -286,13 +286,12 @@ module.exports = {
     }
   },
 
-  async getSellersProductsBySearch(req, res) {
+  async getSearchProducts(req, res) {
     try {
       let sellersProducts = [];
-      console.log("keyword", req.query);
       let where = {};
       if (req.query.keyword) {
-        where["name"] = { [Op.like]: `%${req.query.keyword}%` };
+        where = { name: { [Op.iLike]: `%${req.query.keyword}%` } };
 
         let foundedProductsInGmProductsTable = await GmProduct.findAll({
           attributes: {
@@ -300,46 +299,27 @@ module.exports = {
           },
           where: where,
         });
-        console.log(
-          "foundedProductsInGmProductsTable",
-          foundedProductsInGmProductsTable
-        );
 
         if (foundedProductsInGmProductsTable.length > 0) {
           sellersProducts = await getSellersProducts(where);
-          console.log(
-            "sellersProducts in product name search",
-            sellersProducts
-          );
+
           where = {};
-          where["data.company_name"] = { [Op.like]: `%${req.query.keyword}%` };
+          where = {
+            "data.company_name": { [Op.iLike]: `%${req.query.keyword}%` },
+          };
           let companyProducts = await getCompanyProducts(where);
           if (companyProducts.length > 0) {
-            sellersProducts = [
-              {
-                sellers_products: sellersProducts,
-                company_products: companyProducts,
-              },
-            ];
-            console.log(
-              "sellersProducts in found both company name and product name search",
-              sellersProducts
-            );
+            sellersProducts = [...sellersProducts, ...companyProducts];
           }
-          console.log("sellersProducts in final response if", sellersProducts);
         } else {
           where = {};
-          where["data.company_name"] = { [Op.like]: `%${req.query.keyword}%` };
+          where = {
+            "data.company_name": { [Op.iLike]: `%${req.query.keyword}%` },
+          };
           let companyProducts = await getCompanyProducts(where);
           sellersProducts = companyProducts;
-          console.log(
-            "sellersProducts in final response else",
-            sellersProducts
-          );
         }
       }
-
-      console.log("sellersProducts", sellersProducts);
 
       return sellersProducts;
     } catch (error) {

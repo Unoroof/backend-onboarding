@@ -4,15 +4,17 @@ const sequelize = require("../models").sequelize;
 const _ = require("lodash");
 
 module.exports = async function getSellersProducts(where) {
-  let sellersProducts = [];
   let gmProducts = await GmProduct.findAll({
     attributes: {
       exclude: ["createdAt", "updatedAt"],
       include: [
-        sequelize.literal(`(
+        [
+          sequelize.literal(`(
                   SELECT "profiles"."data" FROM profiles
                   WHERE "profiles"."uuid" = "GmProduct"."profile_uuid"
                   )`),
+          "profile_data",
+        ],
       ],
     },
     include: {
@@ -28,18 +30,11 @@ module.exports = async function getSellersProducts(where) {
     where: where,
   });
 
-  await Promise.all(
-    gmProducts.map(async (product) => {
-      let obj = product;
-      const foundedProduct = await GmProduct.findOne({
-        where: { uuid: product.uuid },
-      });
-      obj = JSON.parse(JSON.stringify(obj));
+  let products = JSON.parse(JSON.stringify(gmProducts));
 
-      obj = { ...obj, data: foundedProduct.data, seller_data: obj.data };
+  products = products.map((product) => {
+    return { ...product, keyword: "product" };
+  });
 
-      sellersProducts.push(obj);
-    })
-  );
-  return _.uniqBy(sellersProducts, "uuid");
+  return products;
 };

@@ -26,9 +26,6 @@ module.exports = async function getCompanyProducts(where) {
             attributes: {
               exclude: ["createdAt", "updatedAt"],
             },
-            through: {
-              as: "gm_products_categories",
-            },
           },
           where: { profile_uuid: profile.uuid },
         });
@@ -39,10 +36,8 @@ module.exports = async function getCompanyProducts(where) {
             console.log("foundedProducts", foundedProducts);
 
             companyProducts.push({
-              company_data: profileObj.data,
-              product_data: {
-                ...productObj,
-              },
+              ...productObj,
+              profile_data: profileObj.data,
               keyword: "company",
             });
           })
@@ -50,5 +45,5 @@ module.exports = async function getCompanyProducts(where) {
       })
     );
   }
-  return _.uniqBy(companyProducts, "product_data.uuid");
+  return _.uniqBy(companyProducts, "uuid");
 };
