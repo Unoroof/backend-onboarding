@@ -2,21 +2,13 @@ const consumeError = require("../functions/consumeError");
 const GmProduct = require("../models").GmProduct;
 const GmCategory = require("../models").GmCategory;
 const Profile = require("../models").Profile;
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 const getSearchQueries = require("../functions/getSearchQueries");
 const sequelize = require("../models").sequelize;
 
 module.exports = {
   async index(req, res) {
     try {
-      // let profile = await Profile.findOne({
-      //   where: {
-      //     user_uuid: req.user,
-      //     type: "fm-buyer",
-      //   },
-      // });
-
-      // if (profile) {
       let whereClouse = {};
 
       if (req.query.profile_uuid) {
@@ -72,9 +64,6 @@ module.exports = {
       });
 
       return gmProducts;
-      // } else {
-      //   throw new Error("To view product user has to be onboarded!");
-      // }
     } catch (error) {
       consumeError(error);
     }
@@ -195,48 +184,68 @@ module.exports = {
     }
   },
 
+  async getBrandNamesForProduct(req, res) {
+    try {
+      let gmProducts = await GmProduct.findAll({
+        attributes: [
+          [Sequelize.fn("DISTINCT", Sequelize.col("brand_name")), "brand_name"],
+        ],
+        where: {
+          name: {
+            [Op.iLike]: {
+              [Op.any]: req.body.products,
+            },
+          },
+        },
+        distinct: true,
+      });
+
+      return gmProducts;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
   async getFilteredSellersProducts(req, res) {
     try {
       let where = {};
-      if (req.body.product_names && req.body.product_names.length > 0) {
+      if (req.body.product_names) {
         where["name"] = { [Op.in]: req.body.product_names };
       }
 
-      if (req.body.brand_names && req.body.brand_names.length > 0) {
+      if (req.body.brand_names) {
         where["brand_name"] = { [Op.in]: req.body.brand_names };
       }
 
-      if (req.body.country && req.body.country === "India") {
-        if (req.body.cities && req.body.cities.length > 0) {
+      if (req.body.country) {
+        if (req.body.country === "India") {
+          if (req.body.cities) {
+            where[Op.and] = [
+              { "data.logistics.india.delivery": true },
+              {
+                "data.logistics.india.exceptions": {
+                  [Op.and]: req.body.cities.map((e) => {
+                    return { [Op.notLike]: `%${e}%` };
+                  }),
+                },
+              },
+            ];
+          } else {
+            where["data.logistics.india"] = { delivery: true };
+          }
+        } else {
           where[Op.and] = [
-            { "data.logistics.india.delivery": true },
+            { "data.logistics.international.delivery": true },
             {
-              "data.logistics.india.exceptions": {
-                [Op.and]: req.body.cities.map((e) => {
+              "data.logistics.international.exceptions": {
+                [Op.and]: [req.body.country].map((e) => {
                   return { [Op.notLike]: `%${e}%` };
                 }),
               },
             },
           ];
-        } else {
-          where["data.logistics.india"] = { delivery: true };
         }
       }
-
-      if (req.body.country && req.body.country !== "India") {
-        where[Op.and] = [
-          { "data.logistics.international.delivery": true },
-          {
-            "data.logistics.international.exceptions": {
-              [Op.and]: [req.body.country].map((e) => {
-                return { [Op.notLike]: `%${e}%` };
-              }),
-            },
-          },
-        ];
-      }
-
-      const gmCategory = req.body.category;
 
       let gmProducts = await GmProduct.findAll({
         attributes: {
@@ -255,7 +264,7 @@ module.exports = {
             ],
           },
           where: {
-            uuid: gmCategory,
+            uuid: req.body.category,
           },
           through: {
             as: "gm_products_categories",
@@ -265,6 +274,7 @@ module.exports = {
       });
       let arr = [];
 
+      console.log("check here gmProducts", gmProducts);
       await Promise.all(
         gmProducts.map(async (product) => {
           let obj = product;
