@@ -4,6 +4,8 @@ const GmCategory = require("../models").GmCategory;
 const Profile = require("../models").Profile;
 const { Op } = require("sequelize");
 const getSearchQueries = require("../functions/getSearchQueries");
+const getSellersProducts = require("../functions/getSellersProducts");
+const getCompanyProducts = require("../functions/getCompanyProducts");
 const sequelize = require("../models").sequelize;
 
 module.exports = {
@@ -273,13 +275,76 @@ module.exports = {
           });
           obj = JSON.parse(JSON.stringify(obj));
 
-          arr.push({ ...obj, product_data: foundedProduct.data });
+          obj = { ...obj, data: foundedProduct.data, seller_data: obj.data };
+
+          arr.push(obj);
         })
       );
 
       console.log("foundedProductarr", arr);
 
       return arr;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async getSellersProductsBySearch(req, res) {
+    try {
+      let sellersProducts = [];
+      console.log("keyword", req.query);
+      let where = {};
+      if (req.query.keyword) {
+        where["name"] = { [Op.like]: `%${req.query.keyword}%` };
+
+        let foundedProductsInGmProductsTable = await GmProduct.findAll({
+          attributes: {
+            exclude: ["createdAt", "updatedAt"],
+          },
+          where: where,
+        });
+        console.log(
+          "foundedProductsInGmProductsTable",
+          foundedProductsInGmProductsTable
+        );
+
+        if (foundedProductsInGmProductsTable.length > 0) {
+          sellersProducts = await getSellersProducts(where);
+          console.log(
+            "sellersProducts in product name search",
+            sellersProducts
+          );
+          where = {};
+          where["data.company_name"] = { [Op.like]: `%${req.query.keyword}%` };
+          let companyProducts = await getCompanyProducts(where);
+          if (companyProducts.length > 0) {
+            sellersProducts = [
+              {
+                sellers_products: sellersProducts,
+                company_products: companyProducts,
+              },
+            ];
+            console.log(
+              "sellersProducts in found both company name and product name search",
+              sellersProducts
+            );
+          }
+          console.log("sellersProducts in final response if", sellersProducts);
+        } else {
+          where = {};
+          where["data.company_name"] = { [Op.like]: `%${req.query.keyword}%` };
+          let companyProducts = await getCompanyProducts(where);
+          sellersProducts = companyProducts;
+          console.log(
+            "sellersProducts in final response else",
+            sellersProducts
+          );
+        }
+      }
+
+      console.log("sellersProducts", sellersProducts);
+
+      return sellersProducts;
     } catch (error) {
       consumeError(error);
     }

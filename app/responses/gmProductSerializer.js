@@ -9,7 +9,12 @@ module.exports = (instance) => {
     "data",
     "status",
     "gmCategories",
-    "product_data"
+    "seller_data",
+    "product_data",
+    "company_data",
+    "sellers_products",
+    "company_products",
+    "keyword",
   ];
   const result = {};
   for (const attribute of attributes) {

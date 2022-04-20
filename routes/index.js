@@ -274,10 +274,17 @@ router.get(
   executeForResponse(gmProductCollectionResponse)
 );
 
+router.get(
+  "/search-gm-products",
+  executeForResult(GmProductController.getSellersProductsBySearch),
+  executeForResponse(gmProductCollectionResponse)
+);
+
 router.post(
   "/gm-products/filter-sellers-products",
   executeForResult(GmProductController.getFilteredSellersProducts),
   executeForResponse(gmProductCollectionResponse)
 );
+
 
 module.exports = router;
