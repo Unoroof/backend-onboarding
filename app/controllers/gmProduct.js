@@ -249,6 +249,16 @@ module.exports = {
 
       let gmProducts = await GmProduct.findAll({
         attributes: {
+          include: [
+            [
+              sequelize.literal(`(
+                SELECT "profiles"."data" 
+                FROM "profiles"
+                WHERE "profiles"."uuid" = "GmProduct"."profile_uuid"
+                )`),
+              "profile_data",
+            ],
+          ],
           exclude: ["createdAt", "updatedAt"],
         },
         include: {
@@ -256,12 +266,6 @@ module.exports = {
           as: "gmCategories",
           attributes: {
             exclude: ["createdAt", "updatedAt"],
-            include: [
-              sequelize.literal(`(
-                SELECT "profiles"."data" FROM profiles
-                WHERE "profiles"."uuid" = "GmProduct"."profile_uuid"
-                )`),
-            ],
           },
           where: {
             uuid: req.body.category,
@@ -272,24 +276,9 @@ module.exports = {
         },
         where: where,
       });
-      let arr = [];
 
-      console.log("check here gmProducts", gmProducts);
-      await Promise.all(
-        gmProducts.map(async (product) => {
-          let obj = product;
-          const foundedProduct = await GmProduct.findOne({
-            where: { uuid: product.uuid },
-          });
-          obj = JSON.parse(JSON.stringify(obj));
-
-          arr.push({ ...obj, product_data: foundedProduct.data });
-        })
-      );
-
-      console.log("foundedProductarr", arr);
-
-      return arr;
+      gmProducts = JSON.parse(JSON.stringify(gmProducts));
+      return gmProducts;
     } catch (error) {
       consumeError(error);
     }

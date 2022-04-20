@@ -9,7 +9,7 @@ module.exports = (instance) => {
     "data",
     "status",
     "gmCategories",
-    "product_data"
+    "profile_data",
   ];
   const result = {};
   for (const attribute of attributes) {

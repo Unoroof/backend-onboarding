@@ -281,7 +281,7 @@ router.post(
 );
 
 router.post(
-  "/gm-products/filter-sellers-products",
+  "/gm-products/filter-products",
   executeForResult(GmProductController.getFilteredSellersProducts),
   executeForResponse(gmProductCollectionResponse)
 );
