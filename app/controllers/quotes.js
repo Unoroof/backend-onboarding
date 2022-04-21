@@ -8,7 +8,6 @@ const sequelize = require("../models").sequelize;
 module.exports = {
   async index(req) {
     try {
-      console.log("req======", req);
       let result = sequelize.transaction(async (t) => {
         let profile = await Profile.findOne(
           {

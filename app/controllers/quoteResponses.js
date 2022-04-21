@@ -13,8 +13,8 @@ module.exports = {
       if (req.query.uuid) constraints.where.uuid = req.query.uuid;
       if (req.query.buyer_uuid)
         constraints.where.buyer_uuid = req.query.buyer_uuid;
-      if (req.query.query_uuid)
-        constraints.where.query_uuid = req.query.query_uuid;
+      if (req.query.quote_uuid)
+        constraints.where.quote_uuid = req.query.quote_uuid;
       if (req.query.seller_uuid)
         constraints.where.seller_uuid = req.query.seller_uuid;
       if (req.query.status) constraints.where.status = req.query.status;
@@ -33,17 +33,20 @@ module.exports = {
 
   async update(req, res) {
     try {
-      console.log("check here response_uuid", req.params.response_uuid);
 
       let result = sequelize.transaction(async (t) => {
         let quoteResponse = await QuoteResponse.findOne(
           {
             where: {
-              uuid: req.params.response_uuid,
+              uuid: req.params.uuid,
             },
           },
           { transaction: t }
         );
+
+        if (!quoteResponse) {
+          throw new Error("Quote response not found");
+        }
 
         let payload = {
           buyer_uuid: quoteResponse.buyer_uuid,

@@ -63,6 +63,10 @@ const createQuote = require("../app/requests/createQuote");
 const QuoteController = require("../app/controllers").QuoteController;
 const QuoteResponse = require("../app/responses/quoteResources");
 const QuoteCollection = require("../app/responses/quoteCollection");
+const QuoteResponseController =
+  require("../app/controllers").QuoteResponseController;
+const QuoteResponseResponse = require("../app/responses/quoteResponseResources");
+const QuoteResponseCollection = require("../app/responses/quoteResponseCollection");
 
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
@@ -316,6 +320,18 @@ router.put(
   createQuote,
   executeForResult(QuoteController.update),
   executeForResponse(QuoteResponse)
+);
+
+router.get(
+  "/quote-response",
+  executeForResult(QuoteResponseController.index, "quoteResponse"),
+  executeForResponse(QuoteResponseCollection)
+);
+
+router.put(
+  "/quote-response/:uuid",
+  executeForResult(QuoteResponseController.update),
+  executeForResponse(QuoteResponseResponse)
 );
 
 module.exports = router;
