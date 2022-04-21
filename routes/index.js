@@ -59,6 +59,10 @@ const createGmProductRequest = require("../app/requests/createGmProduct");
 const gmProductCollectionResponse = require("../app/responses/gmProductCollection");
 const gmProductResourceResponse = require("../app/responses/gmProductResource");
 const getFilteredProducts = require("../app/requests/getFilteredProducts");
+const createQuote = require("../app/requests/createQuote");
+const QuoteController = require("../app/controllers").QuoteController;
+const QuoteResponse = require("../app/responses/quoteResources");
+const QuoteCollection = require("../app/responses/quoteCollection");
 
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
@@ -292,6 +296,26 @@ router.post(
   getFilteredProducts,
   executeForResult(GmProductController.getFilteredProducts),
   executeForResponse(gmProductCollectionResponse)
+);
+
+router.get(
+  "/gm-products-quotes",
+  executeForResult(QuoteController.index, "quotes"),
+  executeForResponse(QuoteCollection)
+);
+
+router.post(
+  "/gm-products/quotes",
+  createQuote,
+  executeForResult(QuoteController.create),
+  executeForResponse(QuoteResponse)
+);
+
+router.put(
+  "/gm-products/quotes/:quote_uuid",
+  createQuote,
+  executeForResult(QuoteController.update),
+  executeForResponse(QuoteResponse)
 );
 
 module.exports = router;
