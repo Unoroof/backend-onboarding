@@ -289,36 +289,16 @@ module.exports = {
   async getSearchProducts(req, res) {
     try {
       let sellersProducts = [];
-      let where = {};
       if (req.query.keyword) {
-        where = { name: { [Op.iLike]: `%${req.query.keyword}%` } };
-
-        let foundedProductsInGmProductsTable = await GmProduct.findAll({
-          attributes: {
-            exclude: ["createdAt", "updatedAt"],
-          },
-          where: where,
+        sellersProducts = await getSellersProducts({
+          name: { [Op.iLike]: `%${req.query.keyword}%` },
         });
 
-        if (foundedProductsInGmProductsTable.length > 0) {
-          sellersProducts = await getSellersProducts(where);
+        let companyProducts = await getCompanyProducts({
+          "data.company_name": { [Op.iLike]: `%${req.query.keyword}%` },
+        });
 
-          where = {};
-          where = {
-            "data.company_name": { [Op.iLike]: `%${req.query.keyword}%` },
-          };
-          let companyProducts = await getCompanyProducts(where);
-          if (companyProducts.length > 0) {
-            sellersProducts = [...sellersProducts, ...companyProducts];
-          }
-        } else {
-          where = {};
-          where = {
-            "data.company_name": { [Op.iLike]: `%${req.query.keyword}%` },
-          };
-          let companyProducts = await getCompanyProducts(where);
-          sellersProducts = companyProducts;
-        }
+        sellersProducts = [...sellersProducts, ...companyProducts];
       }
 
       return sellersProducts;

@@ -1,7 +1,6 @@
 const GmProduct = require("../models").GmProduct;
 const GmCategory = require("../models").GmCategory;
 const sequelize = require("../models").sequelize;
-const _ = require("lodash");
 
 module.exports = async function getSellersProducts(where) {
   let gmProducts = await GmProduct.findAll({
