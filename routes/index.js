@@ -58,6 +58,7 @@ const GmProductController = require("../app/controllers").GmProductController;
 const createGmProductRequest = require("../app/requests/createGmProduct");
 const gmProductCollectionResponse = require("../app/responses/gmProductCollection");
 const gmProductResourceResponse = require("../app/responses/gmProductResource");
+const getFilteredProducts = require("../app/requests/getFilteredProducts");
 
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
@@ -274,9 +275,22 @@ router.get(
   executeForResponse(gmProductCollectionResponse)
 );
 
+router.get(
+  "/search-gm-products",
+  executeForResult(GmProductController.getSearchProducts),
+  executeForResponse(gmProductCollectionResponse)
+);
+
 router.post(
   "/gm-products/brand-names",
   executeForResult(GmProductController.getBrandNamesForProduct),
+  executeForResponse(gmProductCollectionResponse)
+);
+
+router.post(
+  "/gm-products/filter-products",
+  getFilteredProducts,
+  executeForResult(GmProductController.getFilteredProducts),
   executeForResponse(gmProductCollectionResponse)
 );
 

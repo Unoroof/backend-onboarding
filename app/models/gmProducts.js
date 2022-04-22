@@ -27,7 +27,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       price: { type: DataTypes.JSONB },
       discount: { type: DataTypes.JSONB },
-      data: { type: DataTypes.JSONB },
+      data: {
+        type: DataTypes.JSONB,
+      },
       status: {
         allowNull: false,
         type: DataTypes.STRING,
@@ -54,5 +56,6 @@ module.exports = (sequelize, DataTypes) => {
       },
     });
   };
+
   return GmProduct;
 };
