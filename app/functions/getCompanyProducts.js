@@ -1,7 +1,6 @@
 const GmProduct = require("../models").GmProduct;
 const Profile = require("../models").Profile;
 const GmCategory = require("../models").GmCategory;
-const _ = require("lodash");
 
 module.exports = async function getCompanyProducts(where) {
   let companyProducts = [];
@@ -45,5 +44,5 @@ module.exports = async function getCompanyProducts(where) {
       })
     );
   }
-  return _.uniqBy(companyProducts, "uuid");
+  return companyProducts;
 };
