@@ -4,7 +4,9 @@ const GmCategory = require("../models").GmCategory;
 const Profile = require("../models").Profile;
 const { Op, Sequelize } = require("sequelize");
 const getSearchQueries = require("../functions/getSearchQueries");
-const { result } = require("validate.js");
+const getSellersProducts = require("../functions/getSellersProducts");
+const getCompanyProducts = require("../functions/getCompanyProducts");
+const sequelize = require("../models").sequelize;
 
 module.exports = {
   async index(req, res) {
@@ -77,6 +79,10 @@ module.exports = {
           type: "fm-buyer",
         },
       });
+      if (!profile) {
+        console.log("req.user", req.user);
+        throw new Error("fm-seller not allowed to create product");
+      }
 
       let payload = {
         name: req.body.name,
@@ -197,6 +203,105 @@ module.exports = {
       });
 
       return gmProducts;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async getFilteredProducts(req, res) {
+    try {
+      let where = {};
+      if (req.body.product_names) {
+        where["name"] = { [Op.in]: req.body.product_names };
+      }
+
+      if (req.body.brand_names) {
+        where["brand_name"] = { [Op.in]: req.body.brand_names };
+      }
+
+      if (req.body.country) {
+        if (req.body.country === "India") {
+          if (req.body.cities) {
+            where[Op.and] = [
+              { "data.logistics.india.delivery": true },
+              {
+                "data.logistics.india.exceptions": {
+                  [Op.and]: req.body.cities.map((e) => {
+                    return { [Op.notLike]: `%${e}%` };
+                  }),
+                },
+              },
+            ];
+          } else {
+            where["data.logistics.india"] = { delivery: true };
+          }
+        } else {
+          where[Op.and] = [
+            { "data.logistics.international.delivery": true },
+            {
+              "data.logistics.international.exceptions": {
+                [Op.and]: [req.body.country].map((e) => {
+                  return { [Op.notLike]: `%${e}%` };
+                }),
+              },
+            },
+          ];
+        }
+      }
+
+      let gmProducts = await GmProduct.findAll({
+        attributes: {
+          include: [
+            [
+              sequelize.literal(`(
+                SELECT "profiles"."data" 
+                FROM "profiles"
+                WHERE "profiles"."uuid" = "GmProduct"."profile_uuid"
+                )`),
+              "profile_data",
+            ],
+          ],
+          exclude: ["createdAt", "updatedAt"],
+        },
+        include: {
+          model: GmCategory,
+          as: "gmCategories",
+          attributes: {
+            exclude: ["createdAt", "updatedAt"],
+          },
+          where: {
+            uuid: req.body.category,
+          },
+          through: {
+            as: "gm_products_categories",
+          },
+        },
+        where: where,
+      });
+
+      gmProducts = JSON.parse(JSON.stringify(gmProducts));
+      return gmProducts;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async getSearchProducts(req, res) {
+    try {
+      let sellersProducts = [];
+      if (req.query.keyword) {
+        sellersProducts = await getSellersProducts({
+          name: { [Op.iLike]: `%${req.query.keyword}%` },
+        });
+
+        let companyProducts = await getCompanyProducts({
+          "data.company_name": { [Op.iLike]: `%${req.query.keyword}%` },
+        });
+
+        sellersProducts = [...sellersProducts, ...companyProducts];
+      }
+
+      return sellersProducts;
     } catch (error) {
       consumeError(error);
     }

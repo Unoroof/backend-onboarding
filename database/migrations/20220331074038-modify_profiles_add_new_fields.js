@@ -13,4 +13,13 @@ module.exports = {
       ),
     ]);
   },
+  down: async (queryInterface, Sequelize) => {
+    return queryInterface.sequelize.transaction((t) => {
+      return Promise.all([
+        queryInterface.removeColumn("profiles", "onboarded", {
+          transaction: t,
+        }),
+      ]);
+    });
+  },
 };
