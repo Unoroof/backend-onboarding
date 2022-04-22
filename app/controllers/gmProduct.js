@@ -79,25 +79,21 @@ module.exports = {
           type: "fm-buyer",
         },
       });
-      if (!profile) {
-        console.log("req.user", req.user);
-        throw new Error("fm-seller not allowed to create product");
-      }
-
-      let payload = {
-        name: req.body.name,
-        profile_uuid: profile.uuid,
-        brand_name: req.body.brand_name,
-        price: req.body.price,
-        discount: req.body.discount,
-        data: req.body.data,
-      };
-
-      if (req.body.status) {
-        payload["status"] = req.body.status;
-      }
 
       if (profile) {
+        let payload = {
+          name: req.body.name,
+          profile_uuid: profile.uuid,
+          brand_name: req.body.brand_name,
+          price: req.body.price,
+          discount: req.body.discount,
+          data: req.body.data,
+        };
+
+        if (req.body.status) {
+          payload["status"] = req.body.status;
+        }
+
         const gmProduct = await GmProduct.create(payload);
         const productCategories =
           req.body.categories.length !== 0
