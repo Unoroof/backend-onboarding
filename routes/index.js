@@ -63,6 +63,12 @@ const createQuote = require("../app/requests/createQuote");
 const QuoteController = require("../app/controllers").QuoteController;
 const QuoteResponse = require("../app/responses/quoteResources");
 const QuoteCollection = require("../app/responses/quoteCollection");
+
+const AddressController = require("../app/controllers/address");
+const AddressResponse = require("../app/responses/addressResource");
+const AddressCollection = require("../app/responses/addressCollection");
+const createAddress = require("../app/requests/createAddress");
+
 const QuoteResponseController =
   require("../app/controllers").QuoteResponseController;
 const QuoteResponseResponse = require("../app/responses/quoteResponseResources");
@@ -313,6 +319,31 @@ router.get(
   "/quotes",
   executeForResult(QuoteController.index, "quotes"),
   executeForResponse(QuoteCollection)
+);
+
+router.post(
+  "/address",
+  createAddress,
+  executeForResult(AddressController.create),
+  executeForResponse(AddressResponse)
+);
+
+router.put(
+  "/address/:uuid",
+  executeForResult(AddressController.update),
+  executeForResponse(AddressResponse)
+);
+
+router.get(
+  "/address",
+  executeForResult(AddressController.index, "address"),
+  executeForResponse(AddressCollection)
+);
+
+router.delete(
+  "/address/:uuid",
+  executeForResult(AddressController.delete),
+  executeForResponse(AddressResponse)
 );
 
 router.put(

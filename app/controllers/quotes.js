@@ -1,6 +1,7 @@
 const models = require("../models");
 const Quotes = models.Quotes;
 const Profile = models.Profile;
+const Address = models.Address;
 const QuoteResponse = models.QuoteResponse;
 const consumeError = require("../functions/consumeError");
 const sequelize = require("../models").sequelize;
@@ -68,6 +69,29 @@ module.exports = {
         if (!quote) {
           throw new Error("Unable to create quote");
         }
+
+        let isAlreadyExistedAddress = await Address.findOne(
+          {
+            where: {
+              profile_uuid: profile.uuid,
+              location_name: req.body.data.delivery_location,
+            },
+          },
+          { transaction: t }
+        );
+
+        if (isAlreadyExistedAddress) {
+          throw new Error("Unable to add duplicated address");
+        }
+
+        await Address.create({
+          profile_uuid: profile.uuid,
+          location_name: req.body.data.delivery_location,
+          address: req.body.data.delivery_address,
+          country: req.body.data.country,
+          city: req.body.data.city,
+          pincode: req.body.data.pincode,
+        });
 
         await QuoteResponse.create(
           {
