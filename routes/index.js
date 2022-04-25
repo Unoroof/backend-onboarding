@@ -302,21 +302,21 @@ router.post(
   executeForResponse(gmProductCollectionResponse)
 );
 
-router.get(
-  "/gm-products-quotes",
-  executeForResult(QuoteController.index, "quotes"),
-  executeForResponse(QuoteCollection)
-);
-
 router.post(
-  "/gm-products/quotes",
+  "/quotes",
   createQuote,
   executeForResult(QuoteController.create),
   executeForResponse(QuoteResponse)
 );
 
+router.get(
+  "/quotes",
+  executeForResult(QuoteController.index, "quotes"),
+  executeForResponse(QuoteCollection)
+);
+
 router.put(
-  "/gm-products/quotes/:quote_uuid",
+  "/quotes/:quote_uuid",
   createQuote,
   executeForResult(QuoteController.update),
   executeForResponse(QuoteResponse)
