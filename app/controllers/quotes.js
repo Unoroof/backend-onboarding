@@ -74,20 +74,20 @@ module.exports = {
           {
             where: {
               profile_uuid: profile.uuid,
-              location_name: req.body.data.delivery_location,
+              location_name: req.body.data.location_name,
             },
           },
           { transaction: t }
         );
 
         if (isAlreadyExistedAddress) {
-          throw new Error("Unable to add duplicated address");
+          throw new Error("Location name should be unique");
         }
 
         await Address.create({
           profile_uuid: profile.uuid,
-          location_name: req.body.data.delivery_location,
-          address: req.body.data.delivery_address,
+          location_name: req.body.data.location_name,
+          address: req.body.data.address,
           country: req.body.data.country,
           city: req.body.data.city,
           pincode: req.body.data.pincode,

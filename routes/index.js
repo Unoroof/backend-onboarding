@@ -64,7 +64,7 @@ const QuoteController = require("../app/controllers").QuoteController;
 const QuoteResponse = require("../app/responses/quoteResources");
 const QuoteCollection = require("../app/responses/quoteCollection");
 
-const AddressController = require("../app/controllers/address");
+const AddressController = require("../app/controllers").AddressController;
 const AddressResponse = require("../app/responses/addressResource");
 const AddressCollection = require("../app/responses/addressCollection");
 const createAddress = require("../app/requests/createAddress");

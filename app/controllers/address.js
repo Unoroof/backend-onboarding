@@ -29,49 +29,18 @@ module.exports = {
   async create(req) {
     try {
       let result = sequelize.transaction(async (t) => {
-        let foundedAddress = await Address.findAll(
+        let isAlreadyExistedAddress = await Address.findOne(
           {
             where: {
               profile_uuid: req.body.profile_uuid,
+              location_name: req.body.location_name,
             },
           },
           { transaction: t }
         );
 
-        let count = 0;
-        await Promise.all(
-          foundedAddress.map((address) => {
-            let addressString =
-              address.country +
-              "," +
-              address.city +
-              "," +
-              address.location_name +
-              "," +
-              address.address +
-              "," +
-              address.pincode;
-            addressString = addressString.toLowerCase();
-            let comingAddressString =
-              req.body.country +
-              "," +
-              req.body.city +
-              "," +
-              req.body.location_name +
-              "," +
-              req.body.address +
-              "," +
-              req.body.pincode;
-            comingAddressString = comingAddressString.toLowerCase();
-            if (addressString === comingAddressString) {
-              count = count + 1;
-            }
-            return count;
-          })
-        );
-
-        if (count > 0) {
-          throw new Error("Unable to add duplicated address");
+        if (isAlreadyExistedAddress) {
+          throw new Error("Location name should be unique");
         }
 
         let address = await Address.create(req.body, { transaction: t });
