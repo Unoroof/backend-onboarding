@@ -9,6 +9,9 @@ const AutoAssignConditionController = require("./autoAssignConditions");
 const EnquiryController = require("./enquiries");
 const GmCategoryController = require("./gmCategory");
 const GmProductController = require("./gmProduct");
+const QuoteController = require("./quotes");
+const QuoteResponseController = require("./quoteResponses");
+const AddressController = require("./address");
 
 module.exports = {
   ProfileController,
@@ -22,4 +25,7 @@ module.exports = {
   EnquiryController,
   GmCategoryController,
   GmProductController,
+  QuoteController,
+  QuoteResponseController,
+  AddressController,
 };
