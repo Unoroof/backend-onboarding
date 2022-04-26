@@ -70,39 +70,52 @@ module.exports = {
           throw new Error("Unable to create quote");
         }
 
-        let isAlreadyExistedAddress = await Address.findOne(
-          {
-            where: {
-              profile_uuid: profile.uuid,
-              location_name: req.body.data.location_name,
+        if (req.body.type === "get_quote_with_existing_address") {
+          await QuoteResponse.create(
+            {
+              buyer_uuid: quote.profile_uuid,
+              quote_uuid: quote.uuid,
+              seller_uuid: quote.seller_uuid,
+              status: "pending",
+              data: quote.data,
             },
-          },
-          { transaction: t }
-        );
+            { transaction: t }
+          );
+        } else {
+          let isAlreadyExistedAddress = await Address.findOne(
+            {
+              where: {
+                profile_uuid: profile.uuid,
+                location_name: req.body.data.location_name,
+              },
+            },
+            { transaction: t }
+          );
 
-        if (isAlreadyExistedAddress) {
-          throw new Error("Location name should be unique");
+          if (isAlreadyExistedAddress) {
+            throw new Error("Location name should be unique");
+          }
+
+          await Address.create({
+            profile_uuid: profile.uuid,
+            location_name: req.body.data.location_name,
+            address: req.body.data.address,
+            country: req.body.data.country,
+            city: req.body.data.city,
+            pincode: req.body.data.pincode,
+          });
+
+          await QuoteResponse.create(
+            {
+              buyer_uuid: quote.profile_uuid,
+              quote_uuid: quote.uuid,
+              seller_uuid: quote.seller_uuid,
+              status: "pending",
+              data: quote.data,
+            },
+            { transaction: t }
+          );
         }
-
-        await Address.create({
-          profile_uuid: profile.uuid,
-          location_name: req.body.data.location_name,
-          address: req.body.data.address,
-          country: req.body.data.country,
-          city: req.body.data.city,
-          pincode: req.body.data.pincode,
-        });
-
-        await QuoteResponse.create(
-          {
-            buyer_uuid: quote.profile_uuid,
-            quote_uuid: quote.uuid,
-            seller_uuid: quote.seller_uuid,
-            status: "pending",
-            data: quote.data,
-          },
-          { transaction: t }
-        );
 
         return quote;
       });
