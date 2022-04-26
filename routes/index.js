@@ -58,7 +58,6 @@ const GmProductController = require("../app/controllers").GmProductController;
 const createGmProductRequest = require("../app/requests/createGmProduct");
 const gmProductCollectionResponse = require("../app/responses/gmProductCollection");
 const gmProductResourceResponse = require("../app/responses/gmProductResource");
-const getFilteredProducts = require("../app/requests/getFilteredProducts");
 const createQuote = require("../app/requests/createQuote");
 const QuoteController = require("../app/controllers").QuoteController;
 const QuoteResponse = require("../app/responses/quoteResources");
@@ -303,7 +302,6 @@ router.post(
 
 router.post(
   "/gm-products/filter-products",
-  getFilteredProducts,
   executeForResult(GmProductController.getFilteredProducts),
   executeForResponse(gmProductCollectionResponse)
 );

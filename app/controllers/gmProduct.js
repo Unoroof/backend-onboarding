@@ -259,19 +259,31 @@ module.exports = {
           ],
           exclude: ["createdAt", "updatedAt"],
         },
-        include: {
-          model: GmCategory,
-          as: "gmCategories",
-          attributes: {
-            exclude: ["createdAt", "updatedAt"],
-          },
-          where: {
-            uuid: req.body.category,
-          },
-          through: {
-            as: "gm_products_categories",
-          },
-        },
+        include: req.body.category
+          ? {
+              model: GmCategory,
+              as: "gmCategories",
+              attributes: {
+                exclude: ["createdAt", "updatedAt"],
+              },
+              where: {
+                uuid: req.body.category,
+              },
+              through: {
+                as: "gm_products_categories",
+              },
+            }
+          : {
+              model: GmCategory,
+              as: "gmCategories",
+              attributes: {
+                exclude: ["createdAt", "updatedAt"],
+              },
+
+              through: {
+                as: "gm_products_categories",
+              },
+            },
         where: where,
       });
 
