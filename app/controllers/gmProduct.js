@@ -141,7 +141,7 @@ module.exports = {
       }
 
       if (req.body.discount) {
-        payload["discount"] = { ...gmProduct.discount, ...req.body.discount };
+        payload["discount"] = req.body.discount;
       }
 
       if (req.body.data) {
