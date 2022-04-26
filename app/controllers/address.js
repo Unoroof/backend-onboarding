@@ -1,5 +1,6 @@
 const models = require("../models");
 const Address = models.Address;
+const Profile = models.Profile;
 const consumeError = require("../functions/consumeError");
 const sequelize = require("../models").sequelize;
 
@@ -11,10 +12,18 @@ module.exports = {
       };
 
       if (req.query.uuid) constraints.where.uuid = req.query.uuid;
-      if (req.query.profile_uuid)
-        constraints.where.profile_uuid = req.query.profile_uuid;
 
       let result = sequelize.transaction(async (t) => {
+        let profile = await Profile.findOne(
+          {
+            where: {
+              user_uuid: req.user,
+              type: "fm-buyer",
+            },
+          },
+          { transaction: t }
+        );
+        if (profile.uuid) constraints.where.profile_uuid = profile.uuid;
         let quoteResponses = await Address.findAll(constraints, {
           transaction: t,
         });
