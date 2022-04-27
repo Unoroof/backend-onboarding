@@ -44,10 +44,10 @@ const constraints = {
     },
     type: "string",
   },
-  "data.unit": {
+  "data.units": {
     presence: {
       allowEmpty: false,
-      message: "^Please enter the unit",
+      message: "^Please enter the units",
     },
     type: "string",
   },
