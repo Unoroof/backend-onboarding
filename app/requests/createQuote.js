@@ -86,7 +86,7 @@ const constraints = {
     },
     type: "string",
   },
-  pincode: {
+  "data.pincode": {
     presence: {
       allowEmpty: false,
       message: "^Please enter the pincode",
