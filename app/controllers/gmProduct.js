@@ -303,7 +303,7 @@ module.exports = {
         });
 
         let companyProducts = await getCompanyProducts({
-          "data.company_name": { [Op.iLike]: `${req.query.keyword}` },
+          "data.company_name": { [Op.iLike]: `%${req.query.keyword}%` },
         });
 
         sellersProducts = [...sellersProducts, ...companyProducts];
