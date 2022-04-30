@@ -60,8 +60,10 @@ module.exports = {
         if (isAlreadyExistedAddress) {
           throw new Error("Location name should be unique");
         }
+        
+        const payload = { ...req.body, profile_uuid: profile.uuid }
 
-        let address = await Address.create(req.body, { transaction: t });
+        let address = await Address.create(payload, { transaction: t });
 
         return address;
       });
