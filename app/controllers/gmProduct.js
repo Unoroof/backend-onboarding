@@ -215,8 +215,12 @@ module.exports = {
         where["brand_name"] = { [Op.in]: req.body.brand_names };
       }
 
-      if (req.body.country_of_origin) {
-        where["data.country_of_origin"] = req.body.country_of_origin;
+      if (req.body.country_of_origin === "Domestic") {
+        where["data.country_of_origin.label"] = "India";
+      }
+
+      if (req.body.country_of_origin === "International") {
+        where[Op.not] = { "data.country_of_origin.label": "India" };
       }
 
       if (req.body.country) {
