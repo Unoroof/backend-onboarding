@@ -26,7 +26,7 @@ const constraints = {
   "data.units": {
     presence: {
       allowEmpty: false,
-      message: "^Please enter the unit",
+      message: "^Please enter the units",
     },
     type: "string",
   },
@@ -65,7 +65,7 @@ const constraints = {
     },
     type: "string",
   },
-  pincode: {
+  "data.pincode": {
     presence: {
       allowEmpty: false,
       message: "^Please enter the pincode",

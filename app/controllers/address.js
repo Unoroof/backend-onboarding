@@ -38,10 +38,19 @@ module.exports = {
   async create(req) {
     try {
       let result = sequelize.transaction(async (t) => {
+        let profile = await Profile.findOne(
+          {
+            where: {
+              user_uuid: req.user,
+              type: "fm-buyer",
+            },
+          },
+          { transaction: t }
+        );
         let isAlreadyExistedAddress = await Address.findOne(
           {
             where: {
-              profile_uuid: req.body.profile_uuid,
+              profile_uuid: profile.uuid,
               location_name: req.body.location_name,
             },
           },
@@ -51,8 +60,10 @@ module.exports = {
         if (isAlreadyExistedAddress) {
           throw new Error("Location name should be unique");
         }
+        
+        const payload = { ...req.body, profile_uuid: profile.uuid }
 
-        let address = await Address.create(req.body, { transaction: t });
+        let address = await Address.create(payload, { transaction: t });
 
         return address;
       });

@@ -28,7 +28,7 @@ module.exports = {
       }
 
       const gmCategories = req.query.gm_categories
-        ? req.query.categories.split(",").filter((category) => category)
+        ? req.query.gm_categories.split(",").filter((category) => category)
         : [];
 
       const gmCategoryUuidOptions =
@@ -141,7 +141,7 @@ module.exports = {
       }
 
       if (req.body.discount) {
-        payload["discount"] = { ...gmProduct.discount, ...req.body.discount };
+        payload["discount"] = req.body.discount;
       }
 
       if (req.body.data) {

@@ -4,31 +4,6 @@ const checkValidPincode = require("../functions/checkValidPincode");
 const getAllCountries = require("../controllers/countryCity").getAllCountries;
 
 const constraints = {
-  profile_uuid: {
-    presence: {
-      allowEmpty: false,
-      message: "^Please add profile_uuid",
-    },
-    type: "string",
-    custom_callback: {
-      message: "Please add valid profile_uuid",
-      callback: (req) => {
-        const uuidTestRegex =
-          /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-        if (uuidTestRegex.test(req.body.profile_uuid)) {
-          return Profile.count({
-            where: {
-              uuid: req.body.profile_uuid,
-            },
-          }).then((count) => {
-            return count === 1 ? true : false;
-          });
-        }
-        return false;
-      },
-    },
-  },
   location_name: {
     presence: {
       allowEmpty: false,
