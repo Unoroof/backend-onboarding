@@ -56,6 +56,31 @@ module.exports = {
           { transaction: t }
         );
 
+        if (req.body.type === "best_bids_quote") {
+          if (req.body.data.seller_uuid) {
+            let profile = await Profile.findOne(
+              {
+                where: {
+                  uuid: req.body.data.seller_uuid,
+                  type: "fm-buyer",
+                },
+              },
+              { transaction: t }
+            );
+            if (!profile) {
+              throw new Error("Seller not found");
+            }
+          } else {
+            throw new Error("Please add the seller_uuid");
+          }
+        }
+
+        if (req.body.type === "customized_quote") {
+          if (!req.body.data.sellers) {
+            throw new Error("Please add the sellers");
+          }
+        }
+
         const quote = await Quotes.create(
           {
             profile_uuid: profile.uuid,
@@ -71,22 +96,41 @@ module.exports = {
         }
 
         if (req.body.address_type === "existing_address") {
-          await QuoteResponse.create(
+          let addressFound = await Address.findOne(
             {
-              buyer_uuid: quote.profile_uuid,
-              quote_uuid: quote.uuid,
-              type: req.body.type,
-              status: "pending",
-              data: quote.data,
+              where: {
+                profile_uuid: profile.uuid,
+                location_name:
+                  req.body.type === "customized_quote"
+                    ? req.body.data.my_location.location_name
+                    : req.body.data.location_name,
+              },
             },
             { transaction: t }
           );
+          if (addressFound) {
+            await QuoteResponse.create(
+              {
+                buyer_uuid: quote.profile_uuid,
+                quote_uuid: quote.uuid,
+                quote_type: quote.type,
+                status: "pending",
+                data: quote.data,
+              },
+              { transaction: t }
+            );
+          } else {
+            throw new Error("Please add the Location details");
+          }
         } else {
           let isAlreadyExistedAddress = await Address.findOne(
             {
               where: {
                 profile_uuid: profile.uuid,
-                location_name: req.body.data.location_name,
+                location_name:
+                  req.body.type === "customized_quote"
+                    ? req.body.data.my_location.location_name
+                    : req.body.data.location_name,
               },
             },
             { transaction: t }
@@ -109,6 +153,7 @@ module.exports = {
             {
               buyer_uuid: quote.profile_uuid,
               quote_uuid: quote.uuid,
+              quote_type: quote.type,
               status: "pending",
               data: quote.data,
             },
