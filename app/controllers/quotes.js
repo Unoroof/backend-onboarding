@@ -59,8 +59,8 @@ module.exports = {
         const quote = await Quotes.create(
           {
             profile_uuid: profile.uuid,
-            seller_uuid: req.body.seller_uuid,
             data: req.body.data,
+            type: req.body.type,
             status: "open",
           },
           { transaction: t }
@@ -70,12 +70,12 @@ module.exports = {
           throw new Error("Unable to create quote");
         }
 
-        if (req.body.type === "get_quote_with_existing_address") {
+        if (req.body.address_type === "existing_address") {
           await QuoteResponse.create(
             {
               buyer_uuid: quote.profile_uuid,
               quote_uuid: quote.uuid,
-              seller_uuid: quote.seller_uuid,
+              type: req.body.type,
               status: "pending",
               data: quote.data,
             },
@@ -109,7 +109,6 @@ module.exports = {
             {
               buyer_uuid: quote.profile_uuid,
               quote_uuid: quote.uuid,
-              seller_uuid: quote.seller_uuid,
               status: "pending",
               data: quote.data,
             },
