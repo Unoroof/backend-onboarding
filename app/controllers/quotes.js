@@ -114,17 +114,38 @@ module.exports = {
           );
           if (addressFound) {
             if (req.body.type === "best_bids_quote") {
-              await QuoteResponse.create(
-                {
-                  buyer_uuid: quote.profile_uuid,
-                  quote_uuid: quote.uuid,
-                  quote_type: quote.type,
-                  status: "pending",
-                  data: quote.data,
-                  owner_uuid: quote.data.seller_uuid,
+              let constraints = {
+                where: {
+                  name: {
+                    [Op.iLike]: `%${quote.data.product_name}%`,
+                  },
+                  profile_uuid: quote.data.seller_uuid,
+                  "data.additional_product_info.min_order_quantity": {
+                    [Op.lte]: quote.data.quantity,
+                  },
                 },
-                { transaction: t }
-              );
+              };
+
+              console.log("chck here constraints", constraints);
+
+              let profiles = await GmProduct.findOne(constraints, {
+                transaction: t,
+              });
+              console.log("check here profiles", profiles);
+
+              if (profiles) {
+                await QuoteResponse.create(
+                  {
+                    buyer_uuid: quote.profile_uuid,
+                    quote_uuid: quote.uuid,
+                    quote_type: quote.type,
+                    status: "pending",
+                    data: quote.data,
+                    owner_uuid: quote.data.seller_uuid,
+                  },
+                  { transaction: t }
+                );
+              }
             }
             if (req.body.type === "customized_quote") {
               const eligibleResponders = await getEligibleResponders(
@@ -182,17 +203,38 @@ module.exports = {
           });
 
           if (req.body.type === "best_bids_quote") {
-            await QuoteResponse.create(
-              {
-                buyer_uuid: quote.profile_uuid,
-                quote_uuid: quote.uuid,
-                quote_type: quote.type,
-                status: "pending",
-                data: quote.data,
-                owner_uuid: quote.data.seller_uuid,
+            let constraints = {
+              where: {
+                name: {
+                  [Op.iLike]: `%${quote.data.product_name}%`,
+                },
+                profile_uuid: quote.data.seller_uuid,
+                "data.additional_product_info.min_order_quantity": {
+                  [Op.lte]: quote.data.quantity,
+                },
               },
-              { transaction: t }
-            );
+            };
+
+            console.log("chck here constraints", constraints);
+
+            let profiles = await GmProduct.findOne(constraints, {
+              transaction: t,
+            });
+            console.log("check here profiles", profiles);
+
+            if (profiles) {
+              await QuoteResponse.create(
+                {
+                  buyer_uuid: quote.profile_uuid,
+                  quote_uuid: quote.uuid,
+                  quote_type: quote.type,
+                  status: "pending",
+                  data: quote.data,
+                  owner_uuid: quote.data.seller_uuid,
+                },
+                { transaction: t }
+              );
+            }
           }
           if (req.body.type === "customized_quote") {
             const eligibleResponders = await getEligibleResponders(
