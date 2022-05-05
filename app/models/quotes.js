@@ -16,15 +16,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
-      seller_uuid: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       data: {
         type: DataTypes.JSONB,
         allowNull: false,
       },
       status: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      type: {
         type: DataTypes.STRING,
         allowNull: false,
       },
