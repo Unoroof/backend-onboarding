@@ -99,166 +99,77 @@ module.exports = {
           throw new Error("Unable to create quote");
         }
 
-        if (req.body.address_type === "existing_address") {
-          let addressFound = await Address.findOne(
-            {
-              where: {
-                profile_uuid: profile.uuid,
-                location_name:
-                  req.body.type === "customized_quote"
-                    ? req.body.data.my_location.location_name
-                    : req.body.data.location_name,
+        if (req.body.type === "best_bids_quote") {
+          let constraints = {
+            where: {
+              name: {
+                [Op.iLike]: `%${quote.data.product_name}%`,
+              },
+              profile_uuid: quote.data.seller_uuid,
+              "data.additional_product_info.min_order_quantity": {
+                [Op.lte]: quote.data.quantity,
               },
             },
-            { transaction: t }
+          };
+
+          console.log(
+            "check here constraints for checking best-bid seller quote response creation",
+            constraints
           );
-          if (addressFound) {
-            if (req.body.type === "best_bids_quote") {
-              let constraints = {
-                where: {
-                  name: {
-                    [Op.iLike]: `%${quote.data.product_name}%`,
-                  },
-                  profile_uuid: quote.data.seller_uuid,
-                  "data.additional_product_info.min_order_quantity": {
-                    [Op.lte]: quote.data.quantity,
-                  },
-                },
-              };
 
-              console.log("chck here constraints", constraints);
-
-              let profiles = await GmProduct.findOne(constraints, {
-                transaction: t,
-              });
-              console.log("check here profiles", profiles);
-
-              if (profiles) {
-                await QuoteResponse.create(
-                  {
-                    buyer_uuid: quote.profile_uuid,
-                    quote_uuid: quote.uuid,
-                    quote_type: quote.type,
-                    status: "pending",
-                    data: quote.data,
-                    owner_uuid: quote.data.seller_uuid,
-                  },
-                  { transaction: t }
-                );
-              }
-            }
-            if (req.body.type === "customized_quote") {
-              const eligibleResponders = await getEligibleResponders(
-                req.token,
-                quote.data.sellers
-              );
-
-              console.log(
-                "QuotesEligibleResponders",
-                JSON.stringify(eligibleResponders)
-              );
-              eligibleResponders.wired_up_users.forEach(
-                async (sellersProfileUuid) => {
-                  console.log("sellersProfileUuid", sellersProfileUuid);
-                  let quoteResponse = await QuoteResponse.create({
-                    buyer_uuid: quote.profile_uuid, // quote creator
-                    quote_uuid: quote.uuid,
-                    status: "pending",
-                    data: quote.data,
-                    owner_uuid: sellersProfileUuid,
-                    quote_type: quote.type,
-                  });
-                  console.log("quoteResponse", JSON.stringify(quoteResponse));
-                }
-              );
-            }
-          } else {
-            throw new Error("Please add the address details");
-          }
-        } else {
-          let isAlreadyExistedAddress = await Address.findOne(
+          let eligibleGlobalSellerGmProduct = await GmProduct.findOne(
+            constraints,
             {
-              where: {
-                profile_uuid: profile.uuid,
-                location_name:
-                  req.body.type === "customized_quote"
-                    ? req.body.data.my_location.location_name
-                    : req.body.data.location_name,
-              },
-            },
-            { transaction: t }
-          );
-
-          if (isAlreadyExistedAddress) {
-            throw new Error("Address details already exists");
-          }
-
-          await Address.create({
-            profile_uuid: profile.uuid,
-            location_name: req.body.data.location_name,
-            address: req.body.data.address,
-            country: req.body.data.country,
-            city: req.body.data.city,
-            pincode: req.body.data.pincode,
-          });
-
-          if (req.body.type === "best_bids_quote") {
-            let constraints = {
-              where: {
-                name: {
-                  [Op.iLike]: `%${quote.data.product_name}%`,
-                },
-                profile_uuid: quote.data.seller_uuid,
-                "data.additional_product_info.min_order_quantity": {
-                  [Op.lte]: quote.data.quantity,
-                },
-              },
-            };
-
-            console.log("chck here constraints", constraints);
-
-            let profiles = await GmProduct.findOne(constraints, {
               transaction: t,
-            });
-            console.log("check here profiles", profiles);
-
-            if (profiles) {
-              await QuoteResponse.create(
-                {
-                  buyer_uuid: quote.profile_uuid,
-                  quote_uuid: quote.uuid,
-                  quote_type: quote.type,
-                  status: "pending",
-                  data: quote.data,
-                  owner_uuid: quote.data.seller_uuid,
-                },
-                { transaction: t }
-              );
             }
-          }
-          if (req.body.type === "customized_quote") {
-            const eligibleResponders = await getEligibleResponders(
-              req.token,
-              quote.data.sellers
-            );
-            console.log(
-              "QuotesEligibleResponders",
-              JSON.stringify(eligibleResponders)
-            );
-            eligibleResponders.wired_up_users.forEach(
-              async (sellersProfileUuid) => {
-                let quoteResponse = await QuoteResponse.create({
-                  buyer_uuid: quote.profile_uuid, // quote creator
-                  quote_uuid: quote.uuid,
-                  status: "pending",
-                  data: quote.data,
-                  owner_uuid: sellersProfileUuid,
-                  quote_type: quote.type,
-                });
-                console.log("quoteResponse", JSON.stringify(quoteResponse));
-              }
+          );
+          console.log(
+            "check here eligibleGlobalSellerGmProduct best-bid",
+            eligibleGlobalSellerGmProduct
+          );
+
+          if (eligibleGlobalSellerGmProduct) {
+            let data = [quote.data].map(({ seller_uuid, ...rest }) => rest);
+            console.log("data in best bids quote---->", data);
+            await QuoteResponse.create(
+              {
+                buyer_uuid: quote.profile_uuid,
+                quote_uuid: quote.uuid,
+                quote_type: quote.type,
+                status: "pending",
+                data: data,
+                owner_uuid: eligibleGlobalSellerGmProduct.profile_uuid,
+              },
+              { transaction: t }
             );
           }
+        }
+        if (req.body.type === "customized_quote") {
+          const eligibleResponders = await getEligibleResponders(
+            req.token,
+            quote.data.sellers
+          );
+
+          console.log(
+            "QuotesEligibleResponders",
+            JSON.stringify(eligibleResponders)
+          );
+          eligibleResponders.wired_up_users.forEach(
+            async (sellersProfileUuid) => {
+              console.log("sellersProfileUuid", sellersProfileUuid);
+              let data = [quote.data].map(({ sellers, ...rest }) => rest);
+              console.log("data in customized quote---->", data);
+              let quoteResponse = await QuoteResponse.create({
+                buyer_uuid: quote.profile_uuid, // quote creator
+                quote_uuid: quote.uuid,
+                status: "pending",
+                data: data,
+                owner_uuid: sellersProfileUuid,
+                quote_type: quote.type,
+              });
+              console.log("quoteResponse", JSON.stringify(quoteResponse));
+            }
+          );
         }
 
         return quote;
@@ -326,7 +237,7 @@ const getEligibleResponders = async (token, sellers) => {
         );
         console.log("check here system selected seller", sellerProfiles);
         sellerProfiles.forEach((item) => {
-          wired_up_users.push(item.uuid);
+          wired_up_users.push(item.profile_uuid);
         });
       }
     }

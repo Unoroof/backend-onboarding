@@ -58,7 +58,7 @@ module.exports = {
         );
 
         if (isAlreadyExistedAddress) {
-          throw new Error("Location name should be unique");
+          throw new Error("Address details already exists");
         }
         
         const payload = { ...req.body, profile_uuid: profile.uuid }
