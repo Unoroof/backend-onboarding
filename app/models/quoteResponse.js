@@ -20,8 +20,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
-      seller_uuid: {
-        type: DataTypes.STRING,
+      owner_uuid: {
+        type: DataTypes.UUID,
         allowNull: false,
       },
       data: {
@@ -29,6 +29,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       status: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      quote_type: {
         type: DataTypes.STRING,
         allowNull: false,
       },

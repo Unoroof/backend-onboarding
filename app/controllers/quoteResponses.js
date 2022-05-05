@@ -15,8 +15,7 @@ module.exports = {
         constraints.where.buyer_uuid = req.query.buyer_uuid;
       if (req.query.quote_uuid)
         constraints.where.quote_uuid = req.query.quote_uuid;
-      if (req.query.seller_uuid)
-        constraints.where.seller_uuid = req.query.seller_uuid;
+
       if (req.query.status) constraints.where.status = req.query.status;
 
       let result = sequelize.transaction(async (t) => {
@@ -33,7 +32,6 @@ module.exports = {
 
   async update(req, res) {
     try {
-
       let result = sequelize.transaction(async (t) => {
         let quoteResponse = await QuoteResponse.findOne(
           {
@@ -51,7 +49,6 @@ module.exports = {
         let payload = {
           buyer_uuid: quoteResponse.buyer_uuid,
           quote_uuid: quoteResponse.quote_uuid,
-          seller_uuid: quoteResponse.seller_uuid,
         };
 
         if (req.body.status) {
