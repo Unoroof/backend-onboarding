@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: false,
       },
+      owner_uuid: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
       data: {
         type: DataTypes.JSONB,
         allowNull: false,
