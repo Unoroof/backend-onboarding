@@ -72,6 +72,7 @@ const QuoteResponseController =
   require("../app/controllers").QuoteResponseController;
 const QuoteResponseResponse = require("../app/responses/quoteResponseResources");
 const QuoteResponseCollection = require("../app/responses/quoteResponseCollection");
+const SellerQuotesCollection = require("../app/responses/sellerQuotesCollection");
 
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
@@ -361,6 +362,15 @@ router.put(
   "/quote-response/:uuid",
   executeForResult(QuoteResponseController.update),
   executeForResponse(QuoteResponseResponse)
+);
+
+router.get(
+  "/seller-quotes",
+  executeForResult(
+    QuoteResponseController.getBuyerQuotesToSeller,
+    "sellerQuotesResponse"
+  ),
+  executeForResponse(SellerQuotesCollection)
 );
 
 module.exports = router;
