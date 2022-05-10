@@ -8,6 +8,8 @@ module.exports = (instance) => {
     "onboarded",
     "createdAt",
     "updatedAt",
+    "company_name",
+    "profiles",
   ];
 
   const result = {};
