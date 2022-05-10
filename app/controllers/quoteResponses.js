@@ -1,7 +1,10 @@
 const models = require("../models");
 const QuoteResponse = models.QuoteResponse;
+const Profile = models.Profile;
 const consumeError = require("../functions/consumeError");
 const sequelize = require("../models").sequelize;
+const getPagination = require("../functions/getPagination");
+const getPagingData = require("../functions/getPagingData");
 
 module.exports = {
   async index(req) {
@@ -23,6 +26,43 @@ module.exports = {
           transaction: t,
         });
         return quoteResponses;
+      });
+      return result;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async getBuyerQuotesToSeller(req) {
+    try {
+      let result = sequelize.transaction(async (t) => {
+        let profile = await Profile.findOne(
+          {
+            where: {
+              user_uuid: req.user,
+              type: "fm-buyer",
+            },
+          },
+          { transaction: t }
+        );
+
+        const { page, size } = req.query;
+
+        const { limit, offset } = getPagination(page - 1, size);
+
+        const constraints = {
+          where: {
+            owner_uuid: profile.uuid,
+          },
+          limit,
+          offset,
+        };
+
+        let quoteResponses = await QuoteResponse.findAndCountAll(constraints, {
+          transaction: t,
+        });
+        const response = await getPagingData(quoteResponses, page, limit);
+        return response;
       });
       return result;
     } catch (error) {
