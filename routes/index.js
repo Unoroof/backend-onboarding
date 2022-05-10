@@ -48,7 +48,30 @@ const AutoAssignConditionResourceResponse = require("../app/responses/autoAssign
 const EnquiryController = require("../app/controllers").EnquiryController;
 const createEnquiryRequest = require("../app/requests/createEnquiries");
 const enquiryResourceResponse = require("../app/responses/enquiryResource");
-const enquiryCollectionResponse = require("../app/responses/enquiryCollection");
+
+const GmCategoryController = require("../app/controllers").GmCategoryController;
+const createGmCategoryRequest = require("../app/requests/createGmCategory");
+const gmCategoryCollectionResponse = require("../app/responses/gmCategoryCollection");
+const gmCategoryResourceResponse = require("../app/responses/gmCategoryResource");
+
+const GmProductController = require("../app/controllers").GmProductController;
+const createGmProductRequest = require("../app/requests/createGmProduct");
+const gmProductCollectionResponse = require("../app/responses/gmProductCollection");
+const gmProductResourceResponse = require("../app/responses/gmProductResource");
+const createQuote = require("../app/requests/createQuote");
+const QuoteController = require("../app/controllers").QuoteController;
+const QuoteResponse = require("../app/responses/quoteResources");
+const QuoteCollection = require("../app/responses/quoteCollection");
+
+const AddressController = require("../app/controllers").AddressController;
+const AddressResponse = require("../app/responses/addressResource");
+const AddressCollection = require("../app/responses/addressCollection");
+const createAddress = require("../app/requests/createAddress");
+
+const QuoteResponseController =
+  require("../app/controllers").QuoteResponseController;
+const QuoteResponseResponse = require("../app/responses/quoteResponseResources");
+const QuoteResponseCollection = require("../app/responses/quoteResponseCollection");
 
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
@@ -223,6 +246,121 @@ router.put(
   "/enquiries/:enquiry_uuid",
   executeForResult(EnquiryController.update),
   executeForResponse(enquiryResourceResponse)
+);
+
+// global market products
+
+router.post(
+  "/gm-categories",
+  createGmCategoryRequest,
+  executeForResult(GmCategoryController.store),
+  executeForResponse(gmCategoryResourceResponse)
+);
+
+router.get(
+  "/gm-categories",
+  executeForResult(GmCategoryController.index),
+  executeForResponse(gmCategoryCollectionResponse)
+);
+
+router.post(
+  "/gm-products",
+  createGmProductRequest,
+  executeForResult(GmProductController.store),
+  executeForResponse(gmProductResourceResponse)
+);
+
+router.put(
+  "/gm-products/:gm_product_uuid",
+  executeForResult(GmProductController.update),
+  executeForResponse(gmProductResourceResponse)
+);
+
+router.get(
+  "/gm-products/:gm_product_uuid",
+  executeForResult(GmProductController.getProductById),
+  executeForResponse(gmProductResourceResponse)
+);
+
+router.get(
+  "/gm-products",
+  executeForResult(GmProductController.index),
+  executeForResponse(gmProductCollectionResponse)
+);
+
+router.get(
+  "/search-gm-products",
+  executeForResult(GmProductController.getSearchProducts),
+  executeForResponse(gmProductCollectionResponse)
+);
+
+router.post(
+  "/gm-products/brand-names",
+  executeForResult(GmProductController.getBrandNamesForProduct),
+  executeForResponse(gmProductCollectionResponse)
+);
+
+router.post(
+  "/gm-products/filter-products",
+  executeForResult(GmProductController.getFilteredProducts),
+  executeForResponse(gmProductCollectionResponse)
+);
+
+router.post(
+  "/quotes",
+  createQuote,
+  executeForResult(QuoteController.create),
+  executeForResponse(QuoteResponse)
+);
+
+router.get(
+  "/quotes",
+  executeForResult(QuoteController.index, "quotes"),
+  executeForResponse(QuoteCollection)
+);
+
+router.post(
+  "/address",
+  createAddress,
+  executeForResult(AddressController.create),
+  executeForResponse(AddressResponse)
+);
+
+router.put(
+  "/address/:uuid",
+  executeForResult(AddressController.update),
+  executeForResponse(AddressResponse)
+);
+
+router.get(
+  "/address",
+  executeForResult(AddressController.index, "address"),
+  executeForResponse(AddressCollection)
+);
+
+router.delete(
+  "/address/:uuid",
+  executeForResult(AddressController.delete),
+  executeForResponse(AddressResponse)
+);
+
+router.put(
+  "/quotes/:quote_uuid",
+  createQuote,
+  executeForResult(QuoteController.update),
+  executeForResponse(QuoteResponse)
+);
+
+router.get(
+  "/quote-response",
+  executeForResult(QuoteResponseController.index, "quoteResponse"),
+  executeForResponse(QuoteResponseCollection)
+);
+
+router.put(
+  "/quote-response/:uuid",
+  executeForResult(QuoteResponseController.update),
+  executeForResponse(QuoteResponseResponse)
 );
 
 module.exports = router;

@@ -5,6 +5,7 @@ const Queries = models.Queries;
 const ProfileRevision = models.ProfileRevision;
 const { Op } = require("sequelize");
 const getBuyerUuidForProduct = require("../functions/getBuyerUuidForProduct");
+const getProfileUuidByBankname = require("../functions/getProfileUuidByBankname");
 
 module.exports = {
   async index(req, res) {
@@ -93,6 +94,9 @@ module.exports = {
         ...constraints,
         order: [["createdAt", "DESC"]],
       });
+      if (req.body.profilesForCompany) {
+        profiles = await getProfileUuidByBankname(profiles);
+      }
       return profiles;
     } catch (error) {
       consumeError(error);
@@ -125,6 +129,7 @@ module.exports = {
         profile = await profile.update({
           type: req.body.type || profile.type,
           status: req.body.status || profile.status,
+          onboarded: profile.status === "completed" ? true : profile.onboarded,
           data: req.body.data
             ? { ...prevData, ...req.body.data }
             : profile.data,
@@ -135,7 +140,6 @@ module.exports = {
       }
 
       if (toCreateRevision) {
-        console.log("Creating New Revision");
         await ProfileRevision.create({
           profile_uuid: profile.uuid,
           data: profile.data,

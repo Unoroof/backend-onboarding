@@ -1,15 +1,13 @@
 module.exports = (instance) => {
   const attributes = [
     "uuid",
-    "user_uuid",
-    "type",
+    "buyer_uuid",
+    "quote_uuid",
+    "seller_uuid",
     "data",
     "status",
-    "onboarded",
     "createdAt",
     "updatedAt",
-    "company_name",
-    "profiles",
   ];
 
   const result = {};
