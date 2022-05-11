@@ -1,7 +1,6 @@
 const models = require("../models");
 const Quotes = models.Quotes;
 const Profile = models.Profile;
-const Address = models.Address;
 const GmProduct = models.GmProduct;
 const QuoteResponse = models.QuoteResponse;
 const GmCategory = models.GmCategory;
@@ -9,6 +8,8 @@ const consumeError = require("../functions/consumeError");
 const sequelize = require("../models").sequelize;
 const { Op } = require("sequelize");
 const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
+const getPagination = require("../functions/getPagination");
+const getPagingData = require("../functions/getPagingData");
 
 module.exports = {
   async index(req) {
@@ -24,22 +25,25 @@ module.exports = {
           { transaction: t }
         );
 
+        const { page, size } = req.query;
+
+        const { limit, offset } = getPagination(page - 1, size);
+
         let constraints = {
           where: {
             profile_uuid: profile.uuid,
           },
+          limit,
+          offset,
+          order: [["createdAt", "DESC"]],
         };
 
         if (req.query.status) constraints.where.status = req.query.status;
-        let quotes = await Quotes.findAll(
-          {
-            limit: req.query.limit || 100,
-            ...constraints,
-            order: [["createdAt", "DESC"]],
-          },
-          { transaction: t }
-        );
-        return quotes;
+        let quotes = await Quotes.findAndCountAll(constraints, {
+          transaction: t,
+        });
+        const response = await getPagingData(quotes, page, limit);
+        return response;
       });
       return result;
     } catch (error) {
@@ -130,14 +134,14 @@ module.exports = {
 
           if (eligibleGlobalSellerGmProduct) {
             let data = [quote.data].map(({ seller_uuid, ...rest }) => rest);
-            console.log("data in best bids quote---->", data);
+            console.log("data in best bids quote---->", data[0]);
             await QuoteResponse.create(
               {
                 buyer_uuid: quote.profile_uuid,
                 quote_uuid: quote.uuid,
                 quote_type: quote.type,
                 status: "buyer_raises_quote",
-                data: data,
+                data: data[0],
                 owner_uuid: eligibleGlobalSellerGmProduct.profile_uuid,
               },
               { transaction: t }
@@ -158,12 +162,12 @@ module.exports = {
             async (sellersProfileUuid) => {
               console.log("sellersProfileUuid", sellersProfileUuid);
               let data = [quote.data].map(({ sellers, ...rest }) => rest);
-              console.log("data in customized quote---->", data);
+              console.log("data in customized quote---->", data[0]);
               let quoteResponse = await QuoteResponse.create({
                 buyer_uuid: quote.profile_uuid, // quote creator
                 quote_uuid: quote.uuid,
                 status: "buyer_raises_quote",
-                data: data,
+                data: data[0],
                 owner_uuid: sellersProfileUuid,
                 quote_type: quote.type,
               });

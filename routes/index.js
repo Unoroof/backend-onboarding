@@ -72,7 +72,7 @@ const QuoteResponseController =
   require("../app/controllers").QuoteResponseController;
 const QuoteResponseResponse = require("../app/responses/quoteResponseResources");
 const QuoteResponseCollection = require("../app/responses/quoteResponseCollection");
-const SellerQuotesCollection = require("../app/responses/sellerQuotesCollection");
+const SellerQuoteResponsesCollection = require("../app/responses/sellerQuoteResponsesCollection");
 
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
@@ -368,9 +368,9 @@ router.get(
   "/seller-quotes",
   executeForResult(
     QuoteResponseController.getBuyerQuotesToSeller,
-    "sellerQuotesResponse"
+    "sellerQuoteResponses"
   ),
-  executeForResponse(SellerQuotesCollection)
+  executeForResponse(SellerQuoteResponsesCollection)
 );
 
 module.exports = router;
