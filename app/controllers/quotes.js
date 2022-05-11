@@ -136,7 +136,7 @@ module.exports = {
                 buyer_uuid: quote.profile_uuid,
                 quote_uuid: quote.uuid,
                 quote_type: quote.type,
-                status: "pending",
+                status: "buyer_raises_quote",
                 data: data,
                 owner_uuid: eligibleGlobalSellerGmProduct.profile_uuid,
               },
@@ -162,7 +162,7 @@ module.exports = {
               let quoteResponse = await QuoteResponse.create({
                 buyer_uuid: quote.profile_uuid, // quote creator
                 quote_uuid: quote.uuid,
-                status: "pending",
+                status: "buyer_raises_quote",
                 data: data,
                 owner_uuid: sellersProfileUuid,
                 quote_type: quote.type,
