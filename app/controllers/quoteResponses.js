@@ -3,29 +3,53 @@ const QuoteResponse = models.QuoteResponse;
 const Profile = models.Profile;
 const consumeError = require("../functions/consumeError");
 const sequelize = require("../models").sequelize;
+const { Op } = require("sequelize");
 const getPagination = require("../functions/getPagination");
 const getPagingData = require("../functions/getPagingData");
 
 module.exports = {
   async index(req) {
     try {
-      let constraints = {
-        where: {},
-      };
-
-      if (req.query.uuid) constraints.where.uuid = req.query.uuid;
-      if (req.query.buyer_uuid)
-        constraints.where.buyer_uuid = req.query.buyer_uuid;
-      if (req.query.quote_uuid)
-        constraints.where.quote_uuid = req.query.quote_uuid;
-
-      if (req.query.status) constraints.where.status = req.query.status;
-
       let result = sequelize.transaction(async (t) => {
-        let quoteResponses = await QuoteResponse.findAll(constraints, {
+        const { page, size } = req.query;
+        const { limit, offset } = getPagination(page - 1, size);
+
+        let profile = await Profile.findOne(
+          {
+            where: {
+              user_uuid: req.user,
+              type: "fm-buyer",
+            },
+          },
+          { transaction: t }
+        );
+
+        let constraints = {
+          where: {
+            buyer_uuid: profile.uuid,
+          },
+          limit,
+          offset,
+          order: [["createdAt", "DESC"]],
+        };
+
+        const statuses = req.query.status
+          ? req.query.status.split(",").filter((status) => status)
+          : [];
+
+        if (req.query.uuid) constraints.where.uuid = req.query.uuid;
+        if (req.query.buyer_uuid)
+          constraints.where.buyer_uuid = req.query.buyer_uuid;
+        if (req.query.quote_uuid)
+          constraints.where.quote_uuid = req.query.quote_uuid;
+
+        if (req.query.status) constraints.where.status = { [Op.in]: statuses };
+
+        let quoteResponses = await QuoteResponse.findAndCountAll(constraints, {
           transaction: t,
         });
-        return quoteResponses;
+        const response = await getPagingData(quoteResponses, page, limit);
+        return response;
       });
       return result;
     } catch (error) {
@@ -56,7 +80,15 @@ module.exports = {
           },
           limit,
           offset,
+          order: [["createdAt", "DESC"]],
         };
+
+        const statuses = req.query.status
+        ? req.query.status.split(",").filter((status) => status)
+        : [];
+
+
+        if (req.query.status) constraints.where.status = { [Op.in]: statuses };
 
         let quoteResponses = await QuoteResponse.findAndCountAll(constraints, {
           transaction: t,

@@ -8,6 +8,10 @@ module.exports = (instance) => {
     "status",
     "createdAt",
     "updatedAt",
+    "totalItems",
+    "response",
+    "totalPages",
+    "currentPage",
   ];
 
   const result = {};
