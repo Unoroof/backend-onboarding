@@ -42,6 +42,8 @@ module.exports = {
           constraints.where.buyer_uuid = req.query.buyer_uuid;
         if (req.query.quote_uuid)
           constraints.where.quote_uuid = req.query.quote_uuid;
+        if (req.query.quote_type)
+          constraints.where.quote_type = req.query.quote_type;
 
         if (req.query.status) constraints.where.status = { [Op.in]: statuses };
 
@@ -84,9 +86,8 @@ module.exports = {
         };
 
         const statuses = req.query.status
-        ? req.query.status.split(",").filter((status) => status)
-        : [];
-
+          ? req.query.status.split(",").filter((status) => status)
+          : [];
 
         if (req.query.status) constraints.where.status = { [Op.in]: statuses };
 

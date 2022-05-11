@@ -39,6 +39,7 @@ module.exports = {
         };
 
         if (req.query.status) constraints.where.status = req.query.status;
+        if (req.query.type) constraints.where.type = req.query.type;
         let quotes = await Quotes.findAndCountAll(constraints, {
           transaction: t,
         });
