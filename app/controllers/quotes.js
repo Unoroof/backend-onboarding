@@ -266,7 +266,7 @@ const getEligibleResponders = async (token, sellers) => {
       );
       console.log("check here addressbook", addressbookSellers);
       addressbookSellers.forEach((item) => {
-        wired_up_users.push({ profile_uuid: item });
+        wired_up_users.push({ profile_uuid: item, seller_product_info: null });
       });
     }
 
