@@ -119,7 +119,7 @@ module.exports = {
 
           console.log(
             "check here constraints for checking best-bid seller quote response creation",
-            constraints
+            JSON.stringify(constraints)
           );
 
           let eligibleGlobalSellerGmProduct = await GmProduct.findOne(
@@ -130,7 +130,7 @@ module.exports = {
           );
           console.log(
             "check here eligibleGlobalSellerGmProduct best-bid",
-            eligibleGlobalSellerGmProduct
+            JSON.stringify(eligibleGlobalSellerGmProduct)
           );
 
           if (eligibleGlobalSellerGmProduct) {
@@ -138,7 +138,7 @@ module.exports = {
               ...rest,
               seller_product_info: eligibleGlobalSellerGmProduct,
             }));
-            console.log("data in best bids quote---->", data[0]);
+            console.log("data in best bids quote---->", JSON.stringify(data[0]));
             await QuoteResponse.create(
               {
                 buyer_uuid: quote.profile_uuid,
@@ -164,12 +164,12 @@ module.exports = {
           );
           eligibleResponders.wired_up_users.forEach(
             async ({ profile_uuid, seller_product_info }) => {
-              console.log("profile_uuid", profile_uuid);
+              console.log("profile_uuid", JSON.stringify(profile_uuid));
               let data = [quote.data].map(({ sellers, ...rest }) => ({
                 ...rest,
                 seller_product_info: seller_product_info,
               }));
-              console.log("data in customized quote---->", data[0]);
+              console.log("data in customized quote---->", JSON.stringify(data[0]));
               let quoteResponse = await QuoteResponse.create({
                 buyer_uuid: quote.profile_uuid, // quote creator
                 quote_uuid: quote.uuid,
@@ -249,7 +249,7 @@ const getEligibleResponders = async (token, sellers) => {
         let sellerProfiles = await findSystemSelectedSellers(
           sellers.system_selected_sellers
         );
-        console.log("check here system selected seller", sellerProfiles);
+        console.log("check here system selected seller", JSON.stringify(sellerProfiles));
         sellerProfiles.forEach((item) => {
           wired_up_users.push({
             profile_uuid: item.profile_uuid,
@@ -264,7 +264,7 @@ const getEligibleResponders = async (token, sellers) => {
         token,
         sellers.addressbook_contacts
       );
-      console.log("check here addressbook", addressbookSellers);
+      console.log("check here addressbook", JSON.stringify(addressbookSellers));
       addressbookSellers.forEach((item) => {
         wired_up_users.push({ profile_uuid: item, seller_product_info: null });
       });
@@ -306,10 +306,10 @@ const findSystemSelectedSellers = async (condition) => {
       },
     };
 
-    console.log("chck here constraints", constraints);
+    console.log("chck here constraints", JSON.stringify(constraints));
 
     let profiles = await GmProduct.findAll(constraints);
-    console.log("check here profiles", profiles);
+    console.log("check here profiles", JSON.stringify(profiles));
     return profiles;
   } catch (error) {
     consumeError(error);
@@ -325,10 +325,10 @@ const findAddressbookSellers = async (token, contacts) => {
           email: item.email,
           mobile: item.mobile,
         };
-        console.log("payload of addressbook finding", payload);
+        console.log("payload of addressbook finding", JSON.stringify(payload));
         await findUserByEmailMobile(token, payload)
           .then(async (res) => {
-            console.log("response------>", res);
+            console.log("address book profile response------>", JSON.stringify(res));
             if (res.user_uuid) {
               let sellerProfile = await Profile.findOne({
                 where: {
@@ -344,11 +344,11 @@ const findAddressbookSellers = async (token, contacts) => {
           .catch((e) => {
             console.log(e);
           });
-        console.log("check here userProfiles", userProfiles);
+        console.log("check here userProfiles", JSON.stringify(userProfiles));
         return userProfiles;
       })
     );
-    console.log("check here userProfiles3", userProfiles);
+    console.log("check here userProfiles3", JSON.stringify(userProfiles));
     return userProfiles;
   } catch (error) {
     consumeError(error);
