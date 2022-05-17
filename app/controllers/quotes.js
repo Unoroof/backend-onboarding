@@ -134,7 +134,10 @@ module.exports = {
           );
 
           if (eligibleGlobalSellerGmProduct) {
-            let data = [quote.data].map(({ seller_uuid, ...rest }) => rest);
+            let data = [quote.data].map(({ seller_uuid, ...rest }) => ({
+              ...rest,
+              seller_product_info: eligibleGlobalSellerGmProduct,
+            }));
             console.log("data in best bids quote---->", data[0]);
             await QuoteResponse.create(
               {
@@ -160,16 +163,19 @@ module.exports = {
             JSON.stringify(eligibleResponders)
           );
           eligibleResponders.wired_up_users.forEach(
-            async (sellersProfileUuid) => {
+            async ({ profile_uuid, seller_product_info }) => {
               console.log("sellersProfileUuid", sellersProfileUuid);
-              let data = [quote.data].map(({ sellers, ...rest }) => rest);
+              let data = [quote.data].map(({ sellers, ...rest }) => ({
+                ...rest,
+                seller_product_info: seller_product_info,
+              }));
               console.log("data in customized quote---->", data[0]);
               let quoteResponse = await QuoteResponse.create({
                 buyer_uuid: quote.profile_uuid, // quote creator
                 quote_uuid: quote.uuid,
                 status: "buyer_raises_quote",
                 data: data[0],
-                owner_uuid: sellersProfileUuid,
+                owner_uuid: profile_uuid,
                 quote_type: quote.type,
               });
               console.log("quoteResponse", JSON.stringify(quoteResponse));
@@ -228,7 +234,10 @@ const getEligibleResponders = async (token, sellers) => {
     if (sellers.buyer_selected_sellers) {
       sellers.buyer_selected_sellers.forEach((item) => {
         // in buyer_selected_sellers we have profile_uuid's so we can push to eligibleResponders[wired_up_users]
-        wired_up_users.push(item.value);
+        wired_up_users.push({
+          profile_uuid: item.value,
+          seller_product_info: item.productInfo,
+        });
       });
     }
 
@@ -242,7 +251,10 @@ const getEligibleResponders = async (token, sellers) => {
         );
         console.log("check here system selected seller", sellerProfiles);
         sellerProfiles.forEach((item) => {
-          wired_up_users.push(item.profile_uuid);
+          wired_up_users.push({
+            profile_uuid: item.profile_uuid,
+            seller_product_info: item,
+          });
         });
       }
     }
@@ -254,7 +266,7 @@ const getEligibleResponders = async (token, sellers) => {
       );
       console.log("check here addressbook", addressbookSellers);
       addressbookSellers.forEach((item) => {
-        wired_up_users.push(item);
+        wired_up_users.push({ profile_uuid: item });
       });
     }
 
