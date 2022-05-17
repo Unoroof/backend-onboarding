@@ -164,7 +164,7 @@ module.exports = {
           );
           eligibleResponders.wired_up_users.forEach(
             async ({ profile_uuid, seller_product_info }) => {
-              console.log("sellersProfileUuid", sellersProfileUuid);
+              console.log("profile_uuid", profile_uuid);
               let data = [quote.data].map(({ sellers, ...rest }) => ({
                 ...rest,
                 seller_product_info: seller_product_info,
