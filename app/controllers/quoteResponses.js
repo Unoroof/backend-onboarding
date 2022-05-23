@@ -37,6 +37,16 @@ module.exports = {
           ? req.query.status.split(",").filter((status) => status)
           : [];
 
+        const buyer_payment_statuses = req.query.buyer_payment_status
+          ? req.query.buyer_payment_status.split(",").filter((status) => status)
+          : [];
+
+        const seller_payment_statuses = req.query.seller_payment_status
+          ? req.query.seller_payment_status
+              .split(",")
+              .filter((status) => status)
+          : [];
+
         if (req.query.uuid) constraints.where.uuid = req.query.uuid;
         if (req.query.buyer_uuid)
           constraints.where.buyer_uuid = req.query.buyer_uuid;
@@ -46,6 +56,16 @@ module.exports = {
           constraints.where.quote_type = req.query.quote_type;
 
         if (req.query.status) constraints.where.status = { [Op.in]: statuses };
+
+        if (req.query.seller_payment_status)
+          constraints.where.seller_payment_status = {
+            [Op.in]: seller_payment_statuses,
+          };
+
+        if (req.query.buyer_payment_status)
+          constraints.where.buyer_payment_status = {
+            [Op.in]: buyer_payment_statuses,
+          };
 
         let quoteResponses = await QuoteResponse.findAndCountAll(constraints, {
           transaction: t,
@@ -127,7 +147,12 @@ module.exports = {
         if (req.body.status) {
           payload.status = req.body.status;
         }
-
+        if (req.body.seller_payment_status) {
+          payload.seller_payment_status = req.body.seller_payment_status;
+        }
+        if (req.body.buyer_payment_status) {
+          payload.buyer_payment_status = req.body.buyer_payment_status;
+        }
         if (req.body.data) {
           payload.data = req.body.data
             ? { ...quoteResponse.data, ...req.body.data }
