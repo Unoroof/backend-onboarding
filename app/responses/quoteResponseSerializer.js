@@ -10,6 +10,8 @@ module.exports = (instance) => {
     "updatedAt",
     "totalItems",
     "response",
+    "buyer_payment_status",
+    "seller_payment_status",
     "totalPages",
     "currentPage",
   ];
