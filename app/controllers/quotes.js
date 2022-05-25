@@ -1,7 +1,6 @@
 const models = require("../models");
 const Quotes = models.Quotes;
 const Profile = models.Profile;
-const Address = models.Address;
 const GmProduct = models.GmProduct;
 const QuoteResponse = models.QuoteResponse;
 const GmCategory = models.GmCategory;
@@ -9,6 +8,8 @@ const consumeError = require("../functions/consumeError");
 const sequelize = require("../models").sequelize;
 const { Op } = require("sequelize");
 const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
+const getPagination = require("../functions/getPagination");
+const getPagingData = require("../functions/getPagingData");
 
 module.exports = {
   async index(req) {
@@ -24,22 +25,26 @@ module.exports = {
           { transaction: t }
         );
 
+        const { page, size } = req.query;
+
+        const { limit, offset } = getPagination(page - 1, size);
+
         let constraints = {
           where: {
             profile_uuid: profile.uuid,
           },
+          limit,
+          offset,
+          order: [["createdAt", "DESC"]],
         };
 
         if (req.query.status) constraints.where.status = req.query.status;
-        let quotes = await Quotes.findAll(
-          {
-            limit: req.query.limit || 100,
-            ...constraints,
-            order: [["createdAt", "DESC"]],
-          },
-          { transaction: t }
-        );
-        return quotes;
+        if (req.query.type) constraints.where.type = req.query.type;
+        let quotes = await Quotes.findAndCountAll(constraints, {
+          transaction: t,
+        });
+        const response = await getPagingData(quotes, page, limit);
+        return response;
       });
       return result;
     } catch (error) {
@@ -114,7 +119,7 @@ module.exports = {
 
           console.log(
             "check here constraints for checking best-bid seller quote response creation",
-            constraints
+            JSON.stringify(constraints)
           );
 
           let eligibleGlobalSellerGmProduct = await GmProduct.findOne(
@@ -125,19 +130,22 @@ module.exports = {
           );
           console.log(
             "check here eligibleGlobalSellerGmProduct best-bid",
-            eligibleGlobalSellerGmProduct
+            JSON.stringify(eligibleGlobalSellerGmProduct)
           );
 
           if (eligibleGlobalSellerGmProduct) {
-            let data = [quote.data].map(({ seller_uuid, ...rest }) => rest);
-            console.log("data in best bids quote---->", data);
+            let data = [quote.data].map(({ seller_uuid, ...rest }) => ({
+              ...rest,
+              seller_product_info: eligibleGlobalSellerGmProduct,
+            }));
+            console.log("data in best bids quote---->", JSON.stringify(data[0]));
             await QuoteResponse.create(
               {
                 buyer_uuid: quote.profile_uuid,
                 quote_uuid: quote.uuid,
                 quote_type: quote.type,
-                status: "pending",
-                data: data,
+                status: "buyer_raises_quote",
+                data: data[0],
                 owner_uuid: eligibleGlobalSellerGmProduct.profile_uuid,
               },
               { transaction: t }
@@ -155,16 +163,19 @@ module.exports = {
             JSON.stringify(eligibleResponders)
           );
           eligibleResponders.wired_up_users.forEach(
-            async (sellersProfileUuid) => {
-              console.log("sellersProfileUuid", sellersProfileUuid);
-              let data = [quote.data].map(({ sellers, ...rest }) => rest);
-              console.log("data in customized quote---->", data);
+            async ({ profile_uuid, seller_product_info }) => {
+              console.log("profile_uuid", JSON.stringify(profile_uuid));
+              let data = [quote.data].map(({ sellers, ...rest }) => ({
+                ...rest,
+                seller_product_info: seller_product_info,
+              }));
+              console.log("data in customized quote---->", JSON.stringify(data[0]));
               let quoteResponse = await QuoteResponse.create({
                 buyer_uuid: quote.profile_uuid, // quote creator
                 quote_uuid: quote.uuid,
-                status: "pending",
-                data: data,
-                owner_uuid: sellersProfileUuid,
+                status: "buyer_raises_quote",
+                data: data[0],
+                owner_uuid: profile_uuid,
                 quote_type: quote.type,
               });
               console.log("quoteResponse", JSON.stringify(quoteResponse));
@@ -223,7 +234,10 @@ const getEligibleResponders = async (token, sellers) => {
     if (sellers.buyer_selected_sellers) {
       sellers.buyer_selected_sellers.forEach((item) => {
         // in buyer_selected_sellers we have profile_uuid's so we can push to eligibleResponders[wired_up_users]
-        wired_up_users.push(item.value);
+        wired_up_users.push({
+          profile_uuid: item.value,
+          seller_product_info: item.productInfo,
+        });
       });
     }
 
@@ -235,9 +249,12 @@ const getEligibleResponders = async (token, sellers) => {
         let sellerProfiles = await findSystemSelectedSellers(
           sellers.system_selected_sellers
         );
-        console.log("check here system selected seller", sellerProfiles);
+        console.log("check here system selected seller", JSON.stringify(sellerProfiles));
         sellerProfiles.forEach((item) => {
-          wired_up_users.push(item.profile_uuid);
+          wired_up_users.push({
+            profile_uuid: item.profile_uuid,
+            seller_product_info: item,
+          });
         });
       }
     }
@@ -247,9 +264,9 @@ const getEligibleResponders = async (token, sellers) => {
         token,
         sellers.addressbook_contacts
       );
-      console.log("check here addressbook", addressbookSellers);
+      console.log("check here addressbook", JSON.stringify(addressbookSellers));
       addressbookSellers.forEach((item) => {
-        wired_up_users.push(item);
+        wired_up_users.push({ profile_uuid: item, seller_product_info: null });
       });
     }
 
@@ -289,10 +306,10 @@ const findSystemSelectedSellers = async (condition) => {
       },
     };
 
-    console.log("chck here constraints", constraints);
+    console.log("chck here constraints", JSON.stringify(constraints));
 
     let profiles = await GmProduct.findAll(constraints);
-    console.log("check here profiles", profiles);
+    console.log("check here profiles", JSON.stringify(profiles));
     return profiles;
   } catch (error) {
     consumeError(error);
@@ -308,10 +325,10 @@ const findAddressbookSellers = async (token, contacts) => {
           email: item.email,
           mobile: item.mobile,
         };
-        console.log("payload of addressbook finding", payload);
+        console.log("payload of addressbook finding", JSON.stringify(payload));
         await findUserByEmailMobile(token, payload)
           .then(async (res) => {
-            console.log("response------>", res);
+            console.log("address book profile response------>", JSON.stringify(res));
             if (res.user_uuid) {
               let sellerProfile = await Profile.findOne({
                 where: {
@@ -327,11 +344,11 @@ const findAddressbookSellers = async (token, contacts) => {
           .catch((e) => {
             console.log(e);
           });
-        console.log("check here userProfiles", userProfiles);
+        console.log("check here userProfiles", JSON.stringify(userProfiles));
         return userProfiles;
       })
     );
-    console.log("check here userProfiles3", userProfiles);
+    console.log("check here userProfiles3", JSON.stringify(userProfiles));
     return userProfiles;
   } catch (error) {
     consumeError(error);
