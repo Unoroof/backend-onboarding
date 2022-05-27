@@ -25,4 +25,4 @@ psql -h host.docker.internal -p 5433 -U postgres
 
 docker exec -it 86ba3da2b288 sh
 
-# -------
+# ------
