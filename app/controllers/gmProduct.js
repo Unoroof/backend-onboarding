@@ -307,18 +307,25 @@ module.exports = {
     try {
       let products = [];
       if (req.query.keyword) {
-        products = await getGmProducts({
-          [Op.or]: {
+        products = await getGmProducts(
+          {
             name: { [Op.iLike]: `%${req.query.keyword}%` },
-            brand_name: { [Op.iLike]: `%${req.query.keyword}%` },
           },
-        });
+          "product"
+        );
 
         let companyProducts = await getCompanyProducts({
           "data.company_name": { [Op.iLike]: `%${req.query.keyword}%` },
         });
 
-        products = [...products, ...companyProducts];
+        let brandProducts = await getGmProducts(
+          {
+            brand_name: { [Op.iLike]: `%${req.query.keyword}%` },
+          },
+          "brand"
+        );
+
+        products = [...products, ...companyProducts, ...brandProducts];
       }
 
       return products;
