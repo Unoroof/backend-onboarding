@@ -181,9 +181,18 @@ module.exports = {
             quote.data.sellers
           );
 
-          if (eligibleResponders) {
+          console.log(
+            "QuotesEligibleResponders",
+            JSON.stringify(eligibleResponders)
+          );
+
+          if (
+            eligibleResponders &&
+            eligibleResponders.wired_up_users &&
+            eligibleResponders.wired_up_users.length > 0
+          ) {
             console.log(
-              "QuotesEligibleResponders",
+              "if QuotesEligibleResponders",
               JSON.stringify(eligibleResponders)
             );
             eligibleResponders.wired_up_users.forEach(
@@ -205,7 +214,7 @@ module.exports = {
                   owner_uuid: profile_uuid,
                   quote_type: quote.type,
                 });
-                console.log("quoteResponse", JSON.stringify(quoteResponse));
+                console.log("if quoteResponse customized", JSON.stringify(quoteResponse));
               }
             );
           } else {
@@ -214,7 +223,7 @@ module.exports = {
               seller_product_info: null,
             }));
             console.log(
-              "data in customized quote---->",
+              "else data in customized quote---->",
               JSON.stringify(data[0])
             );
             let quoteResponse = await QuoteResponse.create({
@@ -225,7 +234,7 @@ module.exports = {
               owner_uuid: null,
               quote_type: quote.type,
             });
-            console.log("quoteResponse", JSON.stringify(quoteResponse));
+            console.log("else quoteResponse customized", JSON.stringify(quoteResponse));
           }
         }
 
