@@ -12,6 +12,7 @@ const GmProductController = require("./gmProduct");
 const QuoteController = require("./quotes");
 const QuoteResponseController = require("./quoteResponses");
 const AddressController = require("./address");
+const BDSuppliersController = require("./billDiscountSuppliers");
 
 module.exports = {
   ProfileController,
@@ -28,4 +29,5 @@ module.exports = {
   QuoteController,
   QuoteResponseController,
   AddressController,
+  BDSuppliersController,
 };
