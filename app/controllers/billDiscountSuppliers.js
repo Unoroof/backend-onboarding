@@ -2,6 +2,7 @@ const models = require("../models");
 const BillDiscountSuppliers = models.BillDiscountSuppliers;
 const Profile = models.Profile;
 const consumeError = require("../functions/consumeError");
+const sendEvent = require("../functions/neptune/neptuneCaller");
 
 module.exports = {
   async index(req, res) {
@@ -48,37 +49,49 @@ module.exports = {
         },
       });
 
-      let payload = {
-        invited_by: profile.uuid,
-        status: "pending",
-      };
+      req.body.forEach(async (item) => {
+        let supplier = await BillDiscountSuppliers.create({
+          invited_by: profile.uuid,
+          status: "pending",
+          ...item,
+        });
 
-      if (req.body.company_name) {
-        payload["company_name"] = req.body.company_name;
-      }
+        if (supplier) {
+          if (supplier.email) {
+            await sendEvent({
+              event_type: "buyer_sent_a_bill_discount_invitation",
+              user_id: profile.user_uuid,
+              data: {
+                company_name: profile.data.company_name,
+              },
+              ignore_user_contacts: true,
+              contact_infos: [
+                {
+                  type: "email",
+                  value: supplier.email,
+                },
+              ],
+            });
+          } else if (supplier.phone_number) {
+            await sendEvent({
+              event_type: "buyer_sent_a_bill_discount_invitation",
+              user_id: profile.user_uuid,
+              data: {
+                company_name: profile.data.company_name,
+              },
+              ignore_user_contacts: true,
+              contact_infos: [
+                {
+                  type: "mobile_number",
+                  value: supplier.phone_number,
+                },
+              ],
+            });
+          }
+        }
+      });
 
-      if (req.body.email) {
-        payload["email"] = req.body.email;
-      }
-
-      if (req.body.phone_number) {
-        payload["phone_number"] = req.body.phone_number;
-      }
-
-      const supplier = await BillDiscountSuppliers.create(payload);
-
-      if (supplier) {
-        // send email/sms
-        //    await sendPushNotification({
-        //      event_type: "buyer_sent_a_bill_discount_invitation",
-        //      user_id: profile.user_uuid,
-        //      data: {
-        //        company_name:profile.data.company_name
-        //      },
-        //    });
-      }
-
-      return supplier;
+      return "Invite Sent";
     } catch (error) {
       consumeError(error);
     }
