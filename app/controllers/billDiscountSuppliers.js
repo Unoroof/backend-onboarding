@@ -1,0 +1,127 @@
+const models = require("../models");
+const BillDiscountSuppliers = models.BillDiscountSuppliers;
+const Profile = models.Profile;
+const consumeError = require("../functions/consumeError");
+const sendEvent = require("../functions/neptune/neptuneCaller");
+
+module.exports = {
+  async index(req, res) {
+    try {
+      let bdSupplier = await BillDiscountSuppliers.findOne({
+        where: {
+          uuid: req.params.bd_supplier_uuid,
+        },
+      });
+      return bdSupplier;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async getAll(req, res) {
+    try {
+      let constraints = {
+        where: {},
+      };
+
+      if (req.query.invited_by)
+        constraints.where.invited_by = req.query.invited_by;
+      if (req.query.status) constraints.where.status = req.query.status;
+      if (req.query.gm_seller)
+        constraints.where.profile_uuid = req.query.gm_seller;
+
+      let bdSuppliers = await BillDiscountSuppliers.findAll({
+        ...constraints,
+        order: [["createdAt", "DESC"]],
+      });
+      return bdSuppliers;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async create(req, res) {
+    try {
+      let profile = await Profile.findOne({
+        where: {
+          user_uuid: req.user,
+          type: "fm-buyer",
+        },
+      });
+
+      req.body.forEach(async (item) => {
+        let supplier = await BillDiscountSuppliers.create({
+          invited_by: profile.uuid,
+          status: "pending",
+          ...item,
+        });
+
+        if (supplier) {
+          if (supplier.email) {
+            await sendEvent({
+              event_type: "buyer_sent_a_bill_discount_invitation",
+              user_id: profile.user_uuid,
+              data: {
+                company_name: profile.data.company_name,
+              },
+              ignore_user_contacts: true,
+              contact_infos: [
+                {
+                  type: "email",
+                  value: supplier.email,
+                },
+              ],
+            });
+          } else if (supplier.phone_number) {
+            await sendEvent({
+              event_type: "buyer_sent_a_bill_discount_invitation",
+              user_id: profile.user_uuid,
+              data: {
+                company_name: profile.data.company_name,
+              },
+              ignore_user_contacts: true,
+              contact_infos: [
+                {
+                  type: "mobile_number",
+                  value: supplier.phone_number,
+                },
+              ],
+            });
+          }
+        }
+      });
+
+      return "Invite Sent";
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async update(req, res) {
+    try {
+      let bdSupplier = await BillDiscountSuppliers.findOne({
+        where: {
+          uuid: req.params.bd_supplier_uuid,
+        },
+      });
+
+      let payload = {};
+      if (req.body.invoices) {
+        payload["invoices"] = bdSupplier.invoices
+          ? req.body.invoices
+            ? [...bdSupplier.invoices, ...req.body.invoices]
+            : bdSupplier.invoices
+          : req.body.invoices;
+      }
+
+      if (req.body.status) {
+        payload["status"] = req.body.status;
+      }
+
+      bdSupplier = await bdSupplier.update(payload);
+      return bdSupplier;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+};

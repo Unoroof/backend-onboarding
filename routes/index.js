@@ -74,6 +74,11 @@ const QuoteResponseResponse = require("../app/responses/quoteResponseResources")
 const QuoteResponseCollection = require("../app/responses/quoteResponseCollection");
 const SellerQuoteResponsesCollection = require("../app/responses/sellerQuoteResponsesCollection");
 
+const BDSuppliersController =
+  require("../app/controllers").BDSuppliersController;
+const BDSuppliersCollectionResponse = require("../app/responses/billDiscountSupplierCollection");
+const BDSuppliersResourceResponse = require("../app/responses/billDiscountSupplierResource");
+
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
     status: "ok",
@@ -373,4 +378,29 @@ router.get(
   executeForResponse(SellerQuoteResponsesCollection)
 );
 
+router.post(
+  "/bill-discount-supplier/invite",
+  executeForResult(BDSuppliersController.create),
+  executeForResponse(BDSuppliersResourceResponse)
+);
+
+router.put(
+  "/bill-discount-supplier/:bd_supplier_uuid",
+  executeForResult(BDSuppliersController.update),
+  executeForResponse(BDSuppliersResourceResponse)
+);
+
+router.get(
+  "/bill-discount-supplier/:bd_supplier_uuid",
+  executeForResult(BDSuppliersController.index),
+  executeForResponse(BDSuppliersResourceResponse)
+);
+
+router.get(
+  "/bill-discount-supplier",
+  executeForResult(BDSuppliersController.getAll, "data"),
+  executeForResponse(BDSuppliersCollectionResponse)
+);
+
+// BDSuppliersCollectionResponse
 module.exports = router;

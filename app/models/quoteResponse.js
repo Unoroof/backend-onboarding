@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       owner_uuid: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
       },
       data: {
         type: DataTypes.JSONB,

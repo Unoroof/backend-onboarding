@@ -138,7 +138,10 @@ module.exports = {
               ...rest,
               seller_product_info: eligibleGlobalSellerGmProduct,
             }));
-            console.log("data in best bids quote---->", JSON.stringify(data[0]));
+            console.log(
+              "data in best bids quote---->",
+              JSON.stringify(data[0])
+            );
             await QuoteResponse.create(
               {
                 buyer_uuid: quote.profile_uuid,
@@ -147,6 +150,26 @@ module.exports = {
                 status: "buyer_raises_quote",
                 data: data[0],
                 owner_uuid: eligibleGlobalSellerGmProduct.profile_uuid,
+              },
+              { transaction: t }
+            );
+          } else {
+            let data = [quote.data].map(({ seller_uuid, ...rest }) => ({
+              ...rest,
+              seller_product_info: null,
+            }));
+            console.log(
+              "data in best bids quote---->",
+              JSON.stringify(data[0])
+            );
+            await QuoteResponse.create(
+              {
+                buyer_uuid: quote.profile_uuid,
+                quote_uuid: quote.uuid,
+                quote_type: quote.type,
+                status: "buyer_raises_quote",
+                data: data[0],
+                owner_uuid: null,
               },
               { transaction: t }
             );
@@ -162,25 +185,57 @@ module.exports = {
             "QuotesEligibleResponders",
             JSON.stringify(eligibleResponders)
           );
-          eligibleResponders.wired_up_users.forEach(
-            async ({ profile_uuid, seller_product_info }) => {
-              console.log("profile_uuid", JSON.stringify(profile_uuid));
-              let data = [quote.data].map(({ sellers, ...rest }) => ({
-                ...rest,
-                seller_product_info: seller_product_info,
-              }));
-              console.log("data in customized quote---->", JSON.stringify(data[0]));
-              let quoteResponse = await QuoteResponse.create({
-                buyer_uuid: quote.profile_uuid, // quote creator
-                quote_uuid: quote.uuid,
-                status: "buyer_raises_quote",
-                data: data[0],
-                owner_uuid: profile_uuid,
-                quote_type: quote.type,
-              });
-              console.log("quoteResponse", JSON.stringify(quoteResponse));
-            }
-          );
+
+          if (
+            eligibleResponders &&
+            eligibleResponders.wired_up_users &&
+            eligibleResponders.wired_up_users.length > 0
+          ) {
+            console.log(
+              "if QuotesEligibleResponders",
+              JSON.stringify(eligibleResponders)
+            );
+            eligibleResponders.wired_up_users.forEach(
+              async ({ profile_uuid, seller_product_info }) => {
+                console.log("profile_uuid", JSON.stringify(profile_uuid));
+                let data = [quote.data].map(({ sellers, ...rest }) => ({
+                  ...rest,
+                  seller_product_info: seller_product_info,
+                }));
+                console.log(
+                  "data in customized quote---->",
+                  JSON.stringify(data[0])
+                );
+                let quoteResponse = await QuoteResponse.create({
+                  buyer_uuid: quote.profile_uuid, // quote creator
+                  quote_uuid: quote.uuid,
+                  status: "buyer_raises_quote",
+                  data: data[0],
+                  owner_uuid: profile_uuid,
+                  quote_type: quote.type,
+                });
+                console.log("if quoteResponse customized", JSON.stringify(quoteResponse));
+              }
+            );
+          } else {
+            let data = [quote.data].map(({ sellers, ...rest }) => ({
+              ...rest,
+              seller_product_info: null,
+            }));
+            console.log(
+              "else data in customized quote---->",
+              JSON.stringify(data[0])
+            );
+            let quoteResponse = await QuoteResponse.create({
+              buyer_uuid: quote.profile_uuid, // quote creator
+              quote_uuid: quote.uuid,
+              status: "buyer_raises_quote",
+              data: data[0],
+              owner_uuid: null,
+              quote_type: quote.type,
+            });
+            console.log("else quoteResponse customized", JSON.stringify(quoteResponse));
+          }
         }
 
         return quote;
@@ -249,7 +304,10 @@ const getEligibleResponders = async (token, sellers) => {
         let sellerProfiles = await findSystemSelectedSellers(
           sellers.system_selected_sellers
         );
-        console.log("check here system selected seller", JSON.stringify(sellerProfiles));
+        console.log(
+          "check here system selected seller",
+          JSON.stringify(sellerProfiles)
+        );
         sellerProfiles.forEach((item) => {
           wired_up_users.push({
             profile_uuid: item.profile_uuid,
@@ -328,7 +386,10 @@ const findAddressbookSellers = async (token, contacts) => {
         console.log("payload of addressbook finding", JSON.stringify(payload));
         await findUserByEmailMobile(token, payload)
           .then(async (res) => {
-            console.log("address book profile response------>", JSON.stringify(res));
+            console.log(
+              "address book profile response------>",
+              JSON.stringify(res)
+            );
             if (res.user_uuid) {
               let sellerProfile = await Profile.findOne({
                 where: {

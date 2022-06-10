@@ -4,8 +4,9 @@ const GmCategory = require("../models").GmCategory;
 const Profile = require("../models").Profile;
 const { Op, Sequelize } = require("sequelize");
 const getSearchQueries = require("../functions/getSearchQueries");
-const getSellersProducts = require("../functions/getSellersProducts");
+const getGmProducts = require("../functions/getGmProducts");
 const getCompanyProducts = require("../functions/getCompanyProducts");
+
 const sequelize = require("../models").sequelize;
 
 module.exports = {
@@ -304,20 +305,30 @@ module.exports = {
 
   async getSearchProducts(req, res) {
     try {
-      let sellersProducts = [];
+      let products = [];
       if (req.query.keyword) {
-        sellersProducts = await getSellersProducts({
-          name: { [Op.iLike]: `%${req.query.keyword}%` },
-        });
+        products = await getGmProducts(
+          {
+            name: { [Op.iLike]: `%${req.query.keyword}%` },
+          },
+          "product"
+        );
 
         let companyProducts = await getCompanyProducts({
           "data.company_name": { [Op.iLike]: `%${req.query.keyword}%` },
         });
 
-        sellersProducts = [...sellersProducts, ...companyProducts];
+        let brandProducts = await getGmProducts(
+          {
+            brand_name: { [Op.iLike]: `%${req.query.keyword}%` },
+          },
+          "brand"
+        );
+
+        products = [...products, ...companyProducts, ...brandProducts];
       }
 
-      return sellersProducts;
+      return products;
     } catch (error) {
       consumeError(error);
     }
