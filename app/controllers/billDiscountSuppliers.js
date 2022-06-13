@@ -4,6 +4,7 @@ const Profile = models.Profile;
 const consumeError = require("../functions/consumeError");
 const sendEvent = require("../functions/neptune/neptuneCaller");
 const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
+const updateInvoicesArray = require("../functions/updateInvoicesArray");
 
 module.exports = {
   async index(req, res) {
@@ -131,7 +132,7 @@ module.exports = {
       if (req.body.invoices) {
         payload["invoices"] = bdSupplier.invoices
           ? req.body.invoices
-            ? [...bdSupplier.invoices, ...req.body.invoices]
+            ? updateInvoicesArray(bdSupplier.invoices, req.body.invoices)
             : bdSupplier.invoices
           : req.body.invoices;
       }
