@@ -6,6 +6,7 @@ const ProfileRevision = models.ProfileRevision;
 const { Op } = require("sequelize");
 const getBuyerUuidForProduct = require("../functions/getBuyerUuidForProduct");
 const getProfileUuidByBankname = require("../functions/getProfileUuidByBankname");
+const BillDiscountSuppliers = models.BillDiscountSuppliers;
 
 module.exports = {
   async index(req, res) {
@@ -124,6 +125,39 @@ module.exports = {
           status: req.body.status,
         });
         toCreateRevision = true;
+        if (profile.type === "fm-buyer") {
+          let bdSuppliers = await BillDiscountSuppliers.findAll({
+            where: {
+              [Op.or]: [
+                { email: profile.data.email },
+                { phone_number: profile.data.mobile },
+              ],
+            },
+            attributes: ["uuid"],
+          });
+
+          let uuidsToUpdate = [];
+
+          bdSuppliers.forEach(async (item) => {
+            uuidsToUpdate.push(item.uuid);
+          });
+
+          BillDiscountSuppliers.update(
+            {
+              profile_uuid: profile.uuid,
+              company_name: profile.data.company_name
+                ? profile.data.company_name
+                : "",
+            },
+            {
+              where: {
+                uuid: {
+                  [Op.in]: uuidsToUpdate,
+                },
+              },
+            }
+          );
+        }
       } else {
         const prevData = profile.data;
         profile = await profile.update({
@@ -145,6 +179,7 @@ module.exports = {
           data: profile.data,
         });
       }
+
       return profile;
     } catch (error) {
       consumeError(error);

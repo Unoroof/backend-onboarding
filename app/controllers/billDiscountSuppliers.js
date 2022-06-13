@@ -3,6 +3,7 @@ const BillDiscountSuppliers = models.BillDiscountSuppliers;
 const Profile = models.Profile;
 const consumeError = require("../functions/consumeError");
 const sendEvent = require("../functions/neptune/neptuneCaller");
+const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
 
 module.exports = {
   async index(req, res) {
@@ -50,6 +51,27 @@ module.exports = {
       });
 
       req.body.forEach(async (item) => {
+        let payload = {
+          email: item.email ? item.email : "",
+          mobile: item.phone_number ? item.phone_number : "",
+        };
+
+        let user = await findUserByEmailMobile(req.token, payload);
+
+        if (user) {
+          let buyerProfile = await Profile.findOne({
+            where: {
+              user_uuid: user.user_uuid,
+              type: "fm-buyer",
+            },
+          });
+
+          if (buyerProfile) {
+            item["profile_uuid"] = buyerProfile.uuid;
+            item["company_name"] = buyerProfile.data.company_name;
+          }
+        }
+
         let supplier = await BillDiscountSuppliers.create({
           invited_by: profile.uuid,
           status: "pending",
