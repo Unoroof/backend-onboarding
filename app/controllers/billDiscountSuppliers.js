@@ -52,26 +52,34 @@ module.exports = {
       });
 
       req.body.forEach(async (item) => {
-        let payload = {
-          email: item.email ? item.email : "",
-          mobile: item.phone_number ? item.phone_number : "",
-        };
-
-        let user = await findUserByEmailMobile(req.token, payload);
-
-        if (user) {
-          let buyerProfile = await Profile.findOne({
-            where: {
-              user_uuid: user.user_uuid,
-              type: "fm-buyer",
-            },
-          });
-
-          if (buyerProfile) {
-            item["profile_uuid"] = buyerProfile.uuid;
-            item["company_name"] = buyerProfile.data.company_name;
-          }
+        let payload = {};
+        if (item.email) {
+          payload["email"] = item.email;
         }
+
+        if (item.phone_number) {
+          payload["mobile"] = item.phone_number;
+        }
+
+        await findUserByEmailMobile(req.token, payload)
+          .then(async (res) => {
+            if (res.user_uuid) {
+              let buyerProfile = await Profile.findOne({
+                where: {
+                  user_uuid: res.user_uuid,
+                  type: "fm-buyer",
+                },
+              });
+
+              if (buyerProfile) {
+                item["profile_uuid"] = buyerProfile.uuid;
+                item["company_name"] = buyerProfile.data.company_name;
+              }
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
 
         let supplier = await BillDiscountSuppliers.create({
           invited_by: profile.uuid,
