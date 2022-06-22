@@ -17,7 +17,6 @@ module.exports = (token, payload) => {
 
     axios(config)
       .then((response) => {
-        // console.log("check here ", response);
         resolve(response.data);
       })
       .catch((error) => {

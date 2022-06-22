@@ -3,6 +3,8 @@ const BillDiscountSuppliers = models.BillDiscountSuppliers;
 const Profile = models.Profile;
 const consumeError = require("../functions/consumeError");
 const sendEvent = require("../functions/neptune/neptuneCaller");
+const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
+const updateInvoicesArray = require("../functions/updateInvoicesArray");
 
 module.exports = {
   async index(req, res) {
@@ -50,6 +52,35 @@ module.exports = {
       });
 
       req.body.forEach(async (item) => {
+        let payload = {};
+        if (item.email) {
+          payload["email"] = item.email;
+        }
+
+        if (item.phone_number) {
+          payload["mobile"] = item.phone_number;
+        }
+
+        await findUserByEmailMobile(req.token, payload)
+          .then(async (res) => {
+            if (res.user_uuid) {
+              let buyerProfile = await Profile.findOne({
+                where: {
+                  user_uuid: res.user_uuid,
+                  type: "fm-buyer",
+                },
+              });
+
+              if (buyerProfile) {
+                item["profile_uuid"] = buyerProfile.uuid;
+                item["company_name"] = buyerProfile.data.company_name;
+              }
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+
         let supplier = await BillDiscountSuppliers.create({
           invited_by: profile.uuid,
           status: "pending",
@@ -77,7 +108,7 @@ module.exports = {
               event_type: "buyer_sent_a_bill_discount_invitation",
               user_id: profile.user_uuid,
               data: {
-                company_name: profile.data.company_name,
+                company_name: profile.data.company_name.substr(0, 30),
               },
               ignore_user_contacts: true,
               contact_infos: [
@@ -109,7 +140,7 @@ module.exports = {
       if (req.body.invoices) {
         payload["invoices"] = bdSupplier.invoices
           ? req.body.invoices
-            ? [...bdSupplier.invoices, ...req.body.invoices]
+            ? updateInvoicesArray(bdSupplier.invoices, req.body.invoices)
             : bdSupplier.invoices
           : req.body.invoices;
       }
