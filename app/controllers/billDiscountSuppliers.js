@@ -108,7 +108,7 @@ module.exports = {
               event_type: "buyer_sent_a_bill_discount_invitation",
               user_id: profile.user_uuid,
               data: {
-                company_name: profile.data.company_name,
+                company_name: profile.data.company_name.substr(0, 30),
               },
               ignore_user_contacts: true,
               contact_infos: [
