@@ -82,7 +82,7 @@ module.exports = {
       }
 
       if (req.body.data) {
-        payload["data"] = { ...dailyBids.data, ...req.body.status };
+        payload["data"] = { ...dailyBids.data, ...req.body.data };
       }
 
       dailyBids = await dailyBids.update(payload);
