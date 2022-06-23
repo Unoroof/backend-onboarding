@@ -79,6 +79,10 @@ const BDSuppliersController =
 const BDSuppliersCollectionResponse = require("../app/responses/billDiscountSupplierCollection");
 const BDSuppliersResourceResponse = require("../app/responses/billDiscountSupplierResource");
 
+const DailyBidsController = require("../app/controllers").DailyBidsController;
+const DailyBidsCollectionResponse = require("../app/responses/dailyBidsCollection");
+const DailyBidsResourceResponse = require("../app/responses/dailyBidsResource");
+
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
     status: "ok",
@@ -402,5 +406,28 @@ router.get(
   executeForResponse(BDSuppliersCollectionResponse)
 );
 
-// BDSuppliersCollectionResponse
+router.post(
+  "/daily-bids",
+  executeForResult(DailyBidsController.create),
+  executeForResponse(DailyBidsResourceResponse)
+);
+
+router.get(
+  "/daily-bids/:daily_bids_uuid",
+  executeForResult(DailyBidsController.index),
+  executeForResponse(DailyBidsResourceResponse)
+);
+
+router.put(
+  "/daily-bids/:daily_bids_uuid",
+  executeForResult(DailyBidsController.update),
+  executeForResponse(DailyBidsResourceResponse)
+);
+
+router.get(
+  "/daily-bids",
+  executeForResult(DailyBidsController.getAll, "data"),
+  executeForResponse(DailyBidsCollectionResponse)
+);
+
 module.exports = router;
