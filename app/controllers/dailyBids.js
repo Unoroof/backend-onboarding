@@ -56,6 +56,11 @@ module.exports = {
       let dailyBids = await DailyBids.create({
         profile_uuid: profile.uuid,
         bids: req.body.bids,
+        data: {
+          company_name: profile.data.company_name
+            ? profile.data.company_name
+            : "",
+        },
       });
 
       return dailyBids;

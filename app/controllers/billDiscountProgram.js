@@ -60,11 +60,25 @@ module.exports = {
         },
       });
 
+      let profileOfDailyBids = await Profile.findOne({
+        where: {
+          uuid: dailyBids.profile_uuid,
+        },
+      });
+
+      let data = req.body.data ? req.body.data : {};
+      data["request_by_company_name"] = profile.data.company_name
+        ? profile.data.company_name
+        : "";
+      data["request_to_company_name"] = profileOfDailyBids.data.company_name
+        ? profileOfDailyBids.data.company_name
+        : "";
+
       let payload = {
         daily_bids_uuid: req.body.daily_bids_uuid,
         request_by: profile.uuid,
         request_to: dailyBids.profile_uuid,
-        data: req.body.data,
+        data: data,
       };
 
       let billDiscountProgram = await BillDiscountProgram.create(payload);
@@ -108,5 +122,9 @@ module.exports = {
     } catch (error) {
       consumeError(error);
     }
+  },
+
+  async calculateChart(req, res) {
+    // pie chart calculation...
   },
 };
