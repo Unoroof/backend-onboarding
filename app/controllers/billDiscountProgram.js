@@ -79,11 +79,28 @@ module.exports = {
         request_by: profile.uuid,
         request_to: dailyBids.profile_uuid,
         data: data,
+        status: req.body.status,
       };
 
-      let billDiscountProgram = await BillDiscountProgram.create(payload);
+      // dailyBids
+      let alreadyExistValue = await BillDiscountProgram.findOne({
+        where: {
+          daily_bids_uuid: req.body.daily_bids_uuid,
+          data: {
+            joined_program: {
+              tenor: data.joined_program.tenor,
+              discount: data.joined_program.discount,
+            },
+          },
+        },
+      });
 
-      return billDiscountProgram;
+      if (!alreadyExistValue) {
+        let billDiscountProgram = await BillDiscountProgram.create(payload);
+        return billDiscountProgram;
+      } else {
+        return "Already accepted";
+      }
     } catch (error) {
       consumeError(error);
     }
