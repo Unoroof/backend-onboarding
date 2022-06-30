@@ -25,19 +25,37 @@ module.exports = {
         where: {},
       };
 
-      if (req.query.profile_uuid)
-        constraints.where.profile_uuid = req.query.profile_uuid;
-
       if (req.query.tenor) {
-        constraints.where.bids = {
-          [Op.contains]: [{ tenor: req.query.tenor }],
+        constraints.where = {
+          [Op.and]: [
+            {
+              bids: {
+                [Op.contains]: [{ tenor: req.query.tenor }],
+              },
+            },
+            {
+              [Op.not]: {
+                bids: {
+                  [Op.contains]: [{ discount: "" }],
+                },
+              },
+            },
+            {
+              [Op.not]: {
+                bids: {
+                  [Op.contains]: [{ discount: "0" }],
+                },
+              },
+            },
+          ],
         };
       }
 
-      let dailyBids = await DailyBids.findAll({
-        ...constraints,
-        order: [["createdAt", "DESC"]],
-      });
+      if (req.query.profile_uuid)
+        constraints.where.profile_uuid = req.query.profile_uuid;
+
+      let dailyBids = await DailyBids.findAll(constraints);
+
       return dailyBids;
     } catch (error) {
       consumeError(error);
