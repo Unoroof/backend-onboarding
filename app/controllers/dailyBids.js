@@ -36,14 +36,14 @@ module.exports = {
             {
               [Op.not]: {
                 bids: {
-                  [Op.contains]: [{ discount: "" }],
+                  [Op.contains]: [{ tenor: req.query.tenor, discount: "" }],
                 },
               },
             },
             {
               [Op.not]: {
                 bids: {
-                  [Op.contains]: [{ discount: "0" }],
+                  [Op.contains]: [{ tenor: req.query.tenor, discount: "0" }],
                 },
               },
             },
