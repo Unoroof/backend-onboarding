@@ -25,6 +25,7 @@ module.exports = {
       let constraints = {
         where: {},
       };
+      let userBillDiscountProgramsUuids = [];
 
       if (req.query.tenor) {
         let profile = await Profile.findOne({
@@ -47,8 +48,16 @@ module.exports = {
         let userBillDiscountPrograms = await BillDiscountProgram.findAll(
           userConstraints
         );
-        let userBillDiscountProgramsUuids = [];
 
+        let usersDailyBids = await DailyBids.findOne({
+          where: {
+            profile_uuid: profile.uuid,
+          },
+        });
+
+        if (usersDailyBids) {
+          userBillDiscountProgramsUuids.push(usersDailyBids.uuid);
+        }
         userBillDiscountPrograms.forEach((element) => {
           userBillDiscountProgramsUuids.push(element.daily_bids_uuid);
         });
