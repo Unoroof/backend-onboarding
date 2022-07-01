@@ -1,6 +1,7 @@
 const models = require("../models");
 const DailyBids = models.DailyBids;
 const Profile = models.Profile;
+const BillDiscountProgram = models.BillDiscountProgram;
 const consumeError = require("../functions/consumeError");
 const updateBidsArray = require("../functions/updateBidsArray");
 const { Op } = require("sequelize");
@@ -26,6 +27,32 @@ module.exports = {
       };
 
       if (req.query.tenor) {
+        let profile = await Profile.findOne({
+          where: {
+            user_uuid: req.user,
+            type: "fm-buyer",
+          },
+        });
+
+        let userConstraints = {
+          where: {
+            request_by: profile.uuid,
+          },
+          attributes: ["daily_bids_uuid"],
+        };
+        userConstraints.where = {
+          data: { joined_program: { tenor: req.query.tenor } },
+        };
+
+        let userBillDiscountPrograms = await BillDiscountProgram.findAll(
+          userConstraints
+        );
+        let userBillDiscountProgramsUuids = [];
+
+        userBillDiscountPrograms.forEach((element) => {
+          userBillDiscountProgramsUuids.push(element.daily_bids_uuid);
+        });
+
         constraints.where = {
           [Op.and]: [
             {
@@ -45,6 +72,11 @@ module.exports = {
                 bids: {
                   [Op.contains]: [{ tenor: req.query.tenor, discount: "0" }],
                 },
+              },
+            },
+            {
+              uuid: {
+                [Op.notIn]: userBillDiscountProgramsUuids,
               },
             },
           ],
