@@ -13,6 +13,8 @@ const QuoteController = require("./quotes");
 const QuoteResponseController = require("./quoteResponses");
 const AddressController = require("./address");
 const BDSuppliersController = require("./billDiscountSuppliers");
+const DailyBidsController = require("./dailyBids");
+const BillDiscountProgramController = require("./billDiscountProgram");
 
 module.exports = {
   ProfileController,
@@ -30,4 +32,6 @@ module.exports = {
   QuoteResponseController,
   AddressController,
   BDSuppliersController,
+  DailyBidsController,
+  BillDiscountProgramController,
 };
