@@ -52,6 +52,7 @@ module.exports = {
       });
 
       req.body.forEach(async (item) => {
+        item.email = item.email.toLowerCase();
         let payload = {};
         if (item.email) {
           payload["email"] = item.email;
