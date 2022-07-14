@@ -129,12 +129,19 @@ module.exports = {
           let bdSuppliers = await BillDiscountSuppliers.findAll({
             where: {
               [Op.or]: [
-                { email: profile.data.email },
-                { phone_number: profile.data.mobile },
+                {
+                  email: profile.data.email !== "" ? profile.data.email : null,
+                },
+                {
+                  phone_number:
+                    profile.data.mobile !== "" ? profile.data.mobile : null,
+                },
               ],
             },
             attributes: ["uuid"],
           });
+
+          console.log("check here bdSuppliers", bdSuppliers);
 
           let uuidsToUpdate = [];
 
