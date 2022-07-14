@@ -3,6 +3,7 @@ module.exports = (instance) => {
     "uuid",
     "invited_by",
     "company_name",
+    "buyer_company_name",
     "profile_uuid",
     "email",
     "phone_number",

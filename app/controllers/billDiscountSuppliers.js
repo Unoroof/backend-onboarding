@@ -53,6 +53,7 @@ module.exports = {
 
       req.body.forEach(async (item) => {
         item.email = item.email.toLowerCase();
+        item["buyer_company_name"] = profile.data.company_name;
         let payload = {};
         if (item.email) {
           payload["email"] = item.email;

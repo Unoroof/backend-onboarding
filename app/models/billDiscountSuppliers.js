@@ -19,6 +19,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      buyer_company_name: {
+        type: DataTypes.STRING,
+      },
       profile_uuid: {
         type: DataTypes.UUID,
         allowNull: true,
