@@ -70,7 +70,9 @@ module.exports = {
         let quoteResponses = await QuoteResponse.findAndCountAll(constraints, {
           transaction: t,
         });
+
         const response = await getPagingData(quoteResponses, page, limit);
+
         return response;
       });
       return result;
@@ -158,9 +160,80 @@ module.exports = {
             ? { ...quoteResponse.data, ...req.body.data }
             : quoteResponse.data;
         }
+        if (req.body.status) {
+          await sendEventOnResponse(req.body.status, quoteResponse);
+        }
 
         quoteResponse = await quoteResponse.update(payload, { transaction: t });
+        console.log("QUOTE responsessssssss", quoteResponse.quote_type);
 
+        if (
+          quoteResponse.quote_type === "best_bids_quote" &&
+          quoteResponse.status === "seller_responded_to_quote"
+        ) {
+          await sendPushNotification({
+            event_type: "buyer_received_quote_for_best_bid",
+            user_id: sellerProfile.user_uuid,
+            data: {
+              name: quoteResponse.product_name,
+              query_type: "bestbids_quote",
+              query_status: quoteResponse.status,
+              quote_uuid: quoteResponse.quote_uuid,
+              quote_response_uuid: quoteResponse.uuid,
+              buyer_profile_uuid: quoteResponse.buyer_uuid,
+              ...quoteResponse.data,
+              notification_type: "buyer_received_quote_for_best_bid",
+            },
+          });
+        } else {
+          await sendPushNotification({
+            event_type: "buyer_received_quote_for_best_bid",
+            user_id: sellerProfile.user_uuid,
+            data: {
+              name: quoteResponse.product_name,
+              quote_type: "customized_quote",
+              query_status: quoteResponse.status,
+              quote_uuid: quoteResponse.quote_uuid,
+              quote_response_uuid: quoteResponse.uuid,
+              buyer_profile_uuid: quoteResponse.buyer_uuid,
+              ...quoteResponse.data,
+              notification_type: "buyer_received_quote_for_best_bid",
+            },
+          });
+        }
+
+        if (
+          quoteResponse.quote_type === "best_bids_quote" &&
+          quoteResponse.status === "seller_ignored_the_quote"
+        ) {
+          await sendPushNotification({
+            event_type: "seller_ignored_the_quote_for_best_bid",
+            user_id: sellerProfile.user_uuid,
+            data: {
+              name: quoteResponse.product_name,
+              query_type: "rejected_bestbids_quote",
+              quote_uuid: quoteResponse.quote_uuid,
+              quote_response_uuid: quoteResponse.uuid,
+              buyer_profile_uuid: quoteResponse.buyer_uuid,
+              ...quoteResponse.data,
+              notification_type: "seller_ignored_the_quote_for_best_bid",
+            },
+          });
+        } else {
+          await sendPushNotification({
+            event_type: "seller_ignored_the_quote_for_best_bid",
+            user_id: sellerProfile.user_uuid,
+            data: {
+              name: quoteResponse.product_name,
+              quote_type: "rejected_customized_quote",
+              quote_uuid: quoteResponse.quote_uuid,
+              quote_response_uuid: quoteResponse.uuid,
+              buyer_profile_uuid: quoteResponse.buyer_uuid,
+              ...quoteResponse.data,
+              notification_type: "seller_ignored_the_quote_for_best_bid",
+            },
+          });
+        }
         return quoteResponse;
       });
       return result;
