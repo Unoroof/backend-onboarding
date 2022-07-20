@@ -171,22 +171,6 @@ module.exports = {
           quoteResponse.quote_type === "best_bids_quote" &&
           quoteResponse.status === "seller_responded_to_quote"
         ) {
-          console.log("WE ARE IN SENDING THE NOTIFICATIONS PART");
-          let newPayload = {
-            event_type: "buyer_received_quote_for_best_bid",
-            user_id: quoteResponse.owner_uuid,
-            data: {
-              name: quoteResponse.product_name,
-              query_type: "bestbids_quote",
-              query_status: quoteResponse.status,
-              quote_uuid: quoteResponse.quote_uuid,
-              quote_response_uuid: quoteResponse.uuid,
-              buyer_profile_uuid: quoteResponse.buyer_uuid,
-              ...quoteResponse.data,
-              notification_type: "buyer_received_quote_for_best_bid",
-            },
-          };
-          console.log("NEW PAYLOAD*********", newPayload);
           await sendPushNotification({
             event_type: "buyer_received_quote_for_best_bid",
             user_id: quoteResponse.buyer_uuid,
