@@ -6,7 +6,8 @@ const sequelize = require("../models").sequelize;
 const { Op } = require("sequelize");
 const getPagination = require("../functions/getPagination");
 const getPagingData = require("../functions/getPagingData");
-
+const sendPushNotification = require("../functions/neptune/neptuneCaller");
+const sendEventOnResponse = require("../functions/sendEventOnResponse");
 module.exports = {
   async index(req) {
     try {
@@ -165,7 +166,6 @@ module.exports = {
         }
 
         quoteResponse = await quoteResponse.update(payload, { transaction: t });
-        console.log("QUOTE responsessssssss", quoteResponse.quote_type);
 
         if (
           quoteResponse.quote_type === "best_bids_quote" &&
@@ -173,7 +173,7 @@ module.exports = {
         ) {
           await sendPushNotification({
             event_type: "buyer_received_quote_for_best_bid",
-            user_id: sellerProfile.user_uuid,
+            user_id: quoteResponse.buyer_uuid,
             data: {
               name: quoteResponse.product_name,
               query_type: "bestbids_quote",
@@ -188,7 +188,7 @@ module.exports = {
         } else {
           await sendPushNotification({
             event_type: "buyer_received_quote_for_best_bid",
-            user_id: sellerProfile.user_uuid,
+            user_id: quoteResponse.buyer_uuid,
             data: {
               name: quoteResponse.product_name,
               quote_type: "customized_quote",
@@ -208,7 +208,7 @@ module.exports = {
         ) {
           await sendPushNotification({
             event_type: "seller_ignored_the_quote_for_best_bid",
-            user_id: sellerProfile.user_uuid,
+            user_id: quoteResponse.buyer_uuid,
             data: {
               name: quoteResponse.product_name,
               query_type: "rejected_bestbids_quote",
@@ -222,7 +222,7 @@ module.exports = {
         } else {
           await sendPushNotification({
             event_type: "seller_ignored_the_quote_for_best_bid",
-            user_id: sellerProfile.user_uuid,
+            user_id: quoteResponse.buyer_uuid,
             data: {
               name: quoteResponse.product_name,
               quote_type: "rejected_customized_quote",
