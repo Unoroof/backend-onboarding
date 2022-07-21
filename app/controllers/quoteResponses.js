@@ -176,7 +176,7 @@ module.exports = {
             user_id: quoteResponse.buyer_uuid,
             data: {
               name: quoteResponse.product_name,
-              query_type: "bestbids_quote",
+              query_type: "received_bestbids_quote",
               query_status: quoteResponse.status,
               quote_uuid: quoteResponse.quote_uuid,
               quote_response_uuid: quoteResponse.uuid,
@@ -191,7 +191,7 @@ module.exports = {
             user_id: quoteResponse.buyer_uuid,
             data: {
               name: quoteResponse.product_name,
-              quote_type: "customized_quote",
+              quote_type: "received_customized_quote",
               query_status: quoteResponse.status,
               quote_uuid: quoteResponse.quote_uuid,
               quote_response_uuid: quoteResponse.uuid,
@@ -231,6 +231,34 @@ module.exports = {
               buyer_profile_uuid: quoteResponse.buyer_uuid,
               ...quoteResponse.data,
               notification_type: "seller_ignored_the_quote_for_best_bid",
+            },
+          });
+        }
+
+        if (
+          quoteResponse.quote_type === "best_bids_quote" &&
+          quoteResponse.status === "buyer_accepted_the_quote"
+        ) {
+          await sendPushNotification({
+            event_type: "buyer_accepts_best_bid_quote",
+            user_id: quoteResponse.owner_uuid,
+            data: {
+              name: quoteResponse.product_name,
+              quote_type: "accepted_best_bid_quote",
+              notification_type: "buyer_accepts_best_bid_quote",
+            },
+          });
+        } else if (
+          quoteResponse.quote_type === "best_bids_quote" &&
+          quoteResponse.status === "buyer_rejected_the_quote"
+        ) {
+          await sendPushNotification({
+            event_type: "buyer_rejects_best_bid_quote",
+            user_id: quoteResponse.owner_uuid,
+            data: {
+              name: quoteResponse.product_name,
+              quote_type: "rejected_best_bid_quote",
+              notification_type: "buyer_rejects_best_bid_quote",
             },
           });
         }
