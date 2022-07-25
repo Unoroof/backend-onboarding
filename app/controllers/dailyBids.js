@@ -5,6 +5,8 @@ const BillDiscountProgram = models.BillDiscountProgram;
 const consumeError = require("../functions/consumeError");
 const updateBidsArray = require("../functions/updateBidsArray");
 const { Op } = require("sequelize");
+const sendPushNotification = require("../functions/neptune/neptuneCaller");
+const sendEventOnResponse = require("../functions/sendEventOnResponse");
 
 module.exports = {
   async index(req, res) {
@@ -121,6 +123,20 @@ module.exports = {
             : "",
         },
       });
+
+      console.log("DAILY BIDS CREATED", dailyBids);
+
+      // if (dailyBids) {
+      //   await sendPushNotification({
+      //     event_type: "bill_discounting_seller_accepts_the_invite",
+      //     user_id: bdSupplier.invited_by,
+      //     data: {
+      //       name: bdSupplier.company_name,
+      //       quote_type: "seller_accepted_bill_discounting_invite",
+      //       notification_type: "seller_accepts_the_bd_invite",
+      //     },
+      //   });
+      // }
 
       return dailyBids;
     } catch (error) {

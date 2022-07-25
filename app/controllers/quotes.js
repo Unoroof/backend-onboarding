@@ -117,10 +117,10 @@ module.exports = {
             },
           };
 
-          // console.log(
-          //   "check here constraints for checking best-bid seller quote response creation",
-          //   JSON.stringify(constraints)
-          // );
+          console.log(
+            "check here constraints for checking best-bid seller quote response creation",
+            JSON.stringify(constraints)
+          );
 
           let eligibleGlobalSellerGmProduct = await GmProduct.findOne(
             constraints,
@@ -128,20 +128,20 @@ module.exports = {
               transaction: t,
             }
           );
-          // console.log(
-          //   "check here eligibleGlobalSellerGmProduct best-bid",
-          //   JSON.stringify(eligibleGlobalSellerGmProduct)
-          // );
+          console.log(
+            "check here eligibleGlobalSellerGmProduct best-bid",
+            JSON.stringify(eligibleGlobalSellerGmProduct)
+          );
 
           if (eligibleGlobalSellerGmProduct) {
             let data = [quote.data].map(({ seller_uuid, ...rest }) => ({
               ...rest,
               seller_product_info: eligibleGlobalSellerGmProduct,
             }));
-            // console.log(
-            //   "data in best bids quote---->",
-            //   JSON.stringify(data[0])
-            // );
+            console.log(
+              "data in best bids quote---->",
+              JSON.stringify(data[0])
+            );
             await QuoteResponse.create(
               {
                 buyer_uuid: quote.profile_uuid,
@@ -158,10 +158,10 @@ module.exports = {
               ...rest,
               seller_product_info: null,
             }));
-            // console.log(
-            //   "data in best bids quote---->",
-            //   JSON.stringify(data[0])
-            // );
+            console.log(
+              "data in best bids quote---->",
+              JSON.stringify(data[0])
+            );
             await QuoteResponse.create(
               {
                 buyer_uuid: quote.profile_uuid,
@@ -181,20 +181,20 @@ module.exports = {
             quote.data.sellers
           );
 
-          // console.log(
-          //   "QuotesEligibleResponders",
-          //   JSON.stringify(eligibleResponders)
-          // );
+          console.log(
+            "QuotesEligibleResponders",
+            JSON.stringify(eligibleResponders)
+          );
 
           if (
             eligibleResponders &&
             eligibleResponders.wired_up_users &&
             eligibleResponders.wired_up_users.length > 0
           ) {
-            // console.log(
-            //   "if QuotesEligibleResponders",
-            //   JSON.stringify(eligibleResponders)
-            // );
+            console.log(
+              "if QuotesEligibleResponders",
+              JSON.stringify(eligibleResponders)
+            );
             eligibleResponders.wired_up_users.forEach(
               async ({ profile_uuid, seller_product_info }) => {
                 console.log("profile_uuid", JSON.stringify(profile_uuid));
@@ -225,10 +225,10 @@ module.exports = {
               ...rest,
               seller_product_info: null,
             }));
-            // console.log(
-            //   "else data in customized quote---->",
-            //   JSON.stringify(data[0])
-            // );
+            console.log(
+              "else data in customized quote---->",
+              JSON.stringify(data[0])
+            );
             let quoteResponse = await QuoteResponse.create({
               buyer_uuid: quote.profile_uuid, // quote creator
               quote_uuid: quote.uuid,
