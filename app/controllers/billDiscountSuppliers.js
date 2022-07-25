@@ -52,7 +52,13 @@ module.exports = {
       });
 
       req.body.forEach(async (item) => {
-        item.email = item.email.toLowerCase();
+        if (item.email) {
+          item.email = item.email.toLowerCase();
+        }
+        if (item.phone_number && item.phone_number !== "") {
+          item.phone_number = item.isd_code.value + item.phone_number;
+        }
+        delete item["isd_code"];
         item["buyer_company_name"] = profile.data.company_name;
         let payload = {};
         if (item.email) {
@@ -106,14 +112,6 @@ module.exports = {
               ],
             });
           } else if (supplier.phone_number) {
-            const ph_number =
-              supplier.phone_number.length === 13
-                ? supplier.phone_number.substr(3)
-                : supplier.phone_number.length === 12
-                ? supplier.phone_number.substr(2)
-                : supplier.phone_number.length === 11
-                ? supplier.phone_number.substr(1)
-                : supplier.phone_number;
             await sendEvent({
               event_type: "buyer_sent_a_bill_discount_invitation",
               user_id: profile.user_uuid,
@@ -124,7 +122,7 @@ module.exports = {
               contact_infos: [
                 {
                   type: "mobile_number",
-                  value: `+91${ph_number}`,
+                  value: supplier.phone_number,
                 },
               ],
             });
