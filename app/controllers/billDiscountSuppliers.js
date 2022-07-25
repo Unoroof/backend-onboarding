@@ -5,6 +5,8 @@ const consumeError = require("../functions/consumeError");
 const sendEvent = require("../functions/neptune/neptuneCaller");
 const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
 const updateInvoicesArray = require("../functions/updateInvoicesArray");
+const sendPushNotification = require("../functions/neptune/neptuneCaller");
+const sendEventOnResponse = require("../functions/sendEventOnResponse");
 
 module.exports = {
   async index(req, res) {
@@ -138,6 +140,7 @@ module.exports = {
     }
   },
 
+  /// api that we are using updating the invitation status.
   async update(req, res) {
     try {
       let bdSupplier = await BillDiscountSuppliers.findOne({
@@ -145,6 +148,8 @@ module.exports = {
           uuid: req.params.bd_supplier_uuid,
         },
       });
+
+      console.log("bdSupplier details", bdSupplier);
 
       let payload = {};
       if (req.body.invoices) {
@@ -156,10 +161,34 @@ module.exports = {
       }
 
       if (req.body.status) {
+        await sendEventOnResponse(req.body.status, bdSupplier);
         payload["status"] = req.body.status;
       }
 
       bdSupplier = await bdSupplier.update(payload);
+      console.log("BD SUPPLIER DETAILS*****", bdSupplier.status);
+
+      if (bdSupplier.status === "accepted") {
+        await sendPushNotification({
+          event_type: "bill_discounting_seller_accepts_the_invite",
+          user_id: bdSupplier.invited_by,
+          data: {
+            name: bdSupplier.company_name,
+            quote_type: "seller_accepted_bill_discounting_invite",
+            notification_type: "seller_accepts_the_bd_invite",
+          },
+        });
+      } else if (bdSupplier.status === "rejected") {
+        await sendPushNotification({
+          event_type: "bill_discounting_seller_rejects_the_invite",
+          user_id: bdSupplier.invited_by,
+          data: {
+            name: bdSupplier.company_name,
+            quote_type: "seller_rejected_bill_discounting_invite",
+            notification_type: "seller_rejects_the_bd_invite",
+          },
+        });
+      }
       return bdSupplier;
     } catch (error) {
       consumeError(error);
