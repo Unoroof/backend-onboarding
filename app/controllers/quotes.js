@@ -202,10 +202,10 @@ module.exports = {
                   ...rest,
                   seller_product_info: seller_product_info,
                 }));
-                console.log(
-                  "data in customized quote---->",
-                  JSON.stringify(data[0])
-                );
+                // console.log(
+                //   "data in customized quote---->",
+                //   JSON.stringify(data[0])
+                // );
                 let quoteResponse = await QuoteResponse.create({
                   buyer_uuid: quote.profile_uuid, // quote creator
                   quote_uuid: quote.uuid,
@@ -214,7 +214,10 @@ module.exports = {
                   owner_uuid: profile_uuid,
                   quote_type: quote.type,
                 });
-                console.log("if quoteResponse customized", JSON.stringify(quoteResponse));
+                // console.log(
+                //   "if quoteResponse customized",
+                //   JSON.stringify(quoteResponse)
+                // );
               }
             );
           } else {
@@ -234,7 +237,10 @@ module.exports = {
               owner_uuid: null,
               quote_type: quote.type,
             });
-            console.log("else quoteResponse customized", JSON.stringify(quoteResponse));
+            console.log(
+              "else quoteResponse customized",
+              JSON.stringify(quoteResponse)
+            );
           }
         }
 

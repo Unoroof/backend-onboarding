@@ -95,8 +95,12 @@ module.exports = {
         },
       });
 
+      console.log("ALREADY EXISTS VALUE", alreadyExistValue);
+
       if (!alreadyExistValue) {
         let billDiscountProgram = await BillDiscountProgram.create(payload);
+
+        console.log("Bill Discount ********", billDiscountProgram);
         return billDiscountProgram;
       } else {
         return "Already accepted";

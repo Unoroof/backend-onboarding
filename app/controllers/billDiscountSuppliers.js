@@ -5,6 +5,8 @@ const consumeError = require("../functions/consumeError");
 const sendEvent = require("../functions/neptune/neptuneCaller");
 const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
 const updateInvoicesArray = require("../functions/updateInvoicesArray");
+const sendPushNotification = require("../functions/neptune/neptuneCaller");
+const sendEventOnResponse = require("../functions/sendEventOnResponse");
 
 module.exports = {
   async index(req, res) {
@@ -52,7 +54,13 @@ module.exports = {
       });
 
       req.body.forEach(async (item) => {
-        item.email = item.email.toLowerCase();
+        if (item.email) {
+          item.email = item.email.toLowerCase();
+        }
+        if (item.phone_number && item.phone_number !== "") {
+          item.phone_number = item.isd_code.value + item.phone_number;
+        }
+        delete item["isd_code"];
         item["buyer_company_name"] = profile.data.company_name;
         let payload = {};
         if (item.email) {
@@ -106,14 +114,6 @@ module.exports = {
               ],
             });
           } else if (supplier.phone_number) {
-            const ph_number =
-              supplier.phone_number.length === 13
-                ? supplier.phone_number.substr(3)
-                : supplier.phone_number.length === 12
-                ? supplier.phone_number.substr(2)
-                : supplier.phone_number.length === 11
-                ? supplier.phone_number.substr(1)
-                : supplier.phone_number;
             await sendEvent({
               event_type: "buyer_sent_a_bill_discount_invitation",
               user_id: profile.user_uuid,
@@ -124,7 +124,7 @@ module.exports = {
               contact_infos: [
                 {
                   type: "mobile_number",
-                  value: `+91${ph_number}`,
+                  value: supplier.phone_number,
                 },
               ],
             });
@@ -138,6 +138,7 @@ module.exports = {
     }
   },
 
+  /// api that we are using updating the invitation status.
   async update(req, res) {
     try {
       let bdSupplier = await BillDiscountSuppliers.findOne({
@@ -145,6 +146,8 @@ module.exports = {
           uuid: req.params.bd_supplier_uuid,
         },
       });
+
+      console.log("bdSupplier details", bdSupplier);
 
       let payload = {};
       if (req.body.invoices) {
@@ -156,10 +159,34 @@ module.exports = {
       }
 
       if (req.body.status) {
+        await sendEventOnResponse(req.body.status, bdSupplier);
         payload["status"] = req.body.status;
       }
 
       bdSupplier = await bdSupplier.update(payload);
+      console.log("BD SUPPLIER DETAILS*****", bdSupplier.status);
+
+      if (bdSupplier.status === "accepted") {
+        await sendPushNotification({
+          event_type: "bill_discounting_seller_accepts_the_invite",
+          user_id: bdSupplier.invited_by,
+          data: {
+            name: bdSupplier.company_name,
+            quote_type: "seller_accepted_bill_discounting_invite",
+            notification_type: "seller_accepts_the_bd_invite",
+          },
+        });
+      } else if (bdSupplier.status === "rejected") {
+        await sendPushNotification({
+          event_type: "bill_discounting_seller_rejects_the_invite",
+          user_id: bdSupplier.invited_by,
+          data: {
+            name: bdSupplier.company_name,
+            quote_type: "seller_rejected_bill_discounting_invite",
+            notification_type: "seller_rejects_the_bd_invite",
+          },
+        });
+      }
       return bdSupplier;
     } catch (error) {
       consumeError(error);
