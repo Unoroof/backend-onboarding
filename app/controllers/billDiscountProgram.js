@@ -101,6 +101,37 @@ module.exports = {
         let billDiscountProgram = await BillDiscountProgram.create(payload);
 
         console.log("Bill Discount ********", billDiscountProgram);
+        if (billDiscountProgram.status === "accepted") {
+          await sendPushNotification({
+            event_type: "bill_discounting_buyer_accepts_the_discount_offered",
+            request_by: billDiscountProgram.request_by,
+            request_to: billDiscountProgram.request_to,
+            data: {
+              name: billDiscountProgram.data.request_to_company_name,
+              query_type: "buyer_accepted_the_discount",
+              query_status: billDiscountProgram.status,
+              quote_uuid: billDiscountProgram.daily_bids_uuid,
+              ...billDiscountProgram.data,
+              notification_type:
+                "bill_discounting_buyer_accepts_the_discount_offered",
+            },
+          });
+        } else if (billDiscountProgram.status === "rejected") {
+          await sendPushNotification({
+            event_type: "bill_discounting_buyer_rejects_the_discount_offered",
+            request_by: billDiscountProgram.request_by,
+            request_to: billDiscountProgram.request_to,
+            data: {
+              name: billDiscountProgram.data.request_to_company_name,
+              query_type: "buyer_rejected_the_discount",
+              query_status: billDiscountProgram.status,
+              quote_uuid: billDiscountProgram.daily_bids_uuid,
+              ...billDiscountProgram.data,
+              notification_type:
+                "bill_discounting_buyer_rejects_the_discount_offered",
+            },
+          });
+        }
         return billDiscountProgram;
       } else {
         return "Already accepted";
