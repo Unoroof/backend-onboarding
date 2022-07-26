@@ -195,12 +195,11 @@ module.exports = {
           quoteResponse.status === "seller_ignored_the_quote"
         ) {
           await sendPushNotification({
-            event_type: "seller_ignored_the_quote_for_best_bid",
+            event_type: "seller_rejected_the_quote_for_best_bid",
             user_id: buyerProfileData.user_uuid,
             data: {
-              name: quoteResponse.product_name,
               query_type: "best_bid",
-              notification_type: "seller_ignored_the_quote_for_best_bid",
+              notification_type: "seller_rejected_the_quote_for_best_bid",
             },
           });
         }
