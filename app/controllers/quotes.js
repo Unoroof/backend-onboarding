@@ -277,8 +277,6 @@ module.exports = {
         }
 
         if (quote.type === "customized_quote" && quote.status === "open") {
-          // console.log("SELLER PROFILE DATAAAAAA", sellerProfileData.user_uuid);
-
           await sendPushNotification({
             event_type: "seller_received_customized_quote",
             user_id: sellerProfileData.user_uuid,
