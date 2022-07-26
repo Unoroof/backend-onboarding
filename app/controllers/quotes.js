@@ -10,6 +10,8 @@ const { Op } = require("sequelize");
 const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
 const getPagination = require("../functions/getPagination");
 const getPagingData = require("../functions/getPagingData");
+const sendPushNotification = require("../functions/neptune/neptuneCaller");
+const sendEventOnResponse = require("../functions/sendEventOnResponse");
 
 module.exports = {
   async index(req) {
@@ -100,6 +102,8 @@ module.exports = {
           { transaction: t }
         );
 
+        // here we need to add the notification once the  buyer has created the  query.
+
         if (!quote) {
           throw new Error("Unable to create quote");
         }
@@ -117,10 +121,10 @@ module.exports = {
             },
           };
 
-          console.log(
-            "check here constraints for checking best-bid seller quote response creation",
-            JSON.stringify(constraints)
-          );
+          // console.log(
+          //   "check here constraints for checking best-bid seller quote response creation",
+          //   JSON.stringify(constraints)
+          // );
 
           let eligibleGlobalSellerGmProduct = await GmProduct.findOne(
             constraints,
@@ -142,7 +146,7 @@ module.exports = {
               "data in best bids quote---->",
               JSON.stringify(data[0])
             );
-            await QuoteResponse.create(
+            let checkData = await QuoteResponse.create(
               {
                 buyer_uuid: quote.profile_uuid,
                 quote_uuid: quote.uuid,
@@ -153,6 +157,8 @@ module.exports = {
               },
               { transaction: t }
             );
+
+            console.log("CHECKKKKKKK DATA", checkData);
           } else {
             let data = [quote.data].map(({ seller_uuid, ...rest }) => ({
               ...rest,
@@ -202,10 +208,10 @@ module.exports = {
                   ...rest,
                   seller_product_info: seller_product_info,
                 }));
-                console.log(
-                  "data in customized quote---->",
-                  JSON.stringify(data[0])
-                );
+                // console.log(
+                //   "data in customized quote---->",
+                //   JSON.stringify(data[0])
+                // );
                 let quoteResponse = await QuoteResponse.create({
                   buyer_uuid: quote.profile_uuid, // quote creator
                   quote_uuid: quote.uuid,
@@ -214,7 +220,10 @@ module.exports = {
                   owner_uuid: profile_uuid,
                   quote_type: quote.type,
                 });
-                console.log("if quoteResponse customized", JSON.stringify(quoteResponse));
+                // console.log(
+                //   "if quoteResponse customized",
+                //   JSON.stringify(quoteResponse)
+                // );
               }
             );
           } else {
@@ -234,10 +243,49 @@ module.exports = {
               owner_uuid: null,
               quote_type: quote.type,
             });
-            console.log("else quoteResponse customized", JSON.stringify(quoteResponse));
+            console.log(
+              "else quoteResponse customized",
+              JSON.stringify(quoteResponse)
+            );
           }
         }
+        //console.log("NEW QUOTE CREATED**************8", quote);
 
+        let sellerProfileData = await Profile.findOne(
+          {
+            where: {
+              uuid: quote.data.seller_uuid,
+              type: "fm-buyer",
+            },
+          },
+          { transaction: t }
+        );
+
+        console.log("Sample Data Checkkk", sellerProfileData);
+
+        if (quote.type === "best_bids_quote" && quote.status === "open") {
+          // console.log("SELLER PROFILE DATAAAAAA", sellerProfileData.user_uuid);
+
+          await sendPushNotification({
+            event_type: "seller_received_quote_for_best_bid",
+            user_id: sellerProfileData.user_uuid,
+            data: {
+              quote_type: "best_bid",
+              notification_type: "seller_received_quote_for_best_bid",
+            },
+          });
+        }
+
+        if (quote.type === "customized_quote" && quote.status === "open") {
+          await sendPushNotification({
+            event_type: "seller_received_customized_quote",
+            user_id: sellerProfileData.user_uuid,
+            data: {
+              quote_type: "customized_quote",
+              notification_type: "seller_received_customized",
+            },
+          });
+        }
         return quote;
       });
       return result;
