@@ -228,6 +228,16 @@ module.exports = {
               notification_type: "seller_added_invoices_for_best_bid",
             },
           });
+        } else {
+          await sendPushNotification({
+            event_type: "seller_added_invoices_for_custom_quotes",
+            user_id: buyerProfileData.user_uuid,
+            data: {
+              name: quoteResponse.data.seller_product_info.name,
+              quote_type: "custom-quote",
+              notification_type: "seller_added_invoices_for_custom_quotes",
+            },
+          });
         }
 
         // if (
