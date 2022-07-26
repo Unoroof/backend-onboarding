@@ -176,7 +176,7 @@ module.exports = {
           { transaction: t }
         );
         // console.log("Buyer Profileeeeeeeeeeeeeeee", buyerProfileData);
-        // console.log("QUOTE RESPONSEEEEE", quoteResponse);
+        console.log("QUOTE RESPONSEEEEE$$$$$$$", quoteResponse);
         if (
           quoteResponse.quote_type === "best_bids_quote" &&
           quoteResponse.status === "seller_responded_to_quote"
@@ -186,11 +186,12 @@ module.exports = {
             user_id: buyerProfileData.user_uuid,
             data: {
               name: quoteResponse.product_name,
-              query_type: "best_bid",
+              quote_type: "best_bid",
               notification_type: "buyer_received_quote_for_best_bid",
             },
           });
-        } else if (
+        }
+        if (
           quoteResponse.quote_type === "best_bids_quote" &&
           quoteResponse.status === "seller_ignored_the_quote"
         ) {
@@ -200,6 +201,31 @@ module.exports = {
             data: {
               query_type: "best_bid",
               notification_type: "seller_rejected_the_quote_for_best_bid",
+            },
+          });
+        } else {
+          await sendPushNotification({
+            event_type: "seller_rejected_the_customized_quote",
+            user_id: buyerProfileData.user_uuid,
+            data: {
+              query_type: "customized",
+              notification_type: "seller_rejected_the_customized_quote",
+            },
+          });
+        }
+
+        if (
+          quoteResponse.quote_type === "best_bids_quote" &&
+          quoteResponse.status === "buyer_accepted_the_quote" &&
+          quoteResponse.data.invoices.length > 0
+        ) {
+          await sendPushNotification({
+            event_type: "seller_added_invoices_for_best_bid",
+            user_id: buyerProfileData.user_uuid,
+            data: {
+              name: quoteResponse.data.seller_product_info.name,
+              quote_type: "best-bid",
+              notification_type: "seller_added_invoices_for_best_bid",
             },
           });
         }
