@@ -187,7 +187,7 @@ module.exports = {
           });
         } else {
           await sendPushNotification({
-            event_type: "buyer_received_quote_for_best_bid",
+            event_type: "buyer_received_cutomized_quote",
             user_id: quoteResponse.buyer_uuid,
             data: {
               name: quoteResponse.product_name,
@@ -197,7 +197,7 @@ module.exports = {
               quote_response_uuid: quoteResponse.uuid,
               buyer_profile_uuid: quoteResponse.buyer_uuid,
               ...quoteResponse.data,
-              notification_type: "buyer_received_quote_for_best_bid",
+              notification_type: "buyer_received_cutomized_quote",
             },
           });
         }
