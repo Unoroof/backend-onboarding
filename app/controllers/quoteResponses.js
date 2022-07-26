@@ -169,7 +169,7 @@ module.exports = {
         let buyerProfileData = await Profile.findOne(
           {
             where: {
-              uuid: quoteResponse.owner_uuid,
+              uuid: quoteResponse.buyer_uuid,
               type: "fm-buyer",
             },
           },
