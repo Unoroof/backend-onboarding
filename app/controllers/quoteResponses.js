@@ -217,8 +217,12 @@ module.exports = {
         if (
           quoteResponse.quote_type === "best_bids_quote" &&
           quoteResponse.status === "buyer_accepted_the_quote" &&
-          quoteResponse.data.invoices.length > 0
+          quoteResponse.data.seller_invoices.length > 0
         ) {
+          console.log(
+            "USER UUID OF BUYER IN INVOICES CHECK",
+            buyerProfileData.user_uuid
+          );
           await sendPushNotification({
             event_type: "seller_added_invoices_for_best_bid",
             user_id: buyerProfileData.user_uuid,
@@ -228,7 +232,11 @@ module.exports = {
               notification_type: "seller_added_invoices_for_best_bid",
             },
           });
-        } else {
+        } else if (
+          quoteResponse.quote_type === "customized_quote" &&
+          quoteResponse.status === "buyer_accepted_the_quote" &&
+          quoteResponse.data.seller_invoices.length > 0
+        ) {
           await sendPushNotification({
             event_type: "seller_added_invoices_for_custom_quotes",
             user_id: buyerProfileData.user_uuid,
@@ -274,33 +282,33 @@ module.exports = {
         //   });
         // }
 
-        if (
-          quoteResponse.quote_type === "best_bids_quote" &&
-          quoteResponse.status === "buyer_accepted_the_quote"
-        ) {
-          await sendPushNotification({
-            event_type: "buyer_accepts_best_bid_quote",
-            user_id: quoteResponse.owner_uuid,
-            data: {
-              name: quoteResponse.product_name,
-              quote_type: "accepted_best_bid_quote",
-              notification_type: "buyer_accepts_best_bid_quote",
-            },
-          });
-        } else if (
-          quoteResponse.quote_type === "best_bids_quote" &&
-          quoteResponse.status === "buyer_rejected_the_quote"
-        ) {
-          await sendPushNotification({
-            event_type: "buyer_rejects_best_bid_quote",
-            user_id: quoteResponse.owner_uuid,
-            data: {
-              name: quoteResponse.product_name,
-              quote_type: "rejected_best_bid_quote",
-              notification_type: "buyer_rejects_best_bid_quote",
-            },
-          });
-        }
+        // if (
+        //   quoteResponse.quote_type === "best_bids_quote" &&
+        //   quoteResponse.status === "buyer_accepted_the_quote"
+        // ) {
+        //   await sendPushNotification({
+        //     event_type: "buyer_accepts_best_bid_quote",
+        //     user_id: quoteResponse.owner_uuid,
+        //     data: {
+        //       name: quoteResponse.product_name,
+        //       quote_type: "accepted_best_bid_quote",
+        //       notification_type: "buyer_accepts_best_bid_quote",
+        //     },
+        //   });
+        // } else if (
+        //   quoteResponse.quote_type === "best_bids_quote" &&
+        //   quoteResponse.status === "buyer_rejected_the_quote"
+        // ) {
+        //   await sendPushNotification({
+        //     event_type: "buyer_rejects_best_bid_quote",
+        //     user_id: quoteResponse.owner_uuid,
+        //     data: {
+        //       name: quoteResponse.product_name,
+        //       quote_type: "rejected_best_bid_quote",
+        //       notification_type: "buyer_rejects_best_bid_quote",
+        //     },
+        //   });
+        // }
         return quoteResponse;
       });
       return result;
