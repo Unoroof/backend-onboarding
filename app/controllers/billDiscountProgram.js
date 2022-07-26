@@ -4,6 +4,8 @@ const Profile = models.Profile;
 const DailyBids = models.DailyBids;
 const consumeError = require("../functions/consumeError");
 const updateInvoicesArray = require("../functions/updateInvoicesArray");
+const sendPushNotification = require("../functions/neptune/neptuneCaller");
+const sendEventOnResponse = require("../functions/sendEventOnResponse");
 
 const { Op } = require("sequelize");
 
@@ -95,12 +97,8 @@ module.exports = {
         },
       });
 
-      console.log("ALREADY EXISTS VALUE", alreadyExistValue);
-
       if (!alreadyExistValue) {
         let billDiscountProgram = await BillDiscountProgram.create(payload);
-
-        console.log("Bill Discount ********", billDiscountProgram);
         if (billDiscountProgram.status === "accepted") {
           await sendPushNotification({
             event_type: "bill_discounting_buyer_accepts_the_discount_offered",
@@ -167,9 +165,24 @@ module.exports = {
 
       if (req.body.status) {
         payload["status"] = req.body.status;
+        await sendEventOnResponse(req.body.status, billDiscountProgram);
       }
 
       billDiscountProgram = await billDiscountProgram.update(payload);
+      if (billDiscountProgram.invoices.length > 0) {
+        await sendPushNotification({
+          event_type: "bill_discounting_seller_uploaded_invoices",
+          uuid: billDiscountProgram.uuid,
+          data: {
+            name: billDiscountProgram.data.request_by_company_name,
+            query_type: "seller_has_uploaded_invoices",
+            query_status: billDiscountProgram.status,
+            quote_uuid: billDiscountProgram.daily_bids_uuid,
+            ...billDiscountProgram.data,
+            notification_type: "bill_discounting_seller_uploaded_invoices",
+          },
+        });
+      }
       return billDiscountProgram;
     } catch (error) {
       consumeError(error);
