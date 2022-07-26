@@ -166,22 +166,28 @@ module.exports = {
         }
 
         quoteResponse = await quoteResponse.update(payload, { transaction: t });
+        let buyerProfileData = await Profile.findOne(
+          {
+            where: {
+              uuid: quoteResponse.owner_uuid,
+              type: "fm-buyer",
+            },
+          },
+          { transaction: t }
+        );
+        console.log("Buyer Profileeeeeeeeeeeeeeee", buyerProfileData);
 
+        // console.log("QUOTE RESPONSEEEEE", quoteResponse);
         if (
           quoteResponse.quote_type === "best_bids_quote" &&
           quoteResponse.status === "seller_responded_to_quote"
         ) {
           await sendPushNotification({
             event_type: "buyer_received_quote_for_best_bid",
-            user_id: quoteResponse.buyer_uuid,
+            user_id: buyerProfileData.user_uuid,
             data: {
               name: quoteResponse.product_name,
-              query_type: "received_bestbids_quote",
-              query_status: quoteResponse.status,
-              quote_uuid: quoteResponse.quote_uuid,
-              quote_response_uuid: quoteResponse.uuid,
-              buyer_profile_uuid: quoteResponse.buyer_uuid,
-              ...quoteResponse.data,
+              query_type: "best_bid",
               notification_type: "buyer_received_quote_for_best_bid",
             },
           });
