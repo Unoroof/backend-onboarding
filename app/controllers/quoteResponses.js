@@ -185,7 +185,7 @@ module.exports = {
             event_type: "buyer_received_quote_for_best_bid",
             user_id: buyerProfileData.user_uuid,
             data: {
-              name: quoteResponse?.data?.product_name,
+              name: quoteResponse.data.product_name,
               quote_type: "best_bid",
               notification_type: "buyer_received_quote_for_best_bid",
             },
