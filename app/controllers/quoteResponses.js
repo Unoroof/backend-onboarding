@@ -262,8 +262,20 @@ module.exports = {
               notification_type: "buyer_accepts_best_bid_quotation",
             },
           });
+        } else if (
+          quoteResponse.quote_type === "best_bids_quote" &&
+          quoteResponse.status === "buyer_rejected_the_quote"
+        ) {
+          await sendPushNotification({
+            event_type: "buyer_rejects_best_bid_quotation",
+            user_id: buyerProfileData.user_uuid,
+            data: {
+              name: quoteResponse.data.seller_product_info.name,
+              quote_type: "best-bid",
+              notification_type: "buyer_rejects_best_bid_quotation",
+            },
+          });
         }
-
         // if (
         //   quoteResponse.quote_type === "best_bids_quote" &&
         //   quoteResponse.status === "seller_ignored_the_quote"
