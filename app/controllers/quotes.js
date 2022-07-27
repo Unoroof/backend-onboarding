@@ -274,9 +274,10 @@ module.exports = {
               notification_type: "seller_received_quote_for_best_bid",
             },
           });
-        }
-
-        if (quote.type === "customized_quote" && quote.status === "open") {
+        } else if (
+          quote.type === "customized_quote" &&
+          quote.status === "open"
+        ) {
           await sendPushNotification({
             event_type: "seller_received_customized_quote",
             user_id: sellerProfileData.user_uuid,

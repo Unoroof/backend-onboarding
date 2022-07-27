@@ -169,20 +169,20 @@ module.exports = {
       }
 
       billDiscountProgram = await billDiscountProgram.update(payload);
-      if (billDiscountProgram.invoices.length > 0) {
-        await sendPushNotification({
-          event_type: "bill_discounting_seller_uploaded_invoices",
-          uuid: billDiscountProgram.uuid,
-          data: {
-            name: billDiscountProgram.data.request_by_company_name,
-            query_type: "seller_has_uploaded_invoices",
-            query_status: billDiscountProgram.status,
-            quote_uuid: billDiscountProgram.daily_bids_uuid,
-            ...billDiscountProgram.data,
-            notification_type: "bill_discounting_seller_uploaded_invoices",
-          },
-        });
-      }
+      // if (billDiscountProgram.invoices.length > 0) {
+      //   await sendPushNotification({
+      //     event_type: "bill_discounting_seller_uploaded_invoices",
+      //     uuid: billDiscountProgram.uuid,
+      //     data: {
+      //       name: billDiscountProgram.data.request_by_company_name,
+      //       query_type: "seller_has_uploaded_invoices",
+      //       query_status: billDiscountProgram.status,
+      //       quote_uuid: billDiscountProgram.daily_bids_uuid,
+      //       ...billDiscountProgram.data,
+      //       notification_type: "bill_discounting_seller_uploaded_invoices",
+      //     },
+      //   });
+      // }
       return billDiscountProgram;
     } catch (error) {
       consumeError(error);
