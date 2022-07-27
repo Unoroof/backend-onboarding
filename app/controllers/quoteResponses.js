@@ -203,7 +203,10 @@ module.exports = {
               notification_type: "seller_rejected_the_quote_for_best_bid",
             },
           });
-        } else {
+        } else if (
+          quoteResponse.quote_type === "customized_quote" &&
+          quoteResponse.status === "seller_ignored_the_quote"
+        ) {
           await sendPushNotification({
             event_type: "seller_rejected_the_customized_quote",
             user_id: buyerProfileData.user_uuid,
