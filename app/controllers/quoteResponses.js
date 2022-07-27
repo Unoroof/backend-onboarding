@@ -256,9 +256,18 @@ module.exports = {
           quoteResponse.quote_type === "best_bids_quote" &&
           quoteResponse.status === "buyer_accepted_the_quote"
         ) {
+          let sellerProfileData = await Profile.findOne(
+            {
+              where: {
+                uuid: quoteResponse.owner_uuid,
+                type: "fm-buyer",
+              },
+            },
+            { transaction: t }
+          );
           await sendPushNotification({
             event_type: "buyer_accepts_best_bid_quotation",
-            user_id: buyerProfileData.user_uuid,
+            user_id: sellerProfileData.user_uuid,
             data: {
               name: quoteResponse.data.seller_product_info.name,
               quote_type: "best-bid",
@@ -269,9 +278,19 @@ module.exports = {
           quoteResponse.quote_type === "best_bids_quote" &&
           quoteResponse.status === "buyer_rejected_the_quote"
         ) {
+          console.log("QUOTE RESPONSE", quoteResponse);
+          let sellerProfileData = await Profile.findOne(
+            {
+              where: {
+                uuid: quoteResponse.owner_uuid,
+                type: "fm-buyer",
+              },
+            },
+            { transaction: t }
+          );
           await sendPushNotification({
             event_type: "buyer_rejects_best_bid_quotation",
-            user_id: buyerProfileData.user_uuid,
+            user_id: sellerProfileData.user_uuid,
             data: {
               name: quoteResponse.data.seller_product_info.name,
               quote_type: "best-bid",
