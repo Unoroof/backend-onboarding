@@ -208,7 +208,7 @@ module.exports = {
       } else if (bdSupplier.status === "rejected") {
         await sendPushNotification({
           event_type: "bd_supplier_rejects_the_invite",
-          user_id: bdSupplier.invited_by,
+          user_id: buyerProfileData.user_uuid,
           data: {
             name: bdSupplier.company_name,
             quote_type: "bill discounting",
