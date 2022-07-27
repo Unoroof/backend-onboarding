@@ -99,17 +99,13 @@ module.exports = {
 
         if (supplier) {
           if (supplier.email) {
-            console.log("SUPPLIER UUID CHECK", profile.user_uuid);
-
-            console.log("SUPPLIER information in inviet", supplier);
-
             let sellerProfileData = await Profile.findOne({
               where: {
                 uuid: supplier.profile_uuid,
                 type: "fm-buyer",
               },
             });
-            console.log("SELLER PROFILE DATA", sellerProfileData);
+
             await sendPushNotification({
               event_type: "buyer_invited_supplier",
               user_id: sellerProfileData.user_uuid,
