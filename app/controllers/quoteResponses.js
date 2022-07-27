@@ -217,6 +217,7 @@ module.exports = {
         if (
           quoteResponse.quote_type === "best_bids_quote" &&
           quoteResponse.status === "buyer_accepted_the_quote" &&
+          quoteResponse.data.seller_invoices &&
           quoteResponse.data.seller_invoices.length > 0
         ) {
           console.log(
@@ -244,6 +245,21 @@ module.exports = {
               name: quoteResponse.data.seller_product_info.name,
               quote_type: "custom-quote",
               notification_type: "seller_added_invoices_for_custom_quotes",
+            },
+          });
+        }
+
+        if (
+          quoteResponse.quote_type === "best_bids_quote" &&
+          quoteResponse.status === "buyer_accepted_the_quote"
+        ) {
+          await sendPushNotification({
+            event_type: "buyer_accepts_best_bid_quotation",
+            user_id: buyerProfileData.user_uuid,
+            data: {
+              name: quoteResponse.data.seller_product_info.name,
+              quote_type: "best-bid",
+              notification_type: "buyer_accepts_best_bid_quotation",
             },
           });
         }
