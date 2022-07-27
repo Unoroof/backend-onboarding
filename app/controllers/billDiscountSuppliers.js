@@ -99,6 +99,15 @@ module.exports = {
 
         if (supplier) {
           if (supplier.email) {
+            await sendPushNotification({
+              event_type: "buyer_invited_supplier",
+              user_id: profile.user_uuid,
+              data: {
+                quote_type: "bill_discouting",
+                name: profile.data.company_name,
+                notification_type: "buyer_invited_supplier",
+              },
+            });
             await sendEvent({
               event_type: "buyer_sent_a_bill_discount_invitation",
               user_id: profile.user_uuid,
@@ -166,10 +175,20 @@ module.exports = {
       bdSupplier = await bdSupplier.update(payload);
       console.log("BD SUPPLIER DETAILS*****", bdSupplier.status);
 
+      let buyerProfileData = await Profile.findOne(
+        {
+          where: {
+            uuid: bdSupplier.invited_by,
+            type: "fm-buyer",
+          },
+        },
+        { transaction: t }
+      );
+
       if (bdSupplier.status === "accepted") {
         await sendPushNotification({
           event_type: "bill_discounting_seller_accepts_the_invite",
-          user_id: bdSupplier.invited_by,
+          user_id: buyerProfileData.buyerProfileData,
           data: {
             name: bdSupplier.company_name,
             quote_type: "seller_accepted_bill_discounting_invite",
