@@ -169,9 +169,10 @@ module.exports = {
       }
 
       billDiscountProgram = await billDiscountProgram.update(payload);
+      console.log("BILL DISCOUNTING PROGRAM", billDiscountProgram);
       // if (billDiscountProgram.invoices.length > 0) {
       //   await sendPushNotification({
-      //     event_type: "bill_discounting_seller_uploaded_invoices",
+      //     event_type: "bd_seller_uploaded_invoices",
       //     uuid: billDiscountProgram.uuid,
       //     data: {
       //       name: billDiscountProgram.data.request_by_company_name,
@@ -179,7 +180,7 @@ module.exports = {
       //       query_status: billDiscountProgram.status,
       //       quote_uuid: billDiscountProgram.daily_bids_uuid,
       //       ...billDiscountProgram.data,
-      //       notification_type: "bill_discounting_seller_uploaded_invoices",
+      //       notification_type: "bd_seller_uploaded_invoices",
       //     },
       //   });
       // }
