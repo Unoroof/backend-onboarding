@@ -169,11 +169,11 @@ module.exports = {
 
       let payload = {};
       if (req.body.invoices) {
-        payload["invoices"] = bdSupplier.invoices
-          ? req.body.invoices
-            ? updateInvoicesArray(bdSupplier.invoices, req.body.invoices)
-            : bdSupplier.invoices
-          : req.body.invoices;
+        payload["invoices"] = bdSupplier?.invoices
+          ? req?.body?.invoices
+            ? updateInvoicesArray(bdSupplier?.invoices, req?.body?.invoices)
+            : bdSupplier?.invoices
+          : req.body?.invoices;
       }
 
       if (req.body.status) {
@@ -182,36 +182,37 @@ module.exports = {
       }
 
       bdSupplier = await bdSupplier.update(payload);
-      console.log("BD SUPPLIER DETAILS*****", bdSupplier.status);
 
       let buyerProfileData = await Profile.findOne(
         {
           where: {
-            uuid: bdSupplier.invited_by,
+            uuid: bdSupplier?.invited_by,
             type: "fm-buyer",
           },
-        },
-        { transaction: t }
+        }
+        // { transaction: t }
       );
+
+      console.log("Buyer pROFILE IN SUPPLIERS FILE", buyerProfileData);
 
       if (bdSupplier.status === "accepted") {
         await sendPushNotification({
-          event_type: "bill_discounting_seller_accepts_the_invite",
-          user_id: buyerProfileData.buyerProfileData,
+          event_type: "bd_seller_accepts_the_invite",
+          user_id: buyerProfileData.user_uuid,
           data: {
-            name: bdSupplier.company_name,
-            quote_type: "seller_accepted_bill_discounting_invite",
-            notification_type: "seller_accepts_the_bd_invite",
+            name: bdSupplier?.company_name,
+            quote_type: "bill discounting",
+            notification_type: "bd_seller_accepts_the_invite",
           },
         });
       } else if (bdSupplier.status === "rejected") {
         await sendPushNotification({
-          event_type: "bill_discounting_seller_rejects_the_invite",
+          event_type: "bd_supplier_rejects_the_invite",
           user_id: bdSupplier.invited_by,
           data: {
             name: bdSupplier.company_name,
-            quote_type: "seller_rejected_bill_discounting_invite",
-            notification_type: "seller_rejects_the_bd_invite",
+            quote_type: "bill discounting",
+            notification_type: "bd_supplier_rejects_the_invite",
           },
         });
       }
