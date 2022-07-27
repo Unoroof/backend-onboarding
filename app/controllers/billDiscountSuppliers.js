@@ -169,11 +169,11 @@ module.exports = {
 
       let payload = {};
       if (req.body.invoices) {
-        payload["invoices"] = bdSupplier?.invoices
-          ? req?.body?.invoices
-            ? updateInvoicesArray(bdSupplier?.invoices, req?.body?.invoices)
-            : bdSupplier?.invoices
-          : req.body?.invoices;
+        payload["invoices"] = bdSupplier.invoices
+          ? req.body.invoices
+            ? updateInvoicesArray(bdSupplier.invoices, req.body.invoices)
+            : bdSupplier.invoices
+          : req.body.invoices;
       }
 
       if (req.body.status) {
@@ -186,7 +186,7 @@ module.exports = {
       let buyerProfileData = await Profile.findOne(
         {
           where: {
-            uuid: bdSupplier?.invited_by,
+            uuid: bdSupplier.invited_by,
             type: "fm-buyer",
           },
         }
@@ -200,7 +200,7 @@ module.exports = {
           event_type: "bd_seller_accepts_the_invite",
           user_id: buyerProfileData.user_uuid,
           data: {
-            name: bdSupplier?.company_name,
+            name: bdSupplier.company_name,
             quote_type: "bill discounting",
             notification_type: "bd_seller_accepts_the_invite",
           },
