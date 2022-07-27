@@ -99,9 +99,16 @@ module.exports = {
 
         if (supplier) {
           if (supplier.email) {
+            let sellerProfileData = await Profile.findOne({
+              where: {
+                uuid: supplier.profile_uuid,
+                type: "fm-buyer",
+              },
+            });
+
             await sendPushNotification({
               event_type: "buyer_invited_supplier",
-              user_id: profile.user_uuid,
+              user_id: sellerProfileData.user_uuid,
               data: {
                 quote_type: "bill_discouting",
                 name: profile.data.company_name,
@@ -123,9 +130,15 @@ module.exports = {
               ],
             });
           } else if (supplier.phone_number) {
+            let sellerProfileData = await Profile.findOne({
+              where: {
+                uuid: supplier.profile_uuid,
+                type: "fm-buyer",
+              },
+            });
             await sendPushNotification({
               event_type: "buyer_invited_supplier",
-              user_id: profile.user_uuid,
+              user_id: sellerProfileData.user_uuid,
               data: {
                 quote_type: "bill_discouting",
                 name: profile.data.company_name,
