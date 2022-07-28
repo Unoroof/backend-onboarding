@@ -118,7 +118,7 @@ module.exports = {
             user_id: sellerProfileData.user_uuid,
             data: {
               name: billDiscountProgram.data.request_to_company_name,
-              query_type: "bill discounting",
+              quote_type: "bill discounting",
               notification_type: "bd_buyer_accepts_the_quote",
             },
           });
@@ -186,21 +186,6 @@ module.exports = {
           },
         });
 
-        // let anotherBuyer = await Profile.findOne({
-        //   where: {
-        //     uuid: billDiscountProgram.request_by,
-        //   },
-        // });
-
-        // console.log(
-        //   "Buyer profile IN BILL DISCOUNTING GGNJKKDFHHGDFJHDJFFG",
-        //   buyerProfile
-        // );
-
-        // console.log(
-        //   "Another Buyer profile IN BILL DISCOUNTING GGNJKKDFHHGDFJHDJFFG",
-        //   anotherBuyer
-        // );
         await sendPushNotification({
           event_type: "bd_seller_uploaded_invoices",
           user_id: buyerProfile.user_uuid,
