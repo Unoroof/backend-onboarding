@@ -106,11 +106,10 @@ module.exports = {
             type: "fm-buyer",
           },
         });
-        console.log("THIS IS SELLER PROFILE DATA", sellerProfileData);
+
         if (billDiscountProgram.status === "accepted") {
           await sendPushNotification({
             event_type: "bd_buyer_accepts_the_quote",
-            //here the  seller uuid should come.
             user_id: sellerProfileData.user_uuid,
             data: {
               name: billDiscountProgram.data.request_to_company_name,
@@ -119,6 +118,20 @@ module.exports = {
             },
           });
         }
+        bd_buyer_rejects_the_discount;
+
+        if (billDiscountProgram.status === "rejected") {
+          await sendPushNotification({
+            event_type: "bd_buyer_rejects_the_discount",
+            user_id: sellerProfileData.user_uuid,
+            data: {
+              name: billDiscountProgram.data.request_to_company_name,
+              query_type: "bill discounting",
+              notification_type: "bd_buyer_rejects_the_discount",
+            },
+          });
+        }
+
         return billDiscountProgram;
       } else {
         return "Already accepted";
