@@ -182,7 +182,7 @@ module.exports = {
       ) {
         let buyerProfile = await Profile.findOne({
           where: {
-            uuid: billDiscountProgram.request_to,
+            uuid: billDiscountProgram.request_by,
           },
         });
 
