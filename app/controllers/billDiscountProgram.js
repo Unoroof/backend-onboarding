@@ -118,7 +118,6 @@ module.exports = {
             },
           });
         }
-        bd_buyer_rejects_the_discount;
 
         if (billDiscountProgram.status === "rejected") {
           await sendPushNotification({
