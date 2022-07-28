@@ -176,28 +176,44 @@ module.exports = {
 
       billDiscountProgram = await billDiscountProgram.update(payload);
       console.log("BILL DISCOUNTING PROGRAM", billDiscountProgram);
-      // if (
-      //   billDiscountProgram.status === "accepted" &&
-      //   billDiscountProgram.invoices.length > 0
-      // ) {
-      //   let buyerProfile = await Profile.findOne({
-      //     where: {
-      //       uuid: billDiscountProgram.owner_uuid,
-      //     },
-      //   });
-      //   await sendPushNotification({
-      //     event_type: "bd_seller_uploaded_invoices",
-      //     user_id: buyerProfile.user_uuid,
-      //     data: {
-      //       name: billDiscountProgram.data.request_by_company_name,
-      //       query_type: "seller_has_uploaded_invoices",
-      //       query_status: billDiscountProgram.status,
-      //       quote_uuid: billDiscountProgram.daily_bids_uuid,
-      //       ...billDiscountProgram.data,
-      //       notification_type: "bd_seller_uploaded_invoices",
-      //     },
-      //   });
-      // }
+      if (
+        billDiscountProgram.status === "accepted" &&
+        billDiscountProgram.invoices.length > 0
+      ) {
+        let buyerProfile = await Profile.findOne({
+          where: {
+            uuid: billDiscountProgram.request_to,
+          },
+        });
+
+        // let anotherBuyer = await Profile.findOne({
+        //   where: {
+        //     uuid: billDiscountProgram.request_by,
+        //   },
+        // });
+
+        // console.log(
+        //   "Buyer profile IN BILL DISCOUNTING GGNJKKDFHHGDFJHDJFFG",
+        //   buyerProfile
+        // );
+
+        // console.log(
+        //   "Another Buyer profile IN BILL DISCOUNTING GGNJKKDFHHGDFJHDJFFG",
+        //   anotherBuyer
+        // );
+        await sendPushNotification({
+          event_type: "bd_seller_uploaded_invoices",
+          user_id: buyerProfile.user_uuid,
+          data: {
+            name: billDiscountProgram.data.request_by_company_name,
+            query_type: "seller_has_uploaded_invoices",
+            query_status: billDiscountProgram.status,
+            quote_uuid: billDiscountProgram.daily_bids_uuid,
+            ...billDiscountProgram.data,
+            notification_type: "bd_seller_uploaded_invoices",
+          },
+        });
+      }
       return billDiscountProgram;
     } catch (error) {
       consumeError(error);
