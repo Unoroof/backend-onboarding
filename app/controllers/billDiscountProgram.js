@@ -102,10 +102,15 @@ module.exports = {
 
         let sellerProfileData = await Profile.findOne({
           where: {
-            uuid: billDiscountProgram.request_by,
+            uuid: billDiscountProgram.request_to,
             type: "fm-buyer",
           },
         });
+
+        console.log(
+          "SELLER PROFILE DATA CHECK IN BILL DISCOUNTING",
+          sellerProfileData
+        );
 
         if (billDiscountProgram.status === "accepted") {
           await sendPushNotification({
