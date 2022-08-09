@@ -297,6 +297,8 @@ module.exports = {
       });
 
       gmProducts = JSON.parse(JSON.stringify(gmProducts));
+
+      console.log("GM products data", gmProducts);
       return gmProducts;
     } catch (error) {
       consumeError(error);
