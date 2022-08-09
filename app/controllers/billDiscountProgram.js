@@ -107,11 +107,6 @@ module.exports = {
           },
         });
 
-        console.log(
-          "SELLER PROFILE DATA CHECK IN BILL DISCOUNTING",
-          sellerProfileData
-        );
-
         if (billDiscountProgram.status === "accepted") {
           await sendPushNotification({
             event_type: "bd_buyer_accepts_the_quote",
@@ -175,7 +170,6 @@ module.exports = {
       }
 
       billDiscountProgram = await billDiscountProgram.update(payload);
-      console.log("BILL DISCOUNTING PROGRAM", billDiscountProgram);
       if (
         billDiscountProgram.status === "accepted" &&
         billDiscountProgram.invoices.length > 0

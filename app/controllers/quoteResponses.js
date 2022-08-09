@@ -175,8 +175,7 @@ module.exports = {
           },
           { transaction: t }
         );
-        // console.log("Buyer Profileeeeeeeeeeeeeeee", buyerProfileData);
-        console.log("QUOTE RESPONSEEEEE$$$$$$$", quoteResponse);
+
         if (
           quoteResponse.quote_type === "best_bids_quote" &&
           quoteResponse.status === "seller_responded_to_quote"
@@ -223,10 +222,6 @@ module.exports = {
           quoteResponse.data.seller_invoices &&
           quoteResponse.data.seller_invoices.length > 0
         ) {
-          console.log(
-            "USER UUID OF BUYER IN INVOICES CHECK",
-            buyerProfileData.user_uuid
-          );
           await sendPushNotification({
             event_type: "seller_added_invoices_for_best_bid",
             user_id: buyerProfileData.user_uuid,
@@ -278,7 +273,6 @@ module.exports = {
           quoteResponse.quote_type === "best_bids_quote" &&
           quoteResponse.status === "buyer_rejected_the_quote"
         ) {
-          console.log("QUOTE RESPONSE", quoteResponse);
           let sellerProfileData = await Profile.findOne(
             {
               where: {
