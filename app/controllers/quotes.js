@@ -388,9 +388,9 @@ const getEligibleResponders = async (token, sellers) => {
 const findSystemSelectedSellers = async (condition) => {
   try {
     let where = {
-      name: {
-        [Op.iLike]: `%${condition.product_name}%`,
-      },
+      // name: {
+      //   [Op.iLike]: `%${condition.product_name}%`,
+      // },
       // "data.additional_product_info.min_order_quantity": {
       //   [Op.lte]: condition.quantity,
       // },
