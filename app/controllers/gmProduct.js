@@ -96,6 +96,7 @@ module.exports = {
         }
 
         const gmProduct = await GmProduct.create(payload);
+
         const productCategories =
           req.body.categories.length !== 0
             ? await GmCategory.findAll({
@@ -208,9 +209,9 @@ module.exports = {
   async getFilteredProducts(req, res) {
     try {
       let where = {};
-      if (req.body.product_names) {
-        where["name"] = { [Op.in]: req.body.product_names };
-      }
+      // if (req.body.product_names) {
+      //   where["name"] = { [Op.in]: req.body.product_names };
+      // }
 
       if (req.body.brand_names) {
         where["brand_name"] = { [Op.in]: req.body.brand_names };
@@ -297,6 +298,8 @@ module.exports = {
       });
 
       gmProducts = JSON.parse(JSON.stringify(gmProducts));
+
+      console.log("GM products data", gmProducts);
       return gmProducts;
     } catch (error) {
       consumeError(error);

@@ -99,37 +99,38 @@ module.exports = {
 
       if (!alreadyExistValue) {
         let billDiscountProgram = await BillDiscountProgram.create(payload);
+
+        let sellerProfileData = await Profile.findOne({
+          where: {
+            uuid: billDiscountProgram.request_to,
+            type: "fm-buyer",
+          },
+        });
+
         if (billDiscountProgram.status === "accepted") {
           await sendPushNotification({
-            event_type: "bill_discounting_buyer_accepts_the_discount_offered",
-            request_by: billDiscountProgram.request_by,
-            request_to: billDiscountProgram.request_to,
+            event_type: "bd_buyer_accepts_the_quote",
+            user_id: sellerProfileData.user_uuid,
             data: {
               name: billDiscountProgram.data.request_to_company_name,
-              query_type: "buyer_accepted_the_discount",
-              query_status: billDiscountProgram.status,
-              quote_uuid: billDiscountProgram.daily_bids_uuid,
-              ...billDiscountProgram.data,
-              notification_type:
-                "bill_discounting_buyer_accepts_the_discount_offered",
-            },
-          });
-        } else if (billDiscountProgram.status === "rejected") {
-          await sendPushNotification({
-            event_type: "bill_discounting_buyer_rejects_the_discount_offered",
-            request_by: billDiscountProgram.request_by,
-            request_to: billDiscountProgram.request_to,
-            data: {
-              name: billDiscountProgram.data.request_to_company_name,
-              query_type: "buyer_rejected_the_discount",
-              query_status: billDiscountProgram.status,
-              quote_uuid: billDiscountProgram.daily_bids_uuid,
-              ...billDiscountProgram.data,
-              notification_type:
-                "bill_discounting_buyer_rejects_the_discount_offered",
+              quote_type: "bill discounting",
+              notification_type: "bd_buyer_accepts_the_quote",
             },
           });
         }
+
+        if (billDiscountProgram.status === "rejected") {
+          await sendPushNotification({
+            event_type: "bd_buyer_rejects_the_discount",
+            user_id: sellerProfileData.user_uuid,
+            data: {
+              name: billDiscountProgram.data.request_to_company_name,
+              query_type: "bill discounting",
+              notification_type: "bd_buyer_rejects_the_discount",
+            },
+          });
+        }
+
         return billDiscountProgram;
       } else {
         return "Already accepted";
@@ -169,20 +170,29 @@ module.exports = {
       }
 
       billDiscountProgram = await billDiscountProgram.update(payload);
-      // if (billDiscountProgram.invoices.length > 0) {
-      //   await sendPushNotification({
-      //     event_type: "bill_discounting_seller_uploaded_invoices",
-      //     uuid: billDiscountProgram.uuid,
-      //     data: {
-      //       name: billDiscountProgram.data.request_by_company_name,
-      //       query_type: "seller_has_uploaded_invoices",
-      //       query_status: billDiscountProgram.status,
-      //       quote_uuid: billDiscountProgram.daily_bids_uuid,
-      //       ...billDiscountProgram.data,
-      //       notification_type: "bill_discounting_seller_uploaded_invoices",
-      //     },
-      //   });
-      // }
+      if (
+        billDiscountProgram.status === "accepted" &&
+        billDiscountProgram.invoices.length > 0
+      ) {
+        let buyerProfile = await Profile.findOne({
+          where: {
+            uuid: billDiscountProgram.request_by,
+          },
+        });
+
+        await sendPushNotification({
+          event_type: "bd_seller_uploaded_invoices",
+          user_id: buyerProfile.user_uuid,
+          data: {
+            name: billDiscountProgram.data.request_by_company_name,
+            query_type: "seller_has_uploaded_invoices",
+            query_status: billDiscountProgram.status,
+            quote_uuid: billDiscountProgram.daily_bids_uuid,
+            ...billDiscountProgram.data,
+            notification_type: "bd_seller_uploaded_invoices",
+          },
+        });
+      }
       return billDiscountProgram;
     } catch (error) {
       consumeError(error);

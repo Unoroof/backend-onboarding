@@ -115,9 +115,9 @@ module.exports = {
                 [Op.iLike]: `%${quote.data.product_name}%`,
               },
               profile_uuid: quote.data.seller_uuid,
-              "data.additional_product_info.min_order_quantity": {
-                [Op.lte]: quote.data.quantity,
-              },
+              // "data.additional_product_info.min_order_quantity": {
+              //   [Op.lte]: quote.data.quantity,
+              // },
             },
           };
 
@@ -388,12 +388,12 @@ const getEligibleResponders = async (token, sellers) => {
 const findSystemSelectedSellers = async (condition) => {
   try {
     let where = {
-      name: {
-        [Op.iLike]: `%${condition.product_name}%`,
-      },
-      "data.additional_product_info.min_order_quantity": {
-        [Op.lte]: condition.quantity,
-      },
+      // name: {
+      //   [Op.iLike]: `%${condition.product_name}%`,
+      // },
+      // "data.additional_product_info.min_order_quantity": {
+      //   [Op.lte]: condition.quantity,
+      // },
     };
 
     let constraints = {
