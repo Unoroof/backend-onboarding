@@ -56,6 +56,7 @@ module.exports = {
 
   async create(req) {
     try {
+      //console.log("log in create quotes api", req.body.data.sellers); //this log
       const result = await sequelize.transaction(async (t) => {
         let profile = await Profile.findOne(
           {
@@ -101,6 +102,9 @@ module.exports = {
           },
           { transaction: t }
         );
+
+        //console.log("QUOTE LOGGGGGGGG", quote);
+        console.log("QUOTE LOGGGGGGGG****", quote.data.sellers);
 
         // here we need to add the notification once the  buyer has created the  query.
 
@@ -182,6 +186,7 @@ module.exports = {
           }
         }
         if (req.body.type === "customized_quote") {
+          console.log("NOW WE ARE CALLING GET ELIGIBLE RESPONDERS");
           const eligibleResponders = await getEligibleResponders(
             req.token,
             quote.data.sellers
@@ -198,7 +203,7 @@ module.exports = {
             eligibleResponders.wired_up_users.length > 0
           ) {
             console.log(
-              "if QuotesEligibleResponders",
+              "if QuotesEligibleResponders ****",
               JSON.stringify(eligibleResponders)
             );
             eligibleResponders.wired_up_users.forEach(
@@ -216,6 +221,7 @@ module.exports = {
                   owner_uuid: profile_uuid,
                   quote_type: quote.type,
                 });
+                console.log("QUOTE RESPONSE for wiredupusers", quoteResponse);
               }
             );
           } else {
@@ -241,19 +247,19 @@ module.exports = {
             );
           }
         }
-        //console.log("NEW QUOTE CREATED**************8", quote);
-
-        let sellerProfileData = await Profile.findOne(
-          {
-            where: {
-              uuid: quote.data.seller_uuid,
-              type: "fm-buyer",
+        console.log("NEW QUOTE CREATED**************8", quote);
+        let sellerProfileData;
+        if (quote.data.seller_uuid) {
+          sellerProfileData = await Profile.findOne(
+            {
+              where: {
+                uuid: quote.data.seller_uuid,
+                type: "fm-buyer",
+              },
             },
-          },
-          { transaction: t }
-        );
-
-        console.log("Sample Data Checkkk", sellerProfileData);
+            { transaction: t }
+          );
+        }
 
         if (quote.type === "best_bids_quote" && quote.status === "open") {
           await sendPushNotification({
@@ -264,19 +270,8 @@ module.exports = {
               notification_type: "seller_received_quote_for_best_bid",
             },
           });
-        } else if (
-          quote.type === "customized_quote" &&
-          quote.status === "open"
-        ) {
-          await sendPushNotification({
-            event_type: "seller_received_customized_quote",
-            user_id: sellerProfileData.user_uuid,
-            data: {
-              quote_type: "customized_quote",
-              notification_type: "seller_received_customized",
-            },
-          });
         }
+
         return quote;
       });
       return result;
@@ -343,10 +338,10 @@ const getEligibleResponders = async (token, sellers) => {
         let sellerProfiles = await findSystemSelectedSellers(
           sellers.system_selected_sellers
         );
-        console.log(
-          "check here system selected seller",
-          JSON.stringify(sellerProfiles)
-        );
+        // console.log(
+        //   "check here system selected seller",
+        //   JSON.stringify(sellerProfiles)
+        // );
         sellerProfiles.forEach((item) => {
           wired_up_users.push({
             profile_uuid: item.profile_uuid,
@@ -376,6 +371,7 @@ const getEligibleResponders = async (token, sellers) => {
 };
 
 const findSystemSelectedSellers = async (condition) => {
+  console.log("CATEGORY PAYLOAD", condition);
   try {
     let where = {
       // name: {
