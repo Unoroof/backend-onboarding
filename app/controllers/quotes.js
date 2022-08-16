@@ -208,10 +208,6 @@ module.exports = {
                   ...rest,
                   seller_product_info: seller_product_info,
                 }));
-                // console.log(
-                //   "data in customized quote---->",
-                //   JSON.stringify(data[0])
-                // );
                 let quoteResponse = await QuoteResponse.create({
                   buyer_uuid: quote.profile_uuid, // quote creator
                   quote_uuid: quote.uuid,
@@ -220,10 +216,6 @@ module.exports = {
                   owner_uuid: profile_uuid,
                   quote_type: quote.type,
                 });
-                // console.log(
-                //   "if quoteResponse customized",
-                //   JSON.stringify(quoteResponse)
-                // );
               }
             );
           } else {
@@ -264,8 +256,6 @@ module.exports = {
         console.log("Sample Data Checkkk", sellerProfileData);
 
         if (quote.type === "best_bids_quote" && quote.status === "open") {
-          // console.log("SELLER PROFILE DATAAAAAA", sellerProfileData.user_uuid);
-
           await sendPushNotification({
             event_type: "seller_received_quote_for_best_bid",
             user_id: sellerProfileData.user_uuid,
