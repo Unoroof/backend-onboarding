@@ -15,6 +15,7 @@ const AddressController = require("./address");
 const BDSuppliersController = require("./billDiscountSuppliers");
 const DailyBidsController = require("./dailyBids");
 const BillDiscountProgramController = require("./billDiscountProgram");
+const ContactUsLeadsController = require("./contactUsLeads");
 
 module.exports = {
   ProfileController,
@@ -34,4 +35,5 @@ module.exports = {
   BDSuppliersController,
   DailyBidsController,
   BillDiscountProgramController,
+  ContactUsLeadsController,
 };
