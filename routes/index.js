@@ -7,6 +7,13 @@ var executeForResponse = require("../app/functions/executeForResponse");
 const countryAndCityController =
   require("../app/controllers").CountryAndCityController;
 const countryCollectionResponse = require("../app/responses/countryCollection");
+
+const contactUsResourceResponse = require("../app/responses/contactUsResource");
+const ContactUsCollection = require("../app/responses/contactUsCollection");
+const ContactUsLeadsController =
+  require("../app/controllers").ContactUsLeadsController;
+const contactUsRequest = require("../app/requests/contactUs");
+
 const cityCollectionResponse = require("../app/responses/cityCollection");
 const profileController = require("../app/controllers").ProfileController;
 const profileCollectionResponse = require("../app/responses/profileCollection");
@@ -46,6 +53,7 @@ const AutoAssignConditionCollectionResponse = require("../app/responses/autoAssi
 const AutoAssignConditionResourceResponse = require("../app/responses/autoAssignConditionResources");
 
 const EnquiryController = require("../app/controllers").EnquiryController;
+
 const createEnquiryRequest = require("../app/requests/createEnquiries");
 const enquiryResourceResponse = require("../app/responses/enquiryResource");
 
@@ -257,6 +265,20 @@ router.post(
   executeForResult(EnquiryController.create),
   executeForResponse(enquiryResourceResponse)
 );
+
+router.post(
+  "/contact-us",
+  contactUsRequest,
+  executeForResult(ContactUsLeadsController.create),
+  executeForResponse(contactUsResourceResponse)
+);
+
+router.get(
+  "/contact-us-leads",
+  executeForResult(ContactUsLeadsController.index),
+  executeForResponse(ContactUsCollection)
+);
+
 router.put(
   "/enquiries/:enquiry_uuid",
   executeForResult(EnquiryController.update),
