@@ -234,6 +234,7 @@ module.exports = {
         } else if (
           quoteResponse.quote_type === "customized_quote" &&
           quoteResponse.status === "buyer_accepted_the_quote" &&
+          quoteResponse.data.seller_invoices &&
           quoteResponse.data.seller_invoices.length > 0
         ) {
           await sendPushNotification({
