@@ -1,7 +1,36 @@
 const validatorBase = require("./base");
 const GmCategory = require("../models").GmCategory;
 const validate = require("validate.js");
+var { currencyType } = require("./dropdowns.js");
 const { Op } = require("sequelize");
+
+function check(arr, input) {
+  //   console.log("we are in check function", arr, input);
+  const { length } = arr;
+  const found = arr.some((el) => el.value.toLower === input);
+  if (found) {
+    console.log("condition success", found);
+  } else {
+    return "^" + "Currency value did not match, please enter in Upper case";
+  }
+}
+
+validate.validators.myAsyncValidator = function (value) {
+  console.log("valueEEEE", value);
+  return new validate.Promise(function (resolve, reject) {
+    if (value.currency) {
+      console.log("Value passed", value);
+      if (value.currency != "") {
+        let array = currencyType();
+
+        let dat = check(array, value.currency);
+        resolve(dat);
+      }
+    } else {
+      resolve("value not provided for currency");
+    }
+  });
+};
 
 const constraints = {
   name: {
@@ -55,6 +84,8 @@ const constraints = {
       message: "^Please enter Price",
     },
   },
+
+  price: { myAsyncValidator: true },
 
   discount: {
     presence: {
