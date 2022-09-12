@@ -21,7 +21,7 @@ const constraints = {
   "price.currency": {
     presence: {
       allowEmpty: false,
-      message: "^Please enter currency",
+      message: "^Please select currency",
     },
     type: "string",
   },
@@ -34,13 +34,19 @@ const constraints = {
   "price.unit": {
     presence: {
       allowEmpty: false,
-      message: "^Please enter unit",
+      message: "^Please select unit",
     },
   },
   "data.country_of_origin": {
     presence: {
       allowEmpty: false,
       message: "^Please enter country of origin",
+    },
+  },
+  "data.category": {
+    presence: {
+      allowEmpty: false,
+      message: "^Please Select Category",
     },
   },
   price: {
