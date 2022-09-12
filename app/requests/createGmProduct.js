@@ -16,13 +16,10 @@ function check(arr, input) {
 }
 
 validate.validators.myAsyncValidator = function (value) {
-  console.log("valueEEEE", value);
   return new validate.Promise(function (resolve, reject) {
     if (value.currency) {
-      console.log("Value passed", value);
       if (value.currency != "") {
         let array = currencyType();
-
         let dat = check(array, value.currency);
         resolve(dat);
       }
