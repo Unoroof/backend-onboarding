@@ -16,13 +16,44 @@ const constraints = {
       allowEmpty: false,
       message: "^Please enter a Brand Name",
     },
+    type: "string",
   },
+
+  "price.currency": {
+    presence: {
+      allowEmpty: false,
+      message: "^Please enter currency",
+    },
+    type: "string",
+  },
+
+  "price.amount": {
+    presence: {
+      allowEmpty: false,
+      message: "^Please enter amount",
+    },
+  },
+
+  "price.unit": {
+    presence: {
+      allowEmpty: false,
+      message: "^Please enter unit",
+    },
+  },
+  "data.country_of_origin": {
+    presence: {
+      allowEmpty: false,
+      message: "^Please enter country of origin",
+    },
+  },
+
   price: {
     presence: {
       allowEmpty: false,
       message: "^Please enter Price",
     },
   },
+
   discount: {
     presence: {
       allowEmpty: true,
