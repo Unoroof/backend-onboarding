@@ -5,7 +5,7 @@ var { currencyType } = require("./dropdowns.js");
 const { Op } = require("sequelize");
 
 function check(arr, input) {
-  //   console.log("we are in check function", arr, input);
+  console.log("we are in check function", arr, input);
   const { length } = arr;
   const found = arr.some((el) => el.value === input);
   if (found) {
@@ -16,11 +16,12 @@ function check(arr, input) {
 }
 
 validate.validators.myAsyncValidator = function (value) {
+  console.log("VALUEEEEE", value);
   return new validate.Promise(function (resolve, reject) {
-    if (value.currency) {
-      if (value.currency != "") {
+    if (value) {
+      if (value != "") {
         let array = currencyType();
-        let dat = check(array, value.currency);
+        let dat = check(array, value);
         resolve(dat);
       }
     } else {
@@ -82,7 +83,7 @@ const constraints = {
     },
   },
 
-  price: { myAsyncValidator: true },
+  "price.currency": { myAsyncValidator: true },
 
   discount: {
     presence: {
