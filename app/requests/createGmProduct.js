@@ -3,6 +3,7 @@ const GmCategory = require("../models").GmCategory;
 const validate = require("validate.js");
 var { currencyType } = require("./dropdowns.js");
 const { Op } = require("sequelize");
+const { Country, City } = require("country-state-city");
 
 function check(arr, input) {
   console.log("we are in check function", arr, input);
@@ -15,8 +16,10 @@ function check(arr, input) {
   }
 }
 
-validate.validators.myAsyncValidator = function (value) {
-  console.log("VALUEEEEE", value);
+// const countriesList = Country.getAllCountries();
+// console.log("COUNTRIES LIST", countriesList);
+
+validate.validators.currencyValidator = function (value) {
   return new validate.Promise(function (resolve, reject) {
     if (value) {
       if (value != "") {
@@ -83,7 +86,7 @@ const constraints = {
     },
   },
 
-  "price.currency": { myAsyncValidator: true },
+  "price.currency": { currencyValidator: true },
 
   discount: {
     presence: {
