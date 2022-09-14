@@ -1,5 +1,3 @@
-const { Country } = require("country-state-city");
-
 module.exports.currencyType = () => {
   return [
     { label: "INR", value: "INR" },
@@ -22,11 +20,4 @@ module.exports.units = () => {
     { label: "Pack", value: "Pack" },
     { label: "Other", value: "Other" },
   ];
-};
-
-module.exports = {
-  async getAllCountries(req, res) {
-    const countries = Country.getAllCountries();
-    return countries;
-  },
 };
