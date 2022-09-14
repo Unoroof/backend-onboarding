@@ -11,6 +11,7 @@ validate.validators.currencyValidator = function (value) {
       if (value != "") {
         let array = currencyType();
         let dat = check(array, value);
+
         resolve(dat);
       }
     } else {
