@@ -16,6 +16,7 @@ const BDSuppliersController = require("./billDiscountSuppliers");
 const DailyBidsController = require("./dailyBids");
 const BillDiscountProgramController = require("./billDiscountProgram");
 const ContactUsLeadsController = require("./contactUsLeads");
+const OnboardingModuleDropdownsController = require("./onboardingModuleDropdowns");
 
 module.exports = {
   ProfileController,
@@ -36,4 +37,5 @@ module.exports = {
   DailyBidsController,
   BillDiscountProgramController,
   ContactUsLeadsController,
+  OnboardingModuleDropdownsController,
 };
