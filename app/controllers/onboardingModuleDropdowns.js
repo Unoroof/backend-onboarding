@@ -2,30 +2,16 @@ const models = require("../models");
 const DropdownValues = models.DropdownValues;
 const { Op } = require("sequelize");
 const consumeError = require("../functions/consumeError");
+const createOrUpdateDropdown = require("../functions/createOrUpdateDropdowns");
 
 module.exports = {
   async create(req, res) {
     try {
-      let getDropdownValues = await DropdownValues.findAll({
-        where: {
-          [Op.and]: [
-            { label: req.body.label.toLowerCase() },
-            { value: req.body.value.toLowerCase() },
-            { type: req.body.type.toLowerCase() },
-          ],
-        },
-      });
-      console.log("getDropdownValues*******", getDropdownValues);
-      if (getDropdownValues.length == 0) {
-        const dropdownValue = await DropdownValues.create({
-          label: req.body.label.toLowerCase(),
-          value: req.body.value.toLowerCase(),
-          type: req.body.type.toLowerCase(),
-        });
-        return dropdownValue;
-      }
+      const dropdown = await createOrUpdateDropdown(req.body);
+      console.log("dropdown-1234", dropdown);
+      return dropdown;
     } catch (error) {
-      consumeError(error);
+      throw error;
     }
   },
 
