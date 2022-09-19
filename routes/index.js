@@ -311,6 +311,12 @@ router.post(
 );
 
 router.post(
+  "/gm-validate-bulk-products",
+  executeForResponse(GmBulkProductController.validate)
+  // executeForResponse(gmBulkProductResourceResponse)
+);
+
+router.post(
   "/gm-products",
   createGmProductRequest,
   executeForResult(GmProductController.store),
