@@ -14,6 +14,12 @@ const ContactUsLeadsController =
   require("../app/controllers").ContactUsLeadsController;
 const contactUsRequest = require("../app/requests/contactUs");
 
+const addDropdownResourceResponse = require("../app/responses/addDropdownResource");
+const addDropdownCollection = require("../app/responses/addDropdownCollection");
+const onboardingModuleDropdownController =
+  require("../app/controllers").OnboardingModuleDropdownsController;
+const addDropdownRequest = require("../app/requests/addDropdown");
+
 const cityCollectionResponse = require("../app/responses/cityCollection");
 const profileController = require("../app/controllers").ProfileController;
 const profileCollectionResponse = require("../app/responses/profileCollection");
@@ -281,6 +287,19 @@ router.get(
   "/contact-us-leads",
   executeForResult(ContactUsLeadsController.index),
   executeForResponse(ContactUsCollection)
+);
+
+router.post(
+  "/dropdowns",
+  addDropdownRequest,
+  executeForResult(onboardingModuleDropdownController.create),
+  executeForResponse(addDropdownResourceResponse)
+);
+
+router.get(
+  "/dropdowns",
+  executeForResult(onboardingModuleDropdownController.getDropdown),
+  executeForResponse(addDropdownCollection)
 );
 
 router.put(
