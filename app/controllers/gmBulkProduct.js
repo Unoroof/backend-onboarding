@@ -20,12 +20,16 @@ const validateProduct = async (product) => {
   } catch (e) {
     let errors = {};
 
-    e.map((d) => {
-      errors[d.attribute] = d.error;
-      return d;
-    });
-    console.log("errors....", errors);
-    return errors;
+    if (Array.isArray(e)) {
+      e.map((d) => {
+        errors[d.attribute] = d.error;
+        return d;
+      });
+      console.log("errors....", errors);
+      return errors;
+    } else {
+      throw e;
+    }
   }
 };
 
@@ -38,6 +42,8 @@ module.exports = {
           type: "fm-buyer",
         },
       });
+
+      let totalNumberOfProductsAdded = 0;
 
       if (profile) {
         for (let index = 0; index < req.body.products.length; index++) {
@@ -55,10 +61,18 @@ module.exports = {
             payload["status"] = product.status;
           }
 
-          // Optional dropdown values need to be saved?
-          // Need to maintain the flag for products which created from  bulk upload
+          // Optional dropdown values need to be saved? => YES (Shubham)
+          /**
+           * Each product can have new dropdown values for the following fields: Product Form, Packaging Type, Grade, Product Application, Product Type
+           * for each product
+           *    - check if the product contains any of the above 5 dropdown attributes.
+           *    - For such product, call the createOrUpdateDropdowns function for each dropdown type.
+           */
+
+          // Need to maintain the flag for products which created from  bulk upload - Not right now (Shubham)
 
           const gmProduct = await GmProduct.create(payload);
+          totalNumberOfProductsAdded = totalNumberOfProductsAdded + 1;
 
           const productCategories =
             product.categories.length !== 0
@@ -75,7 +89,7 @@ module.exports = {
           gmProduct.setGmCategories(productCategories);
           gmProduct.categories = productCategories;
         }
-        return "done";
+        return { total_products_added: totalNumberOfProductsAdded };
       } else {
         throw new Error("To add product user has to be onboarded!");
       }

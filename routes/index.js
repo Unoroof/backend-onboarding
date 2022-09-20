@@ -324,11 +324,13 @@ router.get(
 
 router.post(
   "/gm-bulk-products",
+  executeForResult(GmBulkProductController.store),
   executeForResponse(GmBulkProductController.store)
 );
 
 router.post(
   "/gm-validate-bulk-products",
+  executeForResult(GmBulkProductController.validate),
   executeForResponse(GmBulkProductController.validate)
 );
 

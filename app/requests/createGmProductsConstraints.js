@@ -1,17 +1,17 @@
 const validate = require("validate.js");
 const GmCategory = require("../models").GmCategory;
 const { Op } = require("sequelize");
-var { check } = require("./inputCheckInArray.js");
-var { currencyType, units } = require("./dropdowns.js");
+var { checkPresence } = require("./inputCheckInArray.js");
+var { getCurrencyTypes, getUnits } = require("./dropdowns.js");
 
 validate.validators.currencyValidator = function (value) {
   return new validate.Promise(function (resolve, reject) {
     if (value) {
       if (value != "") {
-        let array = currencyType();
-        let dat = check(array, value);
+        let array = getCurrencyTypes();
+        let data = checkPresence(array, value);
 
-        resolve(dat);
+        resolve(data);
       }
     } else {
       resolve("value not provided for currency");
@@ -24,10 +24,10 @@ validate.validators.unitsValidator = function (value) {
   return new validate.Promise(function (resolve, reject) {
     if (value) {
       if (value != "") {
-        let array = units();
+        let array = getUnits();
         console.log("UNITS ARRRAY", array);
-        let dat = check(array, value);
-        resolve(dat);
+        let data = checkPresence(array, value);
+        resolve(data);
       }
     } else {
       resolve("value not provided for currency");
@@ -42,26 +42,42 @@ validate.validators.categoriesValidator = function (value) {
       const categories = value;
       const uuidTestRegex =
         /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-      if (!categories || categories.length === 0)
-        return resolve("One or more Categories are not valid ");
 
-      if (
-        validate.isArray(categories) &&
-        categories.every((category) => uuidTestRegex.test(category))
-      ) {
-        return GmCategory.count({
-          where: {
-            uuid: {
-              [Op.or]: categories,
+      if (Array.isArray(categories)) {
+        if (
+          validate.isArray(categories) &&
+          categories.every((category) => uuidTestRegex.test(category))
+        ) {
+          return GmCategory.count({
+            where: {
+              uuid: {
+                [Op.in]: categories,
+              },
             },
-          },
-        }).then((count) => {
-          return count === categories.length
-            ? resolve()
-            : resolve("One or more Categories are not valid ");
-        });
+          }).then((count) => {
+            return count === categories.length
+              ? resolve()
+              : resolve("One or more Categories are not valid");
+          });
+        }
+      } else {
+        console.log("NOT_ARRAY");
+        if (!categories) {
+          resolve("One or more Categories are not valid");
+        } else {
+          return GmCategory.count({
+            where: {
+              uuid: categories,
+            },
+          }).then((count) => {
+            return count === 1
+              ? resolve()
+              : resolve("One or more Categories are not valid");
+          });
+        }
       }
-      return resolve("One or more Categories are not valid");
+
+      resolve("One or more Categories are not valid");
     } else {
       resolve("value not provided for category");
     }

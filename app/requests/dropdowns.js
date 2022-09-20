@@ -1,4 +1,4 @@
-module.exports.currencyType = () => {
+module.exports.getCurrencyTypes = () => {
   return [
     { label: "INR", value: "INR" },
     { label: "USD", value: "USD" },
@@ -7,7 +7,7 @@ module.exports.currencyType = () => {
   ];
 };
 
-module.exports.units = () => {
+module.exports.getUnits = () => {
   return [
     { label: "Litres", value: "Litres" },
     { label: "Meters", value: "Meters" },
