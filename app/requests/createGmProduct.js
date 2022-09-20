@@ -1,7 +1,40 @@
 const validatorBase = require("./base");
 const GmCategory = require("../models").GmCategory;
 const validate = require("validate.js");
+var { currencyType, units } = require("./dropdowns.js");
+var { check } = require("./inputCheckInArray.js");
 const { Op } = require("sequelize");
+
+validate.validators.currencyValidator = function (value) {
+  return new validate.Promise(function (resolve, reject) {
+    if (value) {
+      if (value != "") {
+        let array = currencyType();
+        let dat = check(array, value);
+
+        resolve(dat);
+      }
+    } else {
+      resolve("value not provided for currency");
+    }
+  });
+};
+
+validate.validators.unitsValidator = function (value) {
+  console.log("UNITS VALUEEE", value);
+  return new validate.Promise(function (resolve, reject) {
+    if (value) {
+      if (value != "") {
+        let array = units();
+        console.log("UNITS ARRRAY", array);
+        let dat = check(array, value);
+        resolve(dat);
+      }
+    } else {
+      resolve("value not provided for currency");
+    }
+  });
+};
 
 const constraints = {
   name: {
@@ -16,6 +49,38 @@ const constraints = {
       allowEmpty: false,
       message: "^Please enter a Brand Name",
     },
+    type: "string",
+  },
+  "price.currency": {
+    presence: {
+      allowEmpty: false,
+      message: "^Please select currency",
+    },
+    type: "string",
+  },
+  "price.amount": {
+    presence: {
+      allowEmpty: false,
+      message: "^Please enter amount",
+    },
+  },
+  "price.unit": {
+    presence: {
+      allowEmpty: false,
+      message: "^Please select unit",
+    },
+  },
+  "data.country_of_origin": {
+    presence: {
+      allowEmpty: false,
+      message: "^Please enter country of origin",
+    },
+  },
+  "data.category": {
+    presence: {
+      allowEmpty: false,
+      message: "^Please Select Category",
+    },
   },
   price: {
     presence: {
@@ -23,6 +88,10 @@ const constraints = {
       message: "^Please enter Price",
     },
   },
+
+  "price.currency": { currencyValidator: true },
+  "price.unit": { unitsValidator: true },
+
   discount: {
     presence: {
       allowEmpty: true,
