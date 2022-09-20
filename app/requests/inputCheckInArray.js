@@ -1,4 +1,4 @@
-module.exports.check = (arr, input) => {
+module.exports.checkPresence = (arr, input) => {
   console.log("we are in check function", arr, input);
   const { length } = arr;
   const found = arr.some((el) => el.value === input);

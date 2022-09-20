@@ -68,6 +68,9 @@ const createGmCategoryRequest = require("../app/requests/createGmCategory");
 const gmCategoryCollectionResponse = require("../app/responses/gmCategoryCollection");
 const gmCategoryResourceResponse = require("../app/responses/gmCategoryResource");
 
+const GmBulkProductController =
+  require("../app/controllers").GmBulkProductController;
+
 const GmProductController = require("../app/controllers").GmProductController;
 const createGmProductRequest = require("../app/requests/createGmProduct");
 const gmProductCollectionResponse = require("../app/responses/gmProductCollection");
@@ -317,6 +320,18 @@ router.get(
   "/gm-categories",
   executeForResult(GmCategoryController.index),
   executeForResponse(gmCategoryCollectionResponse)
+);
+
+router.post(
+  "/gm-bulk-products",
+  executeForResult(GmBulkProductController.store),
+  executeForResponse(GmBulkProductController.store)
+);
+
+router.post(
+  "/gm-validate-bulk-products",
+  executeForResult(GmBulkProductController.validate),
+  executeForResponse(GmBulkProductController.validate)
 );
 
 router.post(
