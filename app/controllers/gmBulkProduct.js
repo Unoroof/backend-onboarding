@@ -6,8 +6,28 @@ const { Op, Sequelize } = require("sequelize");
 const getSearchQueries = require("../functions/getSearchQueries");
 const getGmProducts = require("../functions/getGmProducts");
 const getCompanyProducts = require("../functions/getCompanyProducts");
+const constraints = require("../requests/createGmProductsConstraints");
 
 const sequelize = require("../models").sequelize;
+const validate = require("validate.js");
+
+const validateProduct = async (product) => {
+  try {
+    await validate.async(product, constraints, {
+      format: "detailed",
+    });
+    return {};
+  } catch (e) {
+    let errors = {};
+
+    e.map((d) => {
+      errors[d.attribute] = d.error;
+      return d;
+    });
+    console.log("errors....", errors);
+    return errors;
+  }
+};
 
 module.exports = {
   async store(req, res) {
@@ -36,6 +56,9 @@ module.exports = {
           if (product.status) {
             payload["status"] = product.status;
           }
+
+          // Optional dropdown values need to be saved?
+          // Need to maintain the flag for products which created from  bulk upload
 
           const gmProduct = await GmProduct.create(payload);
 
@@ -82,15 +105,15 @@ module.exports = {
           const product = req.body.products[index];
           rowNumber = index + 1;
           product["rowNumber"] = rowNumber;
-          // Validate the product
-          // let result = await validateTheProduct(product);
-          let result = false;
+          // Validate product method will returns either empty object or object with error keys
+          const validationResult = await validateProduct(product, constraints);
+          console.log("validate res....", validationResult);
 
-          if (result == false) {
+          if (Object.keys(validationResult).length > 0) {
             invalidProductCount = invalidProductCount + 1;
           }
 
-          product["validation_result"] = result;
+          product["validation_result"] = validationResult;
           validatedProducts.push(product);
         }
 
