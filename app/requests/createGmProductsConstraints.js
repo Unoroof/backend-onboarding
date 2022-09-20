@@ -35,12 +35,11 @@ validate.validators.unitsValidator = function (value) {
   });
 };
 
-validate.validators.categoryValidator = function (value) {
+validate.validators.categoriesValidator = function (value) {
   console.log("value....", value);
   return new validate.Promise(function (resolve, reject) {
     if (value) {
       const categories = value;
-      console.log("category......", categories);
       const uuidTestRegex =
         /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
       if (!categories || categories.length === 0)
@@ -57,7 +56,6 @@ validate.validators.categoryValidator = function (value) {
             },
           },
         }).then((count) => {
-          console.log("count", count);
           return count === categories.length
             ? resolve()
             : resolve("One or more Categories are not valid ");
@@ -136,7 +134,7 @@ const constraints = {
       allowEmpty: false,
     },
     type: "array",
-    categoryValidator: true,
+    categoriesValidator: true,
   },
 };
 

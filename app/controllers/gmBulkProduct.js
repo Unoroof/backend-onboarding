@@ -31,8 +31,6 @@ const validateProduct = async (product) => {
 
 module.exports = {
   async store(req, res) {
-    // console.log("body", req.body);
-    // return req.body;
     try {
       let profile = await Profile.findOne({
         where: {
@@ -87,8 +85,6 @@ module.exports = {
   },
 
   async validate(req, res) {
-    // console.log("body", req.body);
-    // return req.body;
     try {
       let profile = await Profile.findOne({
         where: {
