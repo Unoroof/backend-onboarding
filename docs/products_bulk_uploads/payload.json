@@ -1,0 +1,259 @@
+{
+    "products": [
+      {
+        "categories": [
+          "ae7774ff-11ee-462f-b69b-263946a9fb26"
+        ],
+        "name": "abcd",
+        "brand_name": "dhdb",
+        "price": {
+          "amount": "100",
+          "currency": "INR",
+          "unit": "Kgs"
+        },
+        "discount": {},
+        "data": {
+          "category": {
+            "label": "Rubber",
+            "value": "08066090-1a63-4dcd-9856-f3654b54447c"
+          },
+          "negotiable": false,
+          "product_name": "abc",
+          "brand_name": "rubber-abc",
+          "country_of_origin": {
+            "label": "India",
+            "value": "IN"
+          },
+          "currency_type": {
+            "label": "INR",
+            "value": "INR"
+          },
+          "input_price": "100",
+          "unit": {
+            "label": "Kgs",
+            "value": "Kgs"
+          },
+          "additional_product_info": {
+            "min_order_quantity": "1"
+          },
+          "prefer_lc": "No",
+          "prefers_open_credit": "No",
+          "opt_for_cash_discount": "No",
+          "cd_seven_days": "",
+          "cd_fifteen_days": "",
+          "cd_thirty_days": "",
+          "supplier_discount_facility": "No",
+          "sd_thirty_days": "",
+          "sd_sixty_days": "",
+          "sd_ninty_days": "",
+          "delivery_in_india": "No",
+          "exceptions": [],
+          "international_delivery": "No",
+          "international_exceptions": [],
+          "logistic_support_from_buyer": "No",
+          "logistics": {
+            "india": {
+              "delivery": false,
+              "exceptions": []
+            },
+            "international": {
+              "delivery": false,
+              "exceptions": []
+            },
+            "logistic_support_from_buyer": false
+          }
+        },
+        "status": "saved"
+      },
+      {
+        "categories": [],
+        "name": "abcd",
+        "brand_name": "rubber-abc",
+        "price": {
+          "amount": "100",
+          "currency": "INR",
+          "unit": "Kgs"
+        },
+        "discount": {},
+        "data": {
+          "category": {
+            "label": "Rubber",
+            "value": "08066090-1a63-4dcd-9856-f3654b54447c"
+          },
+          "negotiable": false,
+          "product_name": "abc",
+          "brand_name": "rubber-abc",
+          "country_of_origin": {
+            "label": "India",
+            "value": "IN"
+          },
+          "currency_type": {
+            "label": "INR",
+            "value": "INR"
+          },
+          "input_price": "100",
+          "unit": {
+            "label": "Kgs",
+            "value": "Kgs"
+          },
+          "additional_product_info": {
+            "min_order_quantity": "1"
+          },
+          "prefer_lc": "No",
+          "prefers_open_credit": "No",
+          "opt_for_cash_discount": "No",
+          "cd_seven_days": "",
+          "cd_fifteen_days": "",
+          "cd_thirty_days": "",
+          "supplier_discount_facility": "No",
+          "sd_thirty_days": "",
+          "sd_sixty_days": "",
+          "sd_ninty_days": "",
+          "delivery_in_india": "No",
+          "exceptions": [],
+          "international_delivery": "No",
+          "international_exceptions": [],
+          "logistic_support_from_buyer": "No",
+          "logistics": {
+            "india": {
+              "delivery": false,
+              "exceptions": []
+            },
+            "international": {
+              "delivery": false,
+              "exceptions": []
+            },
+            "logistic_support_from_buyer": false
+          }
+        },
+        "status": "saved"
+      },
+      {
+        "name": "gggs",
+        "brand_name": "",
+        "price": {
+          "amount": "",
+          "currency": "",
+          "unit": "Box"
+        },
+        "discount": {},
+        "data": {
+          "category": {
+            "label": "Pharma",
+            "value": "6a6e30ba-5aaa-4d3b-b064-39155fe86da5"
+          },
+          "negotiable": false,
+          "product_name": "gggs",
+          "brand_name": "dfghj",
+          "country_of_origin": {
+            "label": "India",
+            "value": "IN"
+          },
+          "currency_type": {
+            "label": "INR",
+            "value": "INR"
+          },
+          "input_price": "1000",
+          "unit": {
+            "label": "Box",
+            "value": "Box"
+          },
+          "additional_product_info": {
+            "min_order_quantity": "1"
+          },
+          "prefer_lc": "No",
+          "prefers_open_credit": "No",
+          "opt_for_cash_discount": "No",
+          "cd_seven_days": "",
+          "cd_fifteen_days": "",
+          "cd_thirty_days": "",
+          "supplier_discount_facility": "No",
+          "sd_thirty_days": "",
+          "sd_sixty_days": "",
+          "sd_ninty_days": "",
+          "delivery_in_india": "No",
+          "exceptions": [],
+          "international_delivery": "No",
+          "international_exceptions": [],
+          "logistic_support_from_buyer": "No",
+          "logistics": {
+            "india": {
+              "delivery": false,
+              "exceptions": []
+            },
+            "international": {
+              "delivery": false,
+              "exceptions": []
+            },
+            "logistic_support_from_buyer": false
+          }
+        },
+        "status": "saved"
+      },
+      {
+        "categories": [
+          "ae7774ff-11ee-462f-b69b-263946a9fb26"
+        ],
+        "name": "abcd",
+        "brand_name": "",
+        "price": {
+          "amount": "100",
+          "currency": "INR",
+          "unit": "Kgs"
+        },
+        "discount": {},
+        "data": {
+          "category": {
+            "label": "Rubber",
+            "value": "08066090-1a63-4dcd-9856-f3654b54447c"
+          },
+          "negotiable": false,
+          "product_name": "abc",
+          "brand_name": "rubber-abc",
+          "country_of_origin": {
+            "label": "India",
+            "value": "IN"
+          },
+          "currency_type": {
+            "label": "INR",
+            "value": "INR"
+          },
+          "input_price": "100",
+          "unit": {
+            "label": "Kgs",
+            "value": "Kgs"
+          },
+          "additional_product_info": {
+            "min_order_quantity": "1"
+          },
+          "prefer_lc": "No",
+          "prefers_open_credit": "No",
+          "opt_for_cash_discount": "No",
+          "cd_seven_days": "",
+          "cd_fifteen_days": "",
+          "cd_thirty_days": "",
+          "supplier_discount_facility": "No",
+          "sd_thirty_days": "",
+          "sd_sixty_days": "",
+          "sd_ninty_days": "",
+          "delivery_in_india": "No",
+          "exceptions": [],
+          "international_delivery": "No",
+          "international_exceptions": [],
+          "logistic_support_from_buyer": "No",
+          "logistics": {
+            "india": {
+              "delivery": false,
+              "exceptions": []
+            },
+            "international": {
+              "delivery": false,
+              "exceptions": []
+            },
+            "logistic_support_from_buyer": false
+          }
+        },
+        "status": "saved"
+      }
+    ]
+  }
