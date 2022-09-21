@@ -14,6 +14,12 @@ const ContactUsLeadsController =
   require("../app/controllers").ContactUsLeadsController;
 const contactUsRequest = require("../app/requests/contactUs");
 
+const popularProductRequest = require("../app/requests/popularProductEnquiry");
+const popularProductEnquiryResponse = require("../app/responses/popularProductEnquiryResource");
+const PopularProductEnquiryCollection = require("../app/responses/popularProductEnquiryCollection");
+const PopularProductEnquiryController =
+  require("../app/controllers").PopularProductEnquiryController;
+
 const addDropdownResourceResponse = require("../app/responses/addDropdownResource");
 const addDropdownCollection = require("../app/responses/addDropdownCollection");
 const onboardingModuleDropdownController =
@@ -277,6 +283,19 @@ router.post(
   contactUsRequest,
   executeForResult(ContactUsLeadsController.create),
   executeForResponse(contactUsResourceResponse)
+);
+
+router.post(
+  "/popular-product-enquiry",
+  popularProductRequest,
+  executeForResult(PopularProductEnquiryController.create),
+  executeForResponse(popularProductEnquiryResponse)
+);
+
+router.get(
+  "/popular-product-enquiries",
+  executeForResult(PopularProductEnquiryController.index),
+  executeForResponse(PopularProductEnquiryCollection)
 );
 
 router.get(
