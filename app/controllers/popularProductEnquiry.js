@@ -23,7 +23,7 @@ module.exports = {
         mobile_number: req.body.mobile_number,
         company_name: req.body.company_name,
         requirement_description: req.body.requirement_description,
-        product_uuid: req.body.product_uuid ? eq.body.product_uuid : null,
+        product_uuid: req.body.product_uuid ? req.body.product_uuid : null,
       });
       return popularProductEnquiry;
     } catch (error) {
