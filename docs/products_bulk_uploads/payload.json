@@ -1,259 +1,252 @@
 {
-    "products": [
+  "products": [
       {
-        "categories": [
-          "ae7774ff-11ee-462f-b69b-263946a9fb26"
-        ],
-        "name": "abcd",
-        "brand_name": "dhdb",
-        "price": {
-          "amount": "100",
-          "currency": "INR",
-          "unit": "Kgs"
-        },
-        "discount": {},
-        "data": {
-          "category": {
-            "label": "Rubber",
-            "value": "08066090-1a63-4dcd-9856-f3654b54447c"
+          "categories": [
+              "605ed987-f8bf-40a7-8319-fcba01a59e72"
+          ],
+          "name": "Ferrari car",
+          "brand_name": "Ferari",
+          "price": {
+              "amount": 200000,
+              "currency": "INR",
+              "unit": "Piece"
           },
-          "negotiable": false,
-          "product_name": "abc",
-          "brand_name": "rubber-abc",
-          "country_of_origin": {
-            "label": "India",
-            "value": "IN"
+          "discount": {},
+          "data": {
+              "category": {
+                  "label": "Automobiles",
+                  "value": "605ed987-f8bf-40a7-8319-fcba01a59e72"
+              },
+              "negotiable": true,
+              "product_name": "Ferrari car",
+              "brand_name": "Ferari",
+              "country_of_origin": {
+                  "label": "India",
+                  "value": "IN"
+              },
+              "currency_type": {
+                  "label": "INR",
+                  "value": "INR"
+              },
+              "input_price": 200000,
+              "unit": {
+                  "label": "Piece",
+                  "value": "Piece"
+              },
+              "payment_period": [
+                  {
+                      "label": "45 days",
+                      "value": "45 days"
+                  }
+              ],
+              "prefer_lc": "yes",
+              "prefers_open_credit": "yes",
+              "opt_for_cash_discount": "yes",
+              "cd_seven_days": "",
+              "cd_fifteen_days": "",
+              "cd_thirty_days": "",
+              "supplier_discount_facility": "yes",
+              "sd_thirty_days": "",
+              "sd_sixty_days": "",
+              "sd_ninty_days": "",
+              "delivery_in_india": "yes",
+              "exceptions": [],
+              "international_delivery": "yes",
+              "international_exceptions": [],
+              "logistic_support_from_buyer": "yes",
+              "logistics": {
+                  "india": {
+                      "delivery": true,
+                      "exceptions": []
+                  },
+                  "international": {
+                      "delivery": true,
+                      "exceptions": []
+                  },
+                  "logistic_support_from_buyer": true
+              },
+              "additional_product_info": {
+                  "product_description": "Fastest car",
+                  "product_form": {
+                      "label": "Other",
+                      "value": "Other",
+                      "type": "product_form"
+                  },
+                  "product_grade": {
+                      "label": "Other",
+                      "value": "Other",
+                      "type": "product_grade"
+                  },
+                  "product_application": {
+                      "label": "Industrial",
+                      "value": "Industrial",
+                      "type": "product_application"
+                  },
+                  "packaging_type": {
+                      "label": "Other",
+                      "value": "Other",
+                      "type": "packaging_type"
+                  },
+                  "packaging_size": 1,
+                  "min_order_quantity": 10,
+                  "purity": "tested",
+                  "color": "red",
+                  "ph_value": 1.2,
+                  "tensile_strength": 12,
+                  "ash_content": "asd",
+                  "viscosity": "aaas",
+                  "oil_content": "ssddd",
+                  "moisture_content": "dddd",
+                  "antioxidants": "dffgg",
+                  "molar_mass": "fghj",
+                  "melting_point": "ghjk",
+                  "material": "cvbn",
+                  "vehicle_use": "fghjk",
+                  "finishing": "fghj",
+                  "size": "cvb",
+                  "length": "dfgh",
+                  "breadth": "fghj",
+                  "density": "dfgh",
+                  "product_type": {
+                      "label": "Others",
+                      "value": "Others",
+                      "type": "product_type"
+                  },
+                  "pattern": "fghj",
+                  "no_of_ply": "fghj",
+                  "thread_count": "fghj",
+                  "fibre_type": "cvbn",
+                  "k_value": "cvbn",
+                  "bulk_density": "cvbn",
+                  "active_ingredients": "cvbn",
+                  "partitioning_agent": "cvbn"
+              }
           },
-          "currency_type": {
-            "label": "INR",
-            "value": "INR"
-          },
-          "input_price": "100",
-          "unit": {
-            "label": "Kgs",
-            "value": "Kgs"
-          },
-          "additional_product_info": {
-            "min_order_quantity": "1"
-          },
-          "prefer_lc": "No",
-          "prefers_open_credit": "No",
-          "opt_for_cash_discount": "No",
-          "cd_seven_days": "",
-          "cd_fifteen_days": "",
-          "cd_thirty_days": "",
-          "supplier_discount_facility": "No",
-          "sd_thirty_days": "",
-          "sd_sixty_days": "",
-          "sd_ninty_days": "",
-          "delivery_in_india": "No",
-          "exceptions": [],
-          "international_delivery": "No",
-          "international_exceptions": [],
-          "logistic_support_from_buyer": "No",
-          "logistics": {
-            "india": {
-              "delivery": false,
-              "exceptions": []
-            },
-            "international": {
-              "delivery": false,
-              "exceptions": []
-            },
-            "logistic_support_from_buyer": false
-          }
-        },
-        "status": "saved"
-      },
-      {
-        "categories": [],
-        "name": "abcd",
-        "brand_name": "rubber-abc",
-        "price": {
-          "amount": "100",
-          "currency": "INR",
-          "unit": "Kgs"
-        },
-        "discount": {},
-        "data": {
-          "category": {
-            "label": "Rubber",
-            "value": "08066090-1a63-4dcd-9856-f3654b54447c"
-          },
-          "negotiable": false,
-          "product_name": "abc",
-          "brand_name": "rubber-abc",
-          "country_of_origin": {
-            "label": "India",
-            "value": "IN"
-          },
-          "currency_type": {
-            "label": "INR",
-            "value": "INR"
-          },
-          "input_price": "100",
-          "unit": {
-            "label": "Kgs",
-            "value": "Kgs"
-          },
-          "additional_product_info": {
-            "min_order_quantity": "1"
-          },
-          "prefer_lc": "No",
-          "prefers_open_credit": "No",
-          "opt_for_cash_discount": "No",
-          "cd_seven_days": "",
-          "cd_fifteen_days": "",
-          "cd_thirty_days": "",
-          "supplier_discount_facility": "No",
-          "sd_thirty_days": "",
-          "sd_sixty_days": "",
-          "sd_ninty_days": "",
-          "delivery_in_india": "No",
-          "exceptions": [],
-          "international_delivery": "No",
-          "international_exceptions": [],
-          "logistic_support_from_buyer": "No",
-          "logistics": {
-            "india": {
-              "delivery": false,
-              "exceptions": []
-            },
-            "international": {
-              "delivery": false,
-              "exceptions": []
-            },
-            "logistic_support_from_buyer": false
-          }
-        },
-        "status": "saved"
-      },
-      {
-        "name": "gggs",
-        "brand_name": "",
-        "price": {
-          "amount": "",
-          "currency": "",
-          "unit": "Box"
-        },
-        "discount": {},
-        "data": {
-          "category": {
-            "label": "Pharma",
-            "value": "6a6e30ba-5aaa-4d3b-b064-39155fe86da5"
-          },
-          "negotiable": false,
-          "product_name": "gggs",
-          "brand_name": "dfghj",
-          "country_of_origin": {
-            "label": "India",
-            "value": "IN"
-          },
-          "currency_type": {
-            "label": "INR",
-            "value": "INR"
-          },
-          "input_price": "1000",
-          "unit": {
-            "label": "Box",
-            "value": "Box"
-          },
-          "additional_product_info": {
-            "min_order_quantity": "1"
-          },
-          "prefer_lc": "No",
-          "prefers_open_credit": "No",
-          "opt_for_cash_discount": "No",
-          "cd_seven_days": "",
-          "cd_fifteen_days": "",
-          "cd_thirty_days": "",
-          "supplier_discount_facility": "No",
-          "sd_thirty_days": "",
-          "sd_sixty_days": "",
-          "sd_ninty_days": "",
-          "delivery_in_india": "No",
-          "exceptions": [],
-          "international_delivery": "No",
-          "international_exceptions": [],
-          "logistic_support_from_buyer": "No",
-          "logistics": {
-            "india": {
-              "delivery": false,
-              "exceptions": []
-            },
-            "international": {
-              "delivery": false,
-              "exceptions": []
-            },
-            "logistic_support_from_buyer": false
-          }
-        },
-        "status": "saved"
+          "status": "saved"
       },
       {
         "categories": [
-          "ae7774ff-11ee-462f-b69b-263946a9fb26"
+            "605ed987-f8bf-40a7-8319-fcba01a59e72"
         ],
-        "name": "abcd",
-        "brand_name": "",
+        "name": "Ferrari car 1",
+        "brand_name": "Ferari",
         "price": {
-          "amount": "100",
-          "currency": "INR",
-          "unit": "Kgs"
+            "amount": 200000,
+            "currency": "INR",
+            "unit": "Piece"
         },
         "discount": {},
         "data": {
-          "category": {
-            "label": "Rubber",
-            "value": "08066090-1a63-4dcd-9856-f3654b54447c"
-          },
-          "negotiable": false,
-          "product_name": "abc",
-          "brand_name": "rubber-abc",
-          "country_of_origin": {
-            "label": "India",
-            "value": "IN"
-          },
-          "currency_type": {
-            "label": "INR",
-            "value": "INR"
-          },
-          "input_price": "100",
-          "unit": {
-            "label": "Kgs",
-            "value": "Kgs"
-          },
-          "additional_product_info": {
-            "min_order_quantity": "1"
-          },
-          "prefer_lc": "No",
-          "prefers_open_credit": "No",
-          "opt_for_cash_discount": "No",
-          "cd_seven_days": "",
-          "cd_fifteen_days": "",
-          "cd_thirty_days": "",
-          "supplier_discount_facility": "No",
-          "sd_thirty_days": "",
-          "sd_sixty_days": "",
-          "sd_ninty_days": "",
-          "delivery_in_india": "No",
-          "exceptions": [],
-          "international_delivery": "No",
-          "international_exceptions": [],
-          "logistic_support_from_buyer": "No",
-          "logistics": {
-            "india": {
-              "delivery": false,
-              "exceptions": []
+            "category": {
+                "label": "Automobiles",
+                "value": "605ed987-f8bf-40a7-8319-fcba01a59e72"
             },
-            "international": {
-              "delivery": false,
-              "exceptions": []
+            "negotiable": true,
+            "product_name": "Ferrari car",
+            "brand_name": "Ferari",
+            "country_of_origin": {
+                "label": "India",
+                "value": "IN"
             },
-            "logistic_support_from_buyer": false
-          }
+            "currency_type": {
+                "label": "INR",
+                "value": "INR"
+            },
+            "input_price": 200000,
+            "unit": {
+                "label": "Piece",
+                "value": "Piece"
+            },
+            "payment_period": [
+                {
+                    "label": "45 days",
+                    "value": "45 days"
+                }
+            ],
+            "prefer_lc": "yes",
+            "prefers_open_credit": "yes",
+            "opt_for_cash_discount": "yes",
+            "cd_seven_days": "",
+            "cd_fifteen_days": "",
+            "cd_thirty_days": "",
+            "supplier_discount_facility": "yes",
+            "sd_thirty_days": "",
+            "sd_sixty_days": "",
+            "sd_ninty_days": "",
+            "delivery_in_india": "yes",
+            "exceptions": [],
+            "international_delivery": "yes",
+            "international_exceptions": [],
+            "logistic_support_from_buyer": "yes",
+            "logistics": {
+                "india": {
+                    "delivery": true,
+                    "exceptions": []
+                },
+                "international": {
+                    "delivery": true,
+                    "exceptions": []
+                },
+                "logistic_support_from_buyer": true
+            },
+            "additional_product_info": {
+                "product_description": "Fastest car",
+                "product_form": {
+                    "label": "Other",
+                    "value": "Other",
+                    "type": "product_form"
+                },
+                "product_grade": {
+                    "label": "Other",
+                    "value": "Other",
+                    "type": "product_grade"
+                },
+                "product_application": {
+                    "label": "Industrial",
+                    "value": "Industrial",
+                    "type": "product_application"
+                },
+                "packaging_type": {
+                    "label": "Other",
+                    "value": "Other",
+                    "type": "packaging_type"
+                },
+                "packaging_size": 1,
+                "min_order_quantity": 10,
+                "purity": "tested",
+                "color": "red",
+                "ph_value": 1.2,
+                "tensile_strength": 12,
+                "ash_content": "asd",
+                "viscosity": "aaas",
+                "oil_content": "ssddd",
+                "moisture_content": "dddd",
+                "antioxidants": "dffgg",
+                "molar_mass": "fghj",
+                "melting_point": "ghjk",
+                "material": "cvbn",
+                "vehicle_use": "fghjk",
+                "finishing": "fghj",
+                "size": "cvb",
+                "length": "dfgh",
+                "breadth": "fghj",
+                "density": "dfgh",
+                "product_type": {
+                    "label": "Others",
+                    "value": "Others",
+                    "type": "product_type"
+                },
+                "pattern": "fghj",
+                "no_of_ply": "fghj",
+                "thread_count": "fghj",
+                "fibre_type": "cvbn",
+                "k_value": "cvbn",
+                "bulk_density": "cvbn",
+                "active_ingredients": "cvbn",
+                "partitioning_agent": "cvbn"
+            }
         },
         "status": "saved"
-      }
-    ]
-  }
+    }
+  ]
+}
