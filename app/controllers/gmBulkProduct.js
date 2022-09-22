@@ -3,13 +3,9 @@ const GmProduct = require("../models").GmProduct;
 const GmCategory = require("../models").GmCategory;
 const Profile = require("../models").Profile;
 const { Op, Sequelize } = require("sequelize");
-const getSearchQueries = require("../functions/getSearchQueries");
-const getGmProducts = require("../functions/getGmProducts");
-const getCompanyProducts = require("../functions/getCompanyProducts");
 const constraints = require("../requests/createGmProductsConstraints");
-
-const sequelize = require("../models").sequelize;
 const validate = require("validate.js");
+const createOrUpdateDropdowns = require("../functions/createOrUpdateDropdowns");
 
 const validateProduct = async (product) => {
   try {
@@ -33,6 +29,79 @@ const validateProduct = async (product) => {
   }
 };
 
+const updateDropdownOptions = async (product) => {
+  console.log("product......", product);
+  try {
+    // let additionalProductsDropdowns = ['product_form', 'product_grade'];
+    // let additionalProductInfo = product.data?.additional_product_info;
+
+    // additionalProductsDropdowns.map((dropdownName) => {
+    //   let dropdownValuesFromPayload = additionalProductInfo[dropdownName];
+    //   if (
+    //     dropdownValuesFromPayload &&
+    //     dropdownValuesFromPayload.label &&
+    //     dropdownValuesFromPayload.value &&
+    //     dropdownValuesFromPayload.type
+    //   ) {
+    //     await createOrUpdateDropdowns(dropdownValuesFromPayload);
+    //   }
+    // })
+
+    const productForm = product.data?.additional_product_info?.product_form;
+    if (
+      productForm &&
+      productForm.label &&
+      productForm.value &&
+      productForm.type
+    ) {
+      await createOrUpdateDropdowns(productForm);
+    }
+
+    const productGrade = product.data?.additional_product_info?.product_grade;
+    if (
+      productGrade &&
+      productGrade.label &&
+      productGrade.value &&
+      productGrade.type
+    ) {
+      await createOrUpdateDropdowns(productGrade);
+    }
+
+    const productApplication =
+      product.data?.additional_product_info?.product_application;
+    if (
+      productApplication &&
+      productApplication.label &&
+      productApplication.value &&
+      productApplication.type
+    ) {
+      await createOrUpdateDropdowns(productApplication);
+    }
+
+    const packagingType = product.data?.additional_product_info?.packaging_type;
+    if (
+      packagingType &&
+      packagingType.label &&
+      packagingType.value &&
+      packagingType.type
+    ) {
+      await createOrUpdateDropdowns(packagingType);
+    }
+
+    const productType = product.data?.additional_product_info?.product_type;
+    if (
+      productType &&
+      productType.label &&
+      productType.value &&
+      productType.type
+    ) {
+      await createOrUpdateDropdowns(productType);
+    }
+  } catch (e) {
+    console.log("Error while update dropdown value", e);
+  }
+};
+
 module.exports = {
   async store(req, res) {
     try {
@@ -48,6 +117,7 @@ module.exports = {
       if (profile) {
         for (let index = 0; index < req.body.products.length; index++) {
           const product = req.body.products[index];
+
           let payload = {
             name: product.name,
             profile_uuid: profile.uuid,
@@ -68,6 +138,7 @@ module.exports = {
            *    - check if the product contains any of the above 5 dropdown attributes.
            *    - For such product, call the createOrUpdateDropdowns function for each dropdown type.
            */
+          await updateDropdownOptions(product);
 
           // Need to maintain the flag for products which created from  bulk upload - Not right now (Shubham)
 
