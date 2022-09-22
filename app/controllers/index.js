@@ -9,6 +9,7 @@ const AutoAssignConditionController = require("./autoAssignConditions");
 const EnquiryController = require("./enquiries");
 const GmCategoryController = require("./gmCategory");
 const GmProductController = require("./gmProduct");
+const GmBulkProductController = require("./gmBulkProduct");
 const QuoteController = require("./quotes");
 const QuoteResponseController = require("./quoteResponses");
 const AddressController = require("./address");
@@ -17,6 +18,7 @@ const DailyBidsController = require("./dailyBids");
 const BillDiscountProgramController = require("./billDiscountProgram");
 const ContactUsLeadsController = require("./contactUsLeads");
 const OnboardingModuleDropdownsController = require("./onboardingModuleDropdowns");
+const PopularProductEnquiryController = require("./popularProductEnquiry");
 
 module.exports = {
   ProfileController,
@@ -30,6 +32,7 @@ module.exports = {
   EnquiryController,
   GmCategoryController,
   GmProductController,
+  GmBulkProductController,
   QuoteController,
   QuoteResponseController,
   AddressController,
@@ -38,4 +41,5 @@ module.exports = {
   BillDiscountProgramController,
   ContactUsLeadsController,
   OnboardingModuleDropdownsController,
+  PopularProductEnquiryController,
 };

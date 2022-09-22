@@ -14,6 +14,12 @@ const ContactUsLeadsController =
   require("../app/controllers").ContactUsLeadsController;
 const contactUsRequest = require("../app/requests/contactUs");
 
+const popularProductRequest = require("../app/requests/popularProductEnquiry");
+const popularProductEnquiryResponse = require("../app/responses/popularProductEnquiryResource");
+const PopularProductEnquiryCollection = require("../app/responses/popularProductEnquiryCollection");
+const PopularProductEnquiryController =
+  require("../app/controllers").PopularProductEnquiryController;
+
 const addDropdownResourceResponse = require("../app/responses/addDropdownResource");
 const addDropdownCollection = require("../app/responses/addDropdownCollection");
 const onboardingModuleDropdownController =
@@ -67,6 +73,10 @@ const GmCategoryController = require("../app/controllers").GmCategoryController;
 const createGmCategoryRequest = require("../app/requests/createGmCategory");
 const gmCategoryCollectionResponse = require("../app/responses/gmCategoryCollection");
 const gmCategoryResourceResponse = require("../app/responses/gmCategoryResource");
+
+const GmBulkProductController =
+  require("../app/controllers").GmBulkProductController;
+const gmBulkUploadResourceResponse = require("../app/responses/gmBulkUploadResource");
 
 const GmProductController = require("../app/controllers").GmProductController;
 const createGmProductRequest = require("../app/requests/createGmProduct");
@@ -279,6 +289,19 @@ router.post(
   executeForResponse(contactUsResourceResponse)
 );
 
+router.post(
+  "/popular-product-enquiry",
+  popularProductRequest,
+  executeForResult(PopularProductEnquiryController.create),
+  executeForResponse(popularProductEnquiryResponse)
+);
+
+router.get(
+  "/popular-product-enquiries",
+  executeForResult(PopularProductEnquiryController.index),
+  executeForResponse(PopularProductEnquiryCollection)
+);
+
 router.get(
   "/contact-us-leads",
   executeForResult(ContactUsLeadsController.index),
@@ -317,6 +340,18 @@ router.get(
   "/gm-categories",
   executeForResult(GmCategoryController.index),
   executeForResponse(gmCategoryCollectionResponse)
+);
+
+router.post(
+  "/gm-bulk-products",
+  executeForResult(GmBulkProductController.store),
+  executeForResponse(gmBulkUploadResourceResponse)
+);
+
+router.post(
+  "/gm-validate-bulk-products",
+  executeForResult(GmBulkProductController.validate),
+  executeForResponse(gmBulkUploadResourceResponse)
 );
 
 router.post(
