@@ -17,6 +17,8 @@ module.exports = {
     try {
       const popularProductEnquiry = await PopularProductEnquiry.create({
         name: req.body.name,
+        user_uuid: req.body.user_uuid,
+        status: req.body.status,
         product_name: req.body.product_name,
         mobile_number: req.body.mobile_number,
         company_name: req.body.company_name,
