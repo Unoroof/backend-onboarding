@@ -47,7 +47,18 @@ const updateDropdownOptions = async (product) => {
     //   }
     // })
 
-    const productForm = product.data?.additional_product_info?.product_form;
+    // const productForm = product.data?.additional_product_info?.product_form;
+    let productForm = null;
+    if (
+      product.data &&
+      product.data.additional_product_info &&
+      product.data.additional_product_info.product_form
+    ) {
+      productForm = product.data.additional_product_info.product_form;
+    }
+
+    console.log("PRODUCT FORMMMMMMMMMMMM", productForm);
+
     if (
       productForm &&
       productForm.label &&
@@ -57,7 +68,17 @@ const updateDropdownOptions = async (product) => {
       await createOrUpdateDropdowns(productForm);
     }
 
-    const productGrade = product.data?.additional_product_info?.product_grade;
+    // const productGrade = product.data?.additional_product_info?.product_grade;
+    let productGrade = null;
+    if (
+      product.data &&
+      product.data.additional_product_info &&
+      product.data.additional_product_info.product_grade
+    ) {
+      productGrade = product.data.additional_product_info.product_grade;
+    }
+    console.log("product garde", productGrade);
+
     if (
       productGrade &&
       productGrade.label &&
@@ -67,8 +88,18 @@ const updateDropdownOptions = async (product) => {
       await createOrUpdateDropdowns(productGrade);
     }
 
-    const productApplication =
-      product.data?.additional_product_info?.product_application;
+    // const productApplication =
+    //   product.data?.additional_product_info?.product_application;
+    let productApplication = null;
+    if (
+      product.data &&
+      product.data.additional_product_info &&
+      product.data.additional_product_info.product_application
+    ) {
+      productApplication =
+        product.data.additional_product_info.product_application;
+    }
+    console.log("prodiuct application", productApplication);
     if (
       productApplication &&
       productApplication.label &&
@@ -78,7 +109,16 @@ const updateDropdownOptions = async (product) => {
       await createOrUpdateDropdowns(productApplication);
     }
 
-    const packagingType = product.data?.additional_product_info?.packaging_type;
+    // const packagingType = product.data?.additional_product_info?.packaging_type;
+    let packagingType = null;
+    if (
+      product.data &&
+      product.data.additional_product_info &&
+      product.data.additional_product_info.packaging_type
+    ) {
+      packagingType = product.data.additional_product_info.packaging_type;
+    }
+    console.log("packaging type", packagingType);
     if (
       packagingType &&
       packagingType.label &&
@@ -88,7 +128,16 @@ const updateDropdownOptions = async (product) => {
       await createOrUpdateDropdowns(packagingType);
     }
 
-    const productType = product.data?.additional_product_info?.product_type;
+    // const productType = product.data?.additional_product_info?.product_type;
+    let productType = null;
+    if (
+      product.data &&
+      product.data.additional_product_info &&
+      product.data.additional_product_info.product_type
+    ) {
+      productType = product.data.additional_product_info.product_type;
+    }
+    console.log("product type", productType);
     if (
       productType &&
       productType.label &&
