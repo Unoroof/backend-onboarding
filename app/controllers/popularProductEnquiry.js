@@ -18,12 +18,12 @@ module.exports = {
       const popularProductEnquiry = await PopularProductEnquiry.create({
         name: req.body.name,
         user_uuid: req.body.user_uuid,
-        status: req.body.status,
+        status: "pending",
         product_name: req.body.product_name,
         mobile_number: req.body.mobile_number,
         company_name: req.body.company_name,
         requirement_description: req.body.requirement_description,
-        product_uuid: req.body.product_uuid,
+        product_uuid: req.body.product_uuid ? eq.body.product_uuid : null,
       });
       return popularProductEnquiry;
     } catch (error) {
