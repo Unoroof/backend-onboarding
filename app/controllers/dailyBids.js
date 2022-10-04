@@ -44,6 +44,7 @@ module.exports = {
           attributes: ["daily_bids_uuid"],
         };
         userConstraints.where = {
+          request_by: profile.uuid,
           data: { joined_program: { tenor: req.query.tenor } },
         };
 
