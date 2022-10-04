@@ -2,6 +2,7 @@ const models = require("../models");
 const DailyBids = models.DailyBids;
 const Profile = models.Profile;
 const BillDiscountProgram = models.BillDiscountProgram;
+const BillDiscountSuppliers = models.BillDiscountSuppliers;
 const consumeError = require("../functions/consumeError");
 const updateBidsArray = require("../functions/updateBidsArray");
 const { Op } = require("sequelize");
@@ -43,14 +44,31 @@ module.exports = {
           },
           attributes: ["daily_bids_uuid"],
         };
+
         userConstraints.where = {
           request_by: profile.uuid,
           data: { joined_program: { tenor: req.query.tenor } },
         };
 
+        console.log("check here userConstraints: ", userConstraints);
+
+        // get bill  discount program which buyer has joined
         let userBillDiscountPrograms = await BillDiscountProgram.findAll(
           userConstraints
         );
+
+        let joinedPrograms = await BillDiscountSuppliers.findAll({
+          where: { invited_by: profile.uuid, status: "accepted" },
+          attributes: ["profile_uuid"],
+        });
+
+        let joinedProgramUuid = [];
+
+        joinedPrograms.forEach((element) => {
+          joinedProgramUuid.push(element.profile_uuid);
+        });
+
+        console.log("check here joinedPrograms: ", joinedProgramUuid);
 
         let usersDailyBids = await DailyBids.findOne({
           where: {
@@ -58,12 +76,20 @@ module.exports = {
           },
         });
 
+        console.log("check here usersDailyBids: ", usersDailyBids);
+
         if (usersDailyBids) {
           userBillDiscountProgramsUuids.push(usersDailyBids.uuid);
         }
+
         userBillDiscountPrograms.forEach((element) => {
           userBillDiscountProgramsUuids.push(element.daily_bids_uuid);
         });
+
+        console.log(
+          "userBillDiscountProgramsUuids>>",
+          userBillDiscountProgramsUuids
+        );
 
         constraints.where = {
           [Op.and]: [
@@ -91,6 +117,12 @@ module.exports = {
                 [Op.notIn]: userBillDiscountProgramsUuids,
               },
             },
+            {
+              profile_uuid: {
+                [Op.in]: joinedProgramUuid,
+              },
+            },
+            // include the suppliers
           ],
         };
       }
