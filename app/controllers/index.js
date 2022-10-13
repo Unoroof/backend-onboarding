@@ -19,6 +19,8 @@ const BillDiscountProgramController = require("./billDiscountProgram");
 const ContactUsLeadsController = require("./contactUsLeads");
 const OnboardingModuleDropdownsController = require("./onboardingModuleDropdowns");
 const PopularProductEnquiryController = require("./popularProductEnquiry");
+const SearchFilterGmProductsController = require("./searchFilterGmProducts");
+const GetGmSellerProductsController = require("./getGmSellerProducts");
 
 module.exports = {
   ProfileController,
@@ -42,4 +44,6 @@ module.exports = {
   ContactUsLeadsController,
   OnboardingModuleDropdownsController,
   PopularProductEnquiryController,
+  SearchFilterGmProductsController,
+  GetGmSellerProductsController,
 };

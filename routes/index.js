@@ -6,6 +6,12 @@ var executeForResponse = require("../app/functions/executeForResponse");
 
 const countryAndCityController =
   require("../app/controllers").CountryAndCityController;
+const searchFilterGmProductsController =
+  require("../app/controllers").SearchFilterGmProductsController;
+const searchFilterResponse = require("../app/responses/searchFilterResource");
+const getGmSellerProductsController =
+  require("../app/controllers").GetGmSellerProductsController;
+const gmSellerProductsResponse = require("../app/responses/getGmSellerProductsResource");
 const countryCollectionResponse = require("../app/responses/countryCollection");
 
 const contactUsResourceResponse = require("../app/responses/contactUsResource");
@@ -533,6 +539,19 @@ router.get(
   "/bill-discount-program",
   executeForResult(BillDiscountProgramController.getAll, "data"),
   executeForResponse(BillDiscountProgramCollectionResponse)
+);
+
+// v2 routes
+router.post(
+  "/v2/gm/get-products",
+  executeForResult(searchFilterGmProductsController.create),
+  executeForResponse(searchFilterResponse)
+);
+
+router.post(
+  "/v2/gm/get-seller-products",
+  executeForResult(getGmSellerProductsController.getGmSellerProducts),
+  executeForResponse(gmSellerProductsResponse)
 );
 
 module.exports = router;
