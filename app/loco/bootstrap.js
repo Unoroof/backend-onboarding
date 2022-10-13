@@ -2,7 +2,7 @@ const { executeRoute, locoFactory } = require("@locospec/engine");
 const operator = require("@locospec/operator-knexjs");
 const path = require("path");
 
-module.exports = () => {
+module.exports = (app, indexRouter) => {
   locoFactory.init({
     resourcesPath: path.resolve(`app/loco/resources`),
     mixinsPath: path.resolve(`app/loco/mixins`),
@@ -14,4 +14,26 @@ module.exports = () => {
     apiPrefix: "/loco",
     operator: operator,
   });
+
+  const routes = locoFactory.generateRoutes();
+
+  //   console.log("routes", routes);
+
+  routes.forEach((mentalRoute) => {
+    indexRouter[mentalRoute.method](
+      mentalRoute.path,
+      async (req, res, next) => {
+        let result = await executeRoute(mentalRoute, {
+          req: req,
+          reqBody: req.body,
+          reqParams: req.params,
+          reqQuery: req.query,
+          reqHeaders: req.headers,
+        });
+        return res.status(200).send(result[responseKey]);
+      }
+    );
+  });
+
+  return indexRouter;
 };

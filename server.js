@@ -18,9 +18,9 @@ Sentry.setTag("app-name", process.env.APP_NAME);
 var indexRouter = require("./routes/index");
 var auth = require("./app/middlewares/auth");
 
-var app = express();
+indexRouter = bootstrapLoco(app, indexRouter);
 
-bootstrapLoco(app);
+var app = express();
 
 app.use(auth);
 
