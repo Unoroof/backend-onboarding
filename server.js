@@ -4,6 +4,7 @@ var path = require("path");
 var logger = require("morgan");
 const Sentry = require("@sentry/node");
 var dotenv = require("dotenv");
+const bootstrapLoco = require("./app/loco/bootstrap");
 
 dotenv.config({ path: ".env" });
 
@@ -18,6 +19,8 @@ var indexRouter = require("./routes/index");
 var auth = require("./app/middlewares/auth");
 
 var app = express();
+
+bootstrapLoco(app);
 
 app.use(auth);
 

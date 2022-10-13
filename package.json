@@ -12,6 +12,8 @@
     "migrate:rollback": "npx sequelize-cli db:migrate:undo"
   },
   "dependencies": {
+    "@locospec/engine": "^0.0.5",
+    "@locospec/operator-knexjs": "^0.0.3",
     "@sentry/node": "^6.5.0",
     "axios": "^0.21.4",
     "country-state-city": "^3.0.1",
