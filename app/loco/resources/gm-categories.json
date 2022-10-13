@@ -1,10 +1,11 @@
 {
-  "name": "topics",
-  "label": "Topics",
+  "name": "gm-categories",
+  "label": "GM Categories",
   "primary": ["uuid"],
   "softDelete": true,
   "meta": {
-    "table": "topics"
+    "table": "gm_categories",
+    "deleted_at_column": "deletedAt"
   },
   "mixins": ["datetime-in-resource.json"],
   "attributes": {
@@ -20,7 +21,7 @@
             { "type": "required" },
             {
               "type": "exists",
-              "table": "topics",
+              "table": "states",
               "column": "uuid"
             }
           ]
@@ -43,7 +44,7 @@
           "validate": [
             {
               "type": "unique",
-              "table": "topics",
+              "table": "states",
               "includeAttributes": [],
               "excludeAttributes": []
             }
@@ -53,7 +54,7 @@
           "validate": [
             {
               "type": "unique",
-              "table": "topics",
+              "table": "states",
               "includeAttributes": [],
               "excludeAttributes": ["uuid"]
             }
@@ -75,56 +76,6 @@
           "component": "TextInputBase"
         }
       }
-    },
-    "slug": {
-      "label": "Slug",
-      "operations": {
-        "create": {
-          "generate": [
-            {
-              "type": "custom_generator",
-              "value": "generateSlug",
-              "source": "name"
-            }
-          ],
-          "validate": [
-            { "type": "required" },
-            {
-              "type": "unique",
-              "table": "topics",
-              "includeAttributes": [],
-              "excludeAttributes": []
-            },
-            {
-              "type": "custom_validator",
-              "value": "noWhiteSpace"
-            }
-          ]
-        },
-        "update": {}
-      },
-      "ui": {
-        "list": {
-          "display": true
-        },
-        "detail": {
-          "display": true
-        },
-        "update": {
-          "component": "TextInputBase"
-        }
-      }
-    },
-    "sub-topics": {
-      "resolveTo": "sub-topics",
-      "label": "Sub Topics",
-      "relation": {
-        "localKey": "uuid",
-        "foreignKey": "topic_uuid",
-        "type": "has_many",
-        "resource": "sub-topics"
-      },
-      "ui": {}
     }
   }
 }

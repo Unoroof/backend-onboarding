@@ -1,7 +1,7 @@
 {
   "attributes": {
-    "created_at": {
-      "identifier": "created_at",
+    "createdAt": {
+      "identifier": "createdAt",
       "label": "Created At",
       "operations": {
         "create": {
@@ -9,8 +9,8 @@
         }
       }
     },
-    "updated_at": {
-      "identifier": "updated_at",
+    "updatedAt": {
+      "identifier": "updatedAt",
       "label": "Updated At",
       "operations": {
         "create": {
@@ -18,8 +18,8 @@
         }
       }
     },
-    "deleted_at": {
-      "identifier": "deleted_at",
+    "deletedAt": {
+      "identifier": "deletedAt",
       "label": "Deleted At",
       "operations": {
         "delete": {

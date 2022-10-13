@@ -30,7 +30,7 @@ module.exports = (app, indexRouter) => {
           reqQuery: req.query,
           reqHeaders: req.headers,
         });
-        return res.status(200).send(result[responseKey]);
+        return res.status(200).send(result["respondResult"]);
       }
     );
   });
