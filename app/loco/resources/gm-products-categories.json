@@ -1,0 +1,11 @@
+{
+  "name": "gm-products-categories",
+  "label": "GM Products Categories",
+  "softDelete": true,
+  "meta": {
+    "table": "gm_products_categories",
+    "deleted_at_column": "deletedAt"
+  },
+  "mixins": ["datetime-in-resource.json"],
+  "attributes": {}
+}
