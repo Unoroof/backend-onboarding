@@ -38,7 +38,7 @@ validate.validators.unitsValidator = function (value) {
 validate.validators.categoriesValidator = function (value) {
   console.log("value....", value);
   return new validate.Promise(function (resolve, reject) {
-    if (value) {
+    if (value && value.length) {
       const categories = value;
       const uuidTestRegex =
         /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -88,57 +88,50 @@ const constraints = {
   name: {
     presence: {
       allowEmpty: false,
-      message: "^Please enter a Product Name",
+      message: "^Enter a Product Name",
     },
     type: "string",
   },
   brand_name: {
     presence: {
       allowEmpty: false,
-      message: "^Please enter a Brand Name",
+      message: "^Enter a Brand Name",
     },
     type: "string",
   },
   "price.currency": {
     presence: {
       allowEmpty: false,
-      message: "^Please select currency",
+      message: "^Select currency",
     },
     type: "string",
+    currencyValidator: true,
   },
   "price.amount": {
     presence: {
       allowEmpty: false,
-      message: "^Please enter amount",
+      message: "^Enter amount",
     },
   },
   "price.unit": {
     presence: {
       allowEmpty: false,
-      message: "^Please select unit",
+      message: "^Select unit",
     },
+    unitsValidator: true,
   },
   "data.country_of_origin": {
     presence: {
       allowEmpty: false,
-      message: "^Please enter country of origin",
+      message: "^Select country of origin",
     },
   },
   "data.category": {
     presence: {
       allowEmpty: false,
-      message: "^Please Select Category",
+      message: "^Select Category",
     },
   },
-  price: {
-    presence: {
-      allowEmpty: false,
-      message: "^Please enter Price",
-    },
-  },
-
-  "price.currency": { currencyValidator: true },
-  "price.unit": { unitsValidator: true },
 
   discount: {
     presence: {
