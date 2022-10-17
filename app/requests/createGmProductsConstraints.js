@@ -88,14 +88,14 @@ const constraints = {
   name: {
     presence: {
       allowEmpty: false,
-      message: "^Enter a Product Name",
+      message: "^Enter Product Name",
     },
     type: "string",
   },
   brand_name: {
     presence: {
       allowEmpty: false,
-      message: "^Enter a Brand Name",
+      message: "^Enter Brand Name",
     },
     type: "string",
   },
