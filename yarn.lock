@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-7.6.0.tgz#9ea331766084288634a9247fcd8b84f16ff4ba07"
   integrity sha512-XK6BTq1NDMo9Xqw/YkYyGjSsg44fbNwYRx7QK2CuoQgyy+f1rrTDHoExVM5PsyXCtfl2vs2vVJ0MN0yN6LppRw==
 
-"@locospec/engine@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@locospec/engine/-/engine-0.0.5.tgz#90a977161801796d3b90e274c86f2c66758b50b7"
-  integrity sha512-mXhHFisxq9BgQuBY2QDlMy+wgjnStgcnM7VFyxiCWvNPCOVPlE54KQ5XAKFl1eZap8YPaVZz4pJt36dy9wOZMw==
+"@locospec/engine@^0.0.15":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@locospec/engine/-/engine-0.0.15.tgz#d944b740a1b1fbe84992bad8b8e578c9ab8c75c5"
+  integrity sha512-ip+7quWCKqFTbB65XWEfL7vBZ8eF8vTcclvfCx1K25gGKvWto3qJWdxrlydxahcFfTuUdBAHA/yXRN0pYLlBYg==
   dependencies:
     fs-extra "^10.1.0"
     uuid "^9.0.0"
