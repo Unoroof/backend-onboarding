@@ -7,19 +7,19 @@
   resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-7.6.0.tgz#9ea331766084288634a9247fcd8b84f16ff4ba07"
   integrity sha512-XK6BTq1NDMo9Xqw/YkYyGjSsg44fbNwYRx7QK2CuoQgyy+f1rrTDHoExVM5PsyXCtfl2vs2vVJ0MN0yN6LppRw==
 
-"@locospec/engine@^0.0.15":
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/@locospec/engine/-/engine-0.0.15.tgz#d944b740a1b1fbe84992bad8b8e578c9ab8c75c5"
-  integrity sha512-ip+7quWCKqFTbB65XWEfL7vBZ8eF8vTcclvfCx1K25gGKvWto3qJWdxrlydxahcFfTuUdBAHA/yXRN0pYLlBYg==
+"@locospec/engine@^0.0.16":
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/@locospec/engine/-/engine-0.0.16.tgz#3c01a67b48cd642d979dc27a54e3206c604e3986"
+  integrity sha512-2R9SaLswB5To8+URKq1oTA85ncnHZTYwg+DW13w3I1EruCYoW9oYcd8bp3rnNN88aNWpLnhzX3rlBTbkzPyryw==
   dependencies:
     fs-extra "^10.1.0"
     uuid "^9.0.0"
     validate.js "^0.13.1"
 
-"@locospec/operator-knexjs@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@locospec/operator-knexjs/-/operator-knexjs-0.0.7.tgz#e79af7e6ab850a906568b987ba0d472ab5690780"
-  integrity sha512-NqqAG5d4gyT9xJ+AYNEGamxe4YTZqnA+yaKVGy8V1YkC6RR3vDwZrAwhozXoFDZnk3q3DrOul3fuusU9m2bo5Q==
+"@locospec/operator-knexjs@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@locospec/operator-knexjs/-/operator-knexjs-0.0.8.tgz#b854fed8acb4e57f258dbb18bc63976abc92acb9"
+  integrity sha512-BbKZ0UNBi8Uv21fpIU2KaWI8n9VcHBEJu445be7FbATo8fKtPNAottS5Q3uqoo+8Xa/ia3/nSCwqZppjr+Jqsg==
   dependencies:
     knex "^2.3.0"
     pg "^8.8.0"
