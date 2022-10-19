@@ -94,7 +94,7 @@
       "operation": "in",
       "transformations": [
         {
-          "operation": "json_path_eq",
+          "operation": "json_path_like",
           "resource": "profiles",
           "findByKey": "data.company_name",
           "findByValue": "company_name",
