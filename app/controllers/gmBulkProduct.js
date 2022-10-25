@@ -2,6 +2,7 @@ const consumeError = require("../functions/consumeError");
 const GmProduct = require("../models").GmProduct;
 const GmCategory = require("../models").GmCategory;
 const Profile = require("../models").Profile;
+const sequelize = require("../models").sequelize;
 const { Op, Sequelize } = require("sequelize");
 const constraints = require("../requests/createGmProductsConstraints");
 const validate = require("validate.js");
@@ -151,6 +152,21 @@ const updateDropdownOptions = async (product) => {
   }
 };
 
+const getCategoryByName = async (name) => {
+  return await GmCategory.findOne({
+    where: sequelize.where(
+      sequelize.fn("lower", sequelize.col("name")),
+      sequelize.fn("lower", name)
+    ),
+  });
+};
+
+const createCategory = async (name) => {
+  return await GmCategory.create({
+    name: name,
+  });
+};
+
 module.exports = {
   async store(req, res) {
     try {
@@ -235,6 +251,33 @@ module.exports = {
           const product = req.body.products[index];
           rowNumber = index + 1;
           product["rowNumber"] = rowNumber;
+
+          if (!product.data.category.value && product.data.category.label) {
+            const categoryBYName = await getCategoryByName(
+              product.data.category.label
+            );
+
+            if (categoryBYName) {
+              const newCategoryObj = {
+                label: categoryBYName.name,
+                value: categoryBYName.uuid,
+              };
+              product.data.category = newCategoryObj;
+              product.categories = [newCategoryObj.value];
+            } else {
+              const createdCategory = await createCategory(
+                product.data.category.label
+              );
+              const newCategoryObj = {
+                label: createdCategory.name,
+                value: createdCategory.uuid,
+              };
+              product.data.category = newCategoryObj;
+              product.categories = [newCategoryObj.value];
+            }
+            console.log("<<....", product);
+          }
+
           // Validate product method will returns either empty object or object with error keys
           const validationResult = await validateProduct(product, constraints);
           console.log("validate res....", validationResult);
