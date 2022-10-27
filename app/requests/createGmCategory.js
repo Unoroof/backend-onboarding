@@ -1,5 +1,6 @@
 const validatorBase = require("./base");
 const GmCategory = require("../models").GmCategory;
+const sequelize = require("../models").sequelize;
 
 const constraints = {
   name: {
@@ -14,9 +15,10 @@ const constraints = {
         let count =
           typeof req.body.name === "string"
             ? await GmCategory.count({
-                where: {
-                  name: req.body.name,
-                },
+                where: sequelize.where(
+                  sequelize.fn("lower", sequelize.col("name")),
+                  sequelize.fn("lower", req.body.name)
+                ),
               })
             : -1;
         return count === 0 ? true : false;

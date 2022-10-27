@@ -1,0 +1,106 @@
+{
+  "name": "gm-products",
+  "label": "GM Products",
+  "primary": ["uuid"],
+  "softDelete": true,
+  "meta": {
+    "table": "gm_products",
+    "deleted_at_column": "deletedAt"
+  },
+  "mixins": ["datetime-in-resource.json"],
+  "attributes": {
+    "uuid": {
+      "label": "UUID",
+      "operations": {
+        "create": {
+          "generate": "uuid",
+          "validate": [{ "type": "uuid" }]
+        },
+        "update": {
+          "validate": [
+            { "type": "required" },
+            {
+              "type": "exists",
+              "table": "gm_products",
+              "column": "uuid"
+            }
+          ]
+        }
+      },
+      "ui": {
+        "detail": {
+          "display": true
+        }
+      }
+    },
+    "profile": {
+      "label": "Profile UUID",
+      "relation": {
+        "resolveTo": "profile_uuid",
+        "foreignKey": "uuid",
+        "resource": "profiles",
+        "type": "belongs_to_one"
+      },
+      "operations": {
+        "create": {
+          "validate": [{ "type": "uuid" }]
+        },
+        "update": {
+          "validate": [
+            { "type": "required" },
+            {
+              "type": "exists",
+              "table": "profiles",
+              "column": "uuid"
+            }
+          ]
+        }
+      }
+    },
+    "name": {
+      "label": "Name",
+      "operations": {
+        "*": {},
+        "create,update": {
+          "validate": [{ "type": "required" }]
+        }
+      }
+    },
+    "brand_name": {
+      "label": "Brand Name",
+      "operations": {}
+    },
+    "data": {
+      "label": "Data",
+      "operations": {}
+    }
+  },
+  "filterBy": {
+    "category": {
+      "localKey": "gm_products.uuid",
+      "operation": "in",
+      "transformations": [
+        {
+          "operation": "in",
+          "resource": "gm-products-categories",
+          "findByKey": "category_uuid",
+          "findByValue": "category",
+          "extract": "product_uuid"
+        }
+      ]
+    },
+    "company_name": {
+      "localKey": "gm_products.profile_uuid",
+      "operation": "in",
+      "transformations": [
+        {
+          "operation": "json_path_like",
+          "resource": "profiles",
+          "findByKey": "data.company_name",
+          "findByValue": "company_name",
+          "extract": "uuid"
+        }
+      ]
+    }
+  }
+}
