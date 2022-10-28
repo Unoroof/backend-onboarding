@@ -6,6 +6,7 @@ const ProfileRevision = models.ProfileRevision;
 const { Op } = require("sequelize");
 const getBuyerUuidForProduct = require("../functions/getBuyerUuidForProduct");
 const getProfileUuidByBankname = require("../functions/getProfileUuidByBankname");
+const updateBillDiscountingSuppliers = require("../functions/updateBillDiscountingSuppliers");
 const BillDiscountSuppliers = models.BillDiscountSuppliers;
 
 module.exports = {
@@ -126,44 +127,7 @@ module.exports = {
         });
         toCreateRevision = true;
         if (profile.type === "fm-buyer") {
-          let bdSuppliers = await BillDiscountSuppliers.findAll({
-            where: {
-              [Op.or]: [
-                {
-                  email: profile.data.email !== "" ? profile.data.email : null,
-                },
-                {
-                  phone_number:
-                    profile.data.mobile !== "" ? profile.data.mobile : null,
-                },
-              ],
-            },
-            attributes: ["uuid"],
-          });
-
-          console.log("check here bdSuppliers", bdSuppliers);
-
-          let uuidsToUpdate = [];
-
-          bdSuppliers.forEach(async (item) => {
-            uuidsToUpdate.push(item.uuid);
-          });
-
-          BillDiscountSuppliers.update(
-            {
-              profile_uuid: profile.uuid,
-              company_name: profile.data.company_name
-                ? profile.data.company_name
-                : "",
-            },
-            {
-              where: {
-                uuid: {
-                  [Op.in]: uuidsToUpdate,
-                },
-              },
-            }
-          );
+          updateBillDiscountingSuppliers(profile);
         }
       } else {
         const prevData = profile.data;
@@ -175,6 +139,11 @@ module.exports = {
             ? { ...prevData, ...req.body.data }
             : profile.data,
         });
+
+        if(profile.type === "fm-buyer"){
+          await updateBillDiscountingSuppliers(profile);
+        }
+
         // Check if data is changed, then only create revision
         toCreateRevision =
           JSON.stringify(prevData) !== JSON.stringify(profile.data);
