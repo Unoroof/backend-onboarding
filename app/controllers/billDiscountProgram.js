@@ -179,12 +179,12 @@ module.exports = {
             uuid: billDiscountProgram.request_by,
           },
         });
-
         await sendPushNotification({
           event_type: "bd_seller_uploaded_invoices",
           user_id: buyerProfile.user_uuid,
           data: {
-            name: billDiscountProgram.data.request_by_company_name,
+            name: billDiscountProgram.data.request_to_company_name,
+            quote_type: "bill discounting",
             query_type: "seller_has_uploaded_invoices",
             query_status: billDiscountProgram.status,
             quote_uuid: billDiscountProgram.daily_bids_uuid,
