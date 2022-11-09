@@ -3,7 +3,7 @@ var uuid = require("uuid");
 var dayjs = require("dayjs");
 
 module.exports = async function (payload) {
-  console.log("checkherepayloadinneptunecaller", JSON.stringify(payload));
+  // console.log("checkherepayloadinneptunecaller", JSON.stringify(payload));
 
   var data = {
     version: 1,
