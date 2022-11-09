@@ -50,7 +50,6 @@ module.exports = {
     try {
       let inviteCount = 0;
       let pendingCount = 0;
-      // console.log("REQUEST IS>>>>>>>", req.user, req.token);
       let profile = await Profile.findOne({
         where: {
           user_uuid: req.user,
@@ -110,12 +109,6 @@ module.exports = {
           supplier = await upsertInvite(profile.uuid, item.profile_uuid, item);
         } else {
         }
-
-        // let supplier = await BillDiscountSuppliers.create({
-        //   invited_by: profile.uuid,
-        //   status: "pending",
-        //   ...item,
-        // });
 
         if (!inviteExists) {
           if (supplier.email) {
