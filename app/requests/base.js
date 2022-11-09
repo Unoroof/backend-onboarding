@@ -34,11 +34,15 @@ module.exports = (constraints, req, res, next) => {
           var response = {
             message: `Validation failed. ${validateJsErrors.length} error(s)`,
           };
+          console.log("validateJsErrors...", validateJsErrors);
 
           let errors = {};
 
           validateJsErrors.map((d) => {
-            errors[d.attribute] = d.error;
+            if (!errors[d.attribute]) {
+              errors[d.attribute] = d.error;
+            }
+
             return d;
           });
 
