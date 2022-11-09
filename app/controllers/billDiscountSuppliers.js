@@ -179,7 +179,7 @@ module.exports = {
       return {
         status: {
           sent: inviteCount,
-          pending:pendingCount,
+          pending: pendingCount,
         },
       };
     } catch (error) {
