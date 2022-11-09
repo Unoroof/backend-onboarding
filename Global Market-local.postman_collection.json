@@ -1,0 +1,1006 @@
+{
+	"info": {
+		"_postman_id": "5ef9e36d-b858-498a-bfd7-9419eba72069",
+		"name": "Global Market-local",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20199694"
+	},
+	"item": [
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Create Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Plastics, PVC, and Polymers\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/gm-categories",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"gm-categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/gm-categories",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"gm-categories"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "Pharma",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Create Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Company\",\n    \"brand_name\": \"port\",\n    \"per_unit\": \"1kg\",\n    \"price\": { \n        \"currency\":\"INR\",\n        \"unit\": \"1kg\",\n        \"amount\":\"\"\n    },\n    \"discount\": {\n\n        \"amount\": \"13\",\n        \"percentage\": \"10%\"\n    },\n    \"status\": \"saved\",\n    \"categories\": [\n        \"08066090-1a63-4dcd-9856-f3654b54447c\"\n    ],\n    \"data\": {\n    \"category\":\"Rubber\",\n    \"country_of_origin\":{\"label\":\"India\", \"value\":\"IN\"} \n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{onboarding_endpoint}}/gm-products",
+							"host": [
+								"{{onboarding_endpoint}}"
+							],
+							"path": [
+								"gm-products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filter sellers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"category\": \"08066090-1a63-4dcd-9856-f3654b54447c\",\n    \"product_names\": [\"Company\"],\n    \"country\": \"USA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{onboarding_endpoint}}/gm-products/filter-products",
+							"host": [
+								"{{onboarding_endpoint}}"
+							],
+							"path": [
+								"gm-products",
+								"filter-products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": {\n        \"logistic\": \"national\",\n        \"country\": \"India\",\n        \"exception\": {\n            \"cities\": [\n                \"Kashmir\",\n                \"Nepal\"\n            ]\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/gm-products/a5453a2d-2f96-41a8-9799-ab603b82292a",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"gm-products",
+								"a5453a2d-2f96-41a8-9799-ab603b82292a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{onboarding_endpoint}}/gm-products",
+							"host": [
+								"{{onboarding_endpoint}}"
+							],
+							"path": [
+								"gm-products"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "saved",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "ToothBrush",
+									"disabled": true
+								},
+								{
+									"key": "profile_uuid",
+									"value": "c434cc46-3e6a-4404-95de-781a671a27b2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Sellers Products by keyword",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{onboarding_endpoint}}/search-gm-products?keyword=Pharma",
+							"host": [
+								"{{onboarding_endpoint}}"
+							],
+							"path": [
+								"search-gm-products"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "Pharma"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/gm-products/5bf9b371-ba7b-4ee9-89b3-c792c793c3a4",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"gm-products",
+								"5bf9b371-ba7b-4ee9-89b3-c792c793c3a4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Quotes",
+			"item": [
+				{
+					"name": "Create Quote",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"type\": \"customized_quote\",\n  \"data\": {\n    \"category\": \"08066090-1a63-4dcd-9856-f3654b54447c\",\n    \"product_name\": \"H-12bb\",\n    \"currency_type\": {\n      \"label\": \"INR\",\n      \"value\": \"INR\"\n    },\n    \"rate\": \"1234\",\n    \"units\": {\n      \"label\": \"Kgs\",\n      \"value\": \"Kgs\"\n    },\n    \"quantity\": \"3456\",\n    \"country_of_origin\": {\n      \"label\": \"Domestic\",\n      \"value\": \"Domestic\"\n    },\n    \"delivery_time\": {\n      \"label\": \"1 day\",\n      \"value\": \"1 day\"\n    },\n    \"product_info\": {},\n    \"payment_period\": \"\",\n    \"provide_lc\": \"no\",\n    \"prefers_open_credit\": \"no\",\n    \"opt_for_cash_discount\": \"no\",\n    \"discount_to_suppliers\": \"no\",\n    \"discount_rate\": \"\",\n    \"tied_up_discount\": \"no\",\n    \"bank_names\": \"\",\n    \"delivery_in_india\": \"no\",\n    \"exceptions\": \"\",\n    \"international_delivery\": \"no\",\n    \"international_exceptions\": \"\",\n    \"deliver_to_my_location\": \"no\",\n    \"cd_one_day\": \"\",\n    \"cd_thirty_days\": \"\",\n    \"cd_sixty_days\": \"\",\n    \"cd_ninety_days\": \"\",\n    \"logistics\": {\n      \"india\": {\n        \"delivery\": false,\n        \"exceptions\": \"\"\n      },\n      \"international\": {\n        \"delivery\": false,\n        \"exceptions\": \"\"\n      },\n      \"deliver_to_my_location\": false,\n      \"my_location\": {\n        \"location_name\": \"\",\n        \"country\": \"\",\n        \"city\": \"\",\n        \"address\": \"\",\n        \"pincode\": \"\"\n      }\n    },\n    \"sellers\": {\n      \"buyer_selected_sellers\": [\n        {\n          \"label\": \"Chaitanya - Betalectic\",\n          \"value\": \"a23f3f1b-c567-4dc0-933a-cab263bc9a6d\",\n          \"productInfo\": {\n            \"uuid\": \"cf8db8dd-3c74-4cd2-bb55-27b85739f47c\",\n            \"name\": \"H-12bb\",\n            \"profile_uuid\": \"a23f3f1b-c567-4dc0-933a-cab263bc9a6d\",\n            \"brand_name\": \"Bbb\",\n            \"price\": {\n              \"unit\": \"Kgs\",\n              \"amount\": \"100\",\n              \"currency\": \"INR\"\n            },\n            \"discount\": {},\n            \"data\": {\n              \"unit\": {\n                \"label\": \"Kgs\",\n                \"value\": \"Kgs\"\n              },\n              \"category\": {\n                \"label\": \"Rubber\",\n                \"value\": \"08066090-1a63-4dcd-9856-f3654b54447c\"\n              },\n              \"logistics\": {\n                \"india\": {\n                  \"delivery\": false,\n                  \"exceptions\": \"\"\n                },\n                \"international\": {\n                  \"delivery\": false,\n                  \"exceptions\": \"\"\n                },\n                \"logistic_support_from_buyer\": false\n              },\n              \"prefer_lc\": \"no\",\n              \"brand_name\": \"Bbb\",\n              \"exceptions\": \"\",\n              \"input_price\": \"100\",\n              \"product_name\": \"H-12bb\",\n              \"cd_seven_days\": \"\",\n              \"currency_type\": {\n                \"label\": \"INR\",\n                \"value\": \"INR\"\n              },\n              \"sd_ninty_days\": \"\",\n              \"sd_sixty_days\": \"\",\n              \"cd_thirty_days\": \"\",\n              \"payment_period\": \"\",\n              \"sd_thirty_days\": \"\",\n              \"cd_fifteen_days\": \"\",\n              \"country_of_origin\": {\n                \"label\": \"India\",\n                \"value\": \"IN\"\n              },\n              \"delivery_in_india\": \"no\",\n              \"prefers_open_credit\": \"no\",\n              \"opt_for_cash_discount\": \"no\",\n              \"international_delivery\": \"no\",\n              \"additional_product_info\": {\n                \"color\": \"\",\n                \"purity\": \"\",\n                \"ph_value\": \"\",\n                \"viscosity\": \"\",\n                \"ash_content\": \"\",\n                \"oil_content\": \"\",\n                \"product_form\": \"\",\n                \"product_grade\": \"\",\n                \"packaging_size\": \"\",\n                \"packaging_type\": \"\",\n                \"product_images\": [\n                  \"07c6751f-ad41-4bdd-bea0-ed366c7ad3db\",\n                  \"2e2474a7-2c7e-4105-80c0-e308e7dad2bd\"\n                ],\n                \"moisture_content\": \"\",\n                \"tensile_strength\": \"\",\n                \"min_order_quantity\": \"\",\n                \"product_application\": \"\",\n                \"product_description\": \"\"\n              },\n              \"international_exceptions\": \"\",\n              \"supplier_discount_facility\": \"no\",\n              \"logistic_support_from_buyer\": \"no\"\n            },\n            \"status\": \"saved\",\n            \"gmCategories\": [\n              {\n                \"uuid\": \"08066090-1a63-4dcd-9856-f3654b54447c\",\n                \"name\": \"Rubber\",\n                \"gm_products_categories\": {\n                  \"createdAt\": \"2022-06-07T11:48:32.406Z\",\n                  \"updatedAt\": \"2022-06-07T11:48:32.406Z\",\n                  \"category_uuid\": \"08066090-1a63-4dcd-9856-f3654b54447c\",\n                  \"product_uuid\": \"cf8db8dd-3c74-4cd2-bb55-27b85739f47c\"\n                }\n              }\n            ],\n            \"profile_data\": {\n              \"city\": {\n                \"label\": \"Hyderabad\",\n                \"value\": \"Hyderabad\"\n              },\n              \"logo\": \"\",\n              \"email\": \"vadthyachaitanya@gmail.com\",\n              \"range\": {\n                \"label\": \"25-100\",\n                \"value\": \"25-100\",\n                \"max_value\": \"1000000000\",\n                \"min_value\": \"250000000\"\n              },\n              \"mobile\": \"+917896543210\",\n              \"country\": {\n                \"label\": \"India\",\n                \"value\": \"IN\"\n              },\n              \"full_name\": \"Chaitanya\",\n              \"designation\": \"Developer\",\n              \"company_name\": \"Betalectic\",\n              \"currency_type\": {\n                \"label\": \"INR\",\n                \"value\": \"INR\"\n              },\n              \"profile_picture\": \"\",\n              \"privacy_preference\": false,\n              \"additional_company_details\": {}\n            }\n          }\n        }\n      ],\n      \"addressbook_contacts\": [],\n      \"system_selected_sellers\": {}\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{onboarding_endpoint}}/quotes",
+							"host": [
+								"{{onboarding_endpoint}}"
+							],
+							"path": [
+								"quotes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Quote",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\":\"buyer_accepted_the_quote\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{onboarding_endpoint}}/quotes/23713813-4ab5-4ec0-a97d-4395337e4a24",
+							"host": [
+								"{{onboarding_endpoint}}"
+							],
+							"path": [
+								"quotes",
+								"23713813-4ab5-4ec0-a97d-4395337e4a24"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Quotes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/quotes?page=1&size=4",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"quotes"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "saved",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "ToothBrush",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customized Quotes",
+			"item": [
+				{
+					"name": "Send Customized quote to buyer selected sellers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"customized_quote\",\n    \"data\": {\n        \"category\": \"6a6e30ba-5aaa-4d3b-b064-39155fe86da5\",\n        \"product_name\": \"Dymethazanole\",\n        \"currency_type\": {\n            \"label\": \"INR\",\n            \"value\": \"INR\"\n        },\n        \"amount\": \"300\",\n        \"units\": {\n            \"label\": \"Pack\",\n            \"value\": \"Pack\"\n        },\n        \"quantity\": \"12\",\n        \"country_of_origin\": {\n            \"label\": \"Domestic\",\n            \"value\": \"Domestic\"\n        },\n        \"delivery_time\": {\n            \"label\": \"45 days\",\n            \"value\": \"45 days\"\n        },\n        \"product_info\": {\n            \"product_description\": \"This is the paracetamol order quote\",\n            \"product_form\": {\n                \"label\": \"Solid\",\n                \"value\": \"Solid\"\n            },\n            \"packaging_type\": {\n                \"label\": \"Bags\",\n                \"value\": \"Bags\"\n            },\n            \"product_grade\": {\n                \"label\": \"Biotech\",\n                \"value\": \"Biotech\"\n            },\n            \"product_application\": {\n                \"label\": \"Processing\",\n                \"value\": \"Processing\"\n            },\n            \"packaging_size\": \"12\",\n            \"min_order_quantity\": \"11\",\n            \"purity\": \"45%\",\n            \"color\": \"tan\",\n            \"ph_value\": \"0.3\",\n            \"molar_mass\": \"10mg/mol\",\n            \"melting_point\": \"65\"\n        },\n        \"payment_period\": [\n            {\n                \"label\": \"Advance\",\n                \"value\": \"Advance\"\n            },\n            {\n                \"label\": \"D/A\",\n                \"value\": \"D/A\"\n            },\n            {\n                \"label\": \"Immediate\",\n                \"value\": \"Immediate\"\n            }\n        ],\n        \"provide_lc\": \"yes\",\n        \"prefers_open_credit\": \"yes\",\n        \"opt_for_cash_discount\": \"yes\",\n        \"discount_to_suppliers\": \"yes\",\n        \"discount_rate\": {\n            \"label\": \"Immediate Payment - 10%\",\n            \"value\": \"10%\"\n        },\n        \"tied_up_discount\": \"yes\",\n        \"bank_names\": [\n            \"Dolo\",\n            \"Cipla\"\n        ],\n        \"delivery_in_india\": \"yes\",\n        \"exceptions\": [\n            {\n                \"label\": \"Abhaneri\",\n                \"value\": \"Abhaneri\"\n            },\n            {\n                \"label\": \"Adur\",\n                \"value\": \"Adur\"\n            },\n            {\n                \"label\": \"Jamadoba\",\n                \"value\": \"Jamadoba\"\n            },\n            {\n                \"label\": \"Jamai\",\n                \"value\": \"Jamai\"\n            }\n        ],\n        \"international_delivery\": \"yes\",\n        \"international_exceptions\": [\n            {\n                \"label\": \"Afghanistan\",\n                \"value\": \"AF\"\n            },\n            {\n                \"label\": \"Bermuda\",\n                \"value\": \"BM\"\n            },\n            {\n                \"label\": \"Canada\",\n                \"value\": \"CA\"\n            }\n        ],\n        \"deliver_to_my_location\": \"yes\",\n        \"cd_one_day\": \"10\",\n        \"cd_thirty_days\": \"8\",\n        \"cd_sixty_days\": \"3\",\n        \"cd_ninety_days\": \"1\",\n        \"my_location\": {\n            \"location_name\": \"Jilla parishath office\",\n            \"address\": \"Rayadurgam, 301-324a\",\n            \"country\": \"India\",\n            \"city\": \"Hyderabad\",\n            \"pincode\": \"500023\"\n        },\n        \"logistics\": {\n            \"india\": {\n                \"delivery\": true,\n                \"exceptions\": [\n                    {\n                        \"label\": \"Abhaneri\",\n                        \"value\": \"Abhaneri\"\n                    },\n                    {\n                        \"label\": \"Adur\",\n                        \"value\": \"Adur\"\n                    },\n                    {\n                        \"label\": \"Jamadoba\",\n                        \"value\": \"Jamadoba\"\n                    },\n                    {\n                        \"label\": \"Jamai\",\n                        \"value\": \"Jamai\"\n                    }\n                ]\n            },\n            \"international\": {\n                \"delivery\": true,\n                \"exceptions\": [\n                    {\n                        \"label\": \"Afghanistan\",\n                        \"value\": \"AF\"\n                    },\n                    {\n                        \"label\": \"Bermuda\",\n                        \"value\": \"BM\"\n                    },\n                    {\n                        \"label\": \"Canada\",\n                        \"value\": \"CA\"\n                    }\n                ]\n            },\n            \"deliver_to_my_location\": true,\n            \"my_location\": {\n                \"location_name\": \"Jilla parishath office\",\n                \"address\": \"Rayadurgam, 301-324a\",\n                \"country\": \"India\",\n                \"city\": \"Hyderabad\",\n                \"pincode\": \"500023\"\n            }\n        },\n        \"sellers\": {\n            \"buyer_selected_sellers\": [\n                {\n                    \"label\": \"Yash Raaj Puri - BidAsk\",\n                    \"value\": \"e1b11c88-b422-4f37-95a3-c8ae709452e2\"\n                }\n            ],\n            \"addressbook_contacts\": [],\n            \"system_selected_sellers\": {}\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/quotes",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"quotes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Customized quote to system selected sellers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"customized_quote\",\n    \"data\": {\n        \"category\": \"6a6e30ba-5aaa-4d3b-b064-39155fe86da5\",\n        \"product_name\": \"Paracetamol\",\n        \"currency_type\": {\n            \"label\": \"INR\",\n            \"value\": \"INR\"\n        },\n        \"amount\": \"300\",\n        \"units\": {\n            \"label\": \"Pack\",\n            \"value\": \"Pack\"\n        },\n        \"quantity\": \"12\",\n        \"country_of_origin\": {\n            \"label\": \"Domestic\",\n            \"value\": \"Domestic\"\n        },\n        \"delivery_time\": {\n            \"label\": \"45 days\",\n            \"value\": \"45 days\"\n        },\n        \"product_info\": {\n            \"product_description\": \"This is the paracetamol order quote\",\n            \"product_form\": {\n                \"label\": \"Solid\",\n                \"value\": \"Solid\"\n            },\n            \"packaging_type\": {\n                \"label\": \"Bags\",\n                \"value\": \"Bags\"\n            },\n            \"product_grade\": {\n                \"label\": \"Biotech\",\n                \"value\": \"Biotech\"\n            },\n            \"product_application\": {\n                \"label\": \"Processing\",\n                \"value\": \"Processing\"\n            },\n            \"packaging_size\": \"12\",\n            \"min_order_quantity\": \"11\",\n            \"purity\": \"45%\",\n            \"color\": \"tan\",\n            \"ph_value\": \"0.3\",\n            \"molar_mass\": \"10mg/mol\",\n            \"melting_point\": \"65\"\n        },\n        \"payment_period\": [\n            {\n                \"label\": \"Advance\",\n                \"value\": \"Advance\"\n            },\n            {\n                \"label\": \"D/A\",\n                \"value\": \"D/A\"\n            },\n            {\n                \"label\": \"Immediate\",\n                \"value\": \"Immediate\"\n            }\n        ],\n        \"provide_lc\": \"yes\",\n        \"prefers_open_credit\": \"yes\",\n        \"opt_for_cash_discount\": \"yes\",\n        \"discount_to_suppliers\": \"yes\",\n        \"discount_rate\": {\n            \"label\": \"Immediate Payment - 10%\",\n            \"value\": \"10%\"\n        },\n        \"tied_up_discount\": \"yes\",\n        \"bank_names\": [\n            \"Dolo\",\n            \"Cipla\"\n        ],\n        \"delivery_in_india\": \"yes\",\n        \"exceptions\": [\n            {\n                \"label\": \"Abhaneri\",\n                \"value\": \"Abhaneri\"\n            },\n            {\n                \"label\": \"Adur\",\n                \"value\": \"Adur\"\n            },\n            {\n                \"label\": \"Jamadoba\",\n                \"value\": \"Jamadoba\"\n            },\n            {\n                \"label\": \"Jamai\",\n                \"value\": \"Jamai\"\n            }\n        ],\n        \"international_delivery\": \"yes\",\n        \"international_exceptions\": [\n            {\n                \"label\": \"Afghanistan\",\n                \"value\": \"AF\"\n            },\n            {\n                \"label\": \"Bermuda\",\n                \"value\": \"BM\"\n            },\n            {\n                \"label\": \"Canada\",\n                \"value\": \"CA\"\n            }\n        ],\n        \"deliver_to_my_location\": \"yes\",\n        \"cd_one_day\": \"10\",\n        \"cd_thirty_days\": \"8\",\n        \"cd_sixty_days\": \"3\",\n        \"cd_ninety_days\": \"1\",\n        \"my_location\": {\n            \"location_name\": \"Jilla parishath office\",\n            \"address\": \"Rayadurgam, 301-324a\",\n            \"country\": \"India\",\n            \"city\": \"Hyderabad\",\n            \"pincode\": \"500023\"\n        },\n        \"logistics\": {\n            \"india\": {\n                \"delivery\": true,\n                \"exceptions\": [\n                    {\n                        \"label\": \"Abhaneri\",\n                        \"value\": \"Abhaneri\"\n                    },\n                    {\n                        \"label\": \"Adur\",\n                        \"value\": \"Adur\"\n                    },\n                    {\n                        \"label\": \"Jamadoba\",\n                        \"value\": \"Jamadoba\"\n                    },\n                    {\n                        \"label\": \"Jamai\",\n                        \"value\": \"Jamai\"\n                    }\n                ]\n            },\n            \"international\": {\n                \"delivery\": true,\n                \"exceptions\": [\n                    {\n                        \"label\": \"Afghanistan\",\n                        \"value\": \"AF\"\n                    },\n                    {\n                        \"label\": \"Bermuda\",\n                        \"value\": \"BM\"\n                    },\n                    {\n                        \"label\": \"Canada\",\n                        \"value\": \"CA\"\n                    }\n                ]\n            },\n            \"deliver_to_my_location\": true,\n            \"my_location\": {\n                \"location_name\": \"Jilla parishath office\",\n                \"address\": \"Rayadurgam, 301-324a\",\n                \"country\": \"India\",\n                \"city\": \"Hyderabad\",\n                \"pincode\": \"500023\"\n            }\n        },\n        \"sellers\": {\n            \"buyer_selected_sellers\": [],\n            \"addressbook_contacts\": [],\n            \"system_selected_sellers\": {\n                \"product_name\": \"Paracetamol\",\n                \"category\": \"6a6e30ba-5aaa-4d3b-b064-39155fe86da5\",\n                \"quantity\": \"2\"\n            }\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/quotes",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"quotes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Customized quote to address book contacts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"customized_quote\",\n    \"data\": {\n        \"category\": \"6a6e30ba-5aaa-4d3b-b064-39155fe86da5\",\n        \"product_name\": \"Paracetamol\",\n        \"currency_type\": {\n            \"label\": \"INR\",\n            \"value\": \"INR\"\n        },\n        \"amount\": \"300\",\n        \"units\": {\n            \"label\": \"Pack\",\n            \"value\": \"Pack\"\n        },\n        \"quantity\": \"12\",\n        \"country_of_origin\": {\n            \"label\": \"Domestic\",\n            \"value\": \"Domestic\"\n        },\n        \"delivery_time\": {\n            \"label\": \"45 days\",\n            \"value\": \"45 days\"\n        },\n        \"product_info\": {\n            \"product_description\": \"This is the paracetamol order quote\",\n            \"product_form\": {\n                \"label\": \"Solid\",\n                \"value\": \"Solid\"\n            },\n            \"packaging_type\": {\n                \"label\": \"Bags\",\n                \"value\": \"Bags\"\n            },\n            \"product_grade\": {\n                \"label\": \"Biotech\",\n                \"value\": \"Biotech\"\n            },\n            \"product_application\": {\n                \"label\": \"Processing\",\n                \"value\": \"Processing\"\n            },\n            \"packaging_size\": \"12\",\n            \"min_order_quantity\": \"11\",\n            \"purity\": \"45%\",\n            \"color\": \"tan\",\n            \"ph_value\": \"0.3\",\n            \"molar_mass\": \"10mg/mol\",\n            \"melting_point\": \"65\"\n        },\n        \"payment_period\": [\n            {\n                \"label\": \"Advance\",\n                \"value\": \"Advance\"\n            },\n            {\n                \"label\": \"D/A\",\n                \"value\": \"D/A\"\n            },\n            {\n                \"label\": \"Immediate\",\n                \"value\": \"Immediate\"\n            }\n        ],\n        \"provide_lc\": \"yes\",\n        \"prefers_open_credit\": \"yes\",\n        \"opt_for_cash_discount\": \"yes\",\n        \"discount_to_suppliers\": \"yes\",\n        \"discount_rate\": {\n            \"label\": \"Immediate Payment - 10%\",\n            \"value\": \"10%\"\n        },\n        \"tied_up_discount\": \"yes\",\n        \"bank_names\": [\n            \"Dolo\",\n            \"Cipla\"\n        ],\n        \"delivery_in_india\": \"yes\",\n        \"exceptions\": [\n            {\n                \"label\": \"Abhaneri\",\n                \"value\": \"Abhaneri\"\n            },\n            {\n                \"label\": \"Adur\",\n                \"value\": \"Adur\"\n            },\n            {\n                \"label\": \"Jamadoba\",\n                \"value\": \"Jamadoba\"\n            },\n            {\n                \"label\": \"Jamai\",\n                \"value\": \"Jamai\"\n            }\n        ],\n        \"international_delivery\": \"yes\",\n        \"international_exceptions\": [\n            {\n                \"label\": \"Afghanistan\",\n                \"value\": \"AF\"\n            },\n            {\n                \"label\": \"Bermuda\",\n                \"value\": \"BM\"\n            },\n            {\n                \"label\": \"Canada\",\n                \"value\": \"CA\"\n            }\n        ],\n        \"deliver_to_my_location\": \"yes\",\n        \"cd_one_day\": \"10\",\n        \"cd_thirty_days\": \"8\",\n        \"cd_sixty_days\": \"3\",\n        \"cd_ninety_days\": \"1\",\n        \"my_location\": {\n            \"location_name\": \"Jilla parishath office\",\n            \"address\": \"Rayadurgam, 301-324a\",\n            \"country\": \"India\",\n            \"city\": \"Hyderabad\",\n            \"pincode\": \"500023\",\n            \"type\": \"get_customized_quote_with_existing_address\"\n        },\n        \"logistics\": {\n            \"india\": {\n                \"delivery\": true,\n                \"exceptions\": [\n                    {\n                        \"label\": \"Abhaneri\",\n                        \"value\": \"Abhaneri\"\n                    },\n                    {\n                        \"label\": \"Adur\",\n                        \"value\": \"Adur\"\n                    },\n                    {\n                        \"label\": \"Jamadoba\",\n                        \"value\": \"Jamadoba\"\n                    },\n                    {\n                        \"label\": \"Jamai\",\n                        \"value\": \"Jamai\"\n                    }\n                ]\n            },\n            \"international\": {\n                \"delivery\": true,\n                \"exceptions\": [\n                    {\n                        \"label\": \"Afghanistan\",\n                        \"value\": \"AF\"\n                    },\n                    {\n                        \"label\": \"Bermuda\",\n                        \"value\": \"BM\"\n                    },\n                    {\n                        \"label\": \"Canada\",\n                        \"value\": \"CA\"\n                    }\n                ]\n            },\n            \"deliver_to_my_location\": true,\n            \"my_location\": {\n                \"location_name\": \"Jilla parishath office\",\n                \"address\": \"Rayadurgam, 301-324a\",\n                \"country\": \"India\",\n                \"city\": \"Hyderabad\",\n                \"pincode\": \"500023\"\n            }\n        },\n        \"sellers\": {\n            \"buyer_selected_sellers\": [],\n            \"addressbook_contacts\": [\n                {\n                    \"uuid\": \"822dd7fb-20f9-477e-a235-34edd5b729ca\",\n                    \"name\": \"Rajesh Nautiyal\",\n                    \"email\": \"rajesh@betalectic.com\",\n                    \"mobile\": null,\n                    \"logo\": \"\",\n                    \"organization\": \"Betalectic\",\n                    \"designation\": \"Developer\",\n                    \"department\": \"IT\",\n                    \"categories\": [\n                        {\n                            \"uuid\": \"c8f81663-d41d-44c7-a2c7-8b086ebd676b\",\n                            \"name\": \"Team\",\n                            \"contacts_categories\": {\n                                \"createdAt\": \"2022-03-01T10:03:43.023Z\",\n                                \"updatedAt\": \"2022-03-01T10:03:43.023Z\",\n                                \"category_uuid\": \"c8f81663-d41d-44c7-a2c7-8b086ebd676b\",\n                                \"contact_uuid\": \"822dd7fb-20f9-477e-a235-34edd5b729ca\"\n                            }\n                        }\n                    ]\n                },\n                {\n                    \"uuid\": \"c246cee2-491a-438b-bff3-0296e4bc167a\",\n                    \"name\": \"Chaitanya\",\n                    \"email\": \"vadthyachaitanya@gmail.com\",\n                    \"mobile\": \"+918919813714\",\n                    \"logo\": \"4930a1df-81b2-40c9-bdd6-8648c4f7755e\",\n                    \"organization\": \"Betalectic\",\n                    \"designation\": \"Developer\",\n                    \"department\": \"It\",\n                    \"categories\": [\n                        {\n                            \"uuid\": \"77106057-e295-4d13-9ddc-f57de321a7d6\",\n                            \"name\": \"Sellers and Buyers\",\n                            \"contacts_categories\": {\n                                \"createdAt\": \"2022-02-15T06:18:58.629Z\",\n                                \"updatedAt\": \"2022-02-15T06:18:58.629Z\",\n                                \"category_uuid\": \"77106057-e295-4d13-9ddc-f57de321a7d6\",\n                                \"contact_uuid\": \"c246cee2-491a-438b-bff3-0296e4bc167a\"\n                            }\n                        }\n                    ]\n                }\n            ],\n            \"system_selected_sellers\": {}\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/quotes",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"quotes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Quote",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"seller_uuid\": \"60271bd1-c407-486f-9af0-ee33995126ff\",\n    \"data\": {\n        \"product_name\": \"Eraser\",\n        \"unit\": \"boxes\",\n        \"quantity\": \"10\",\n        \"delivery_location\": \"Gachibowli\",\n        \"delivery_address\": \"1/2A, Swathi nilayam, Greenland street\",\n        \"city\": \"Hyderabad\",\n        \"pincode\": \"500019\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/quotes/cbb6ba41-c799-4f0e-abaf-e2bfc8c4002a",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"quotes",
+								"cbb6ba41-c799-4f0e-abaf-e2bfc8c4002a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Quotes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/quotes",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"quotes"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "saved",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "ToothBrush",
+									"disabled": true
+								},
+								{
+									"key": "profile_uuid",
+									"value": "c434cc46-3e6a-4404-95de-781a671a27b2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Address",
+			"item": [
+				{
+					"name": "Address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"country\": \"India\",\n    \"city\": \"Hyderabad\",\n    \"location_name\": \"Manikonda\",\n    \"address\": \"1/2A, Swathi nilayam, Greenland street\",\n    \"pincode\": \"500019\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{onboarding_endpoint}}/address",
+							"host": [
+								"{{onboarding_endpoint}}"
+							],
+							"path": [
+								"address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"country\": \"Chennai\",\n    \"city\": \"Tiruvananthapur\",\n    \"data\": {\n        \"description\": \"test\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/address/3464ed12-b7e2-4651-8c6f-2d7eedbe4d05",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"address",
+								"3464ed12-b7e2-4651-8c6f-2d7eedbe4d05"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Addresses",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/address",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"address"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "saved",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "ToothBrush",
+									"disabled": true
+								},
+								{
+									"key": "profile_uuid",
+									"value": "c434cc46-3e6a-4404-95de-781a671a27b2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/address/3464ed12-b7e2-4651-8c6f-2d7eedbe4d05",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"address",
+								"3464ed12-b7e2-4651-8c6f-2d7eedbe4d05"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "saved",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "ToothBrush",
+									"disabled": true
+								},
+								{
+									"key": "profile_uuid",
+									"value": "c434cc46-3e6a-4404-95de-781a671a27b2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PinCode Check",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.worldpostallocations.com/pincode?postalcode=534318",
+							"protocol": "https",
+							"host": [
+								"api",
+								"worldpostallocations",
+								"com"
+							],
+							"path": [
+								"pincode"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "saved",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "ToothBrush",
+									"disabled": true
+								},
+								{
+									"key": "profile_uuid",
+									"value": "c434cc46-3e6a-4404-95de-781a671a27b2",
+									"disabled": true
+								},
+								{
+									"key": "postalcode",
+									"value": "534318"
+								},
+								{
+									"key": "countrycode",
+									"value": "in",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Quote Responses",
+			"item": [
+				{
+					"name": "Get Query Response",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{onboarding_endpoint}}/quote-response",
+							"host": [
+								"{{onboarding_endpoint}}"
+							],
+							"path": [
+								"quote-response"
+							],
+							"query": [
+								{
+									"key": "owner_uuid",
+									"value": "555f3222-613f-440d-9920-b6815a30c6c1",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "created",
+									"disabled": true
+								},
+								{
+									"key": "profile_uuid",
+									"value": "555f3222-613f-440d-9920-b6815a30c6c1",
+									"disabled": true
+								},
+								{
+									"key": "core_buyer_leads",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "wirdeup_generated_leads",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "assigned_uuid",
+									"value": "fa90bced-5e4d-4a76-98fb-59c900daf32b",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Seller Quote Responses",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{onboarding_endpoint}}/seller-quotes?page=1&size=10",
+							"host": [
+								"{{onboarding_endpoint}}"
+							],
+							"path": [
+								"seller-quotes"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "saved",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "ToothBrush",
+									"disabled": true
+								},
+								{
+									"key": "profile_uuid",
+									"value": "c434cc46-3e6a-4404-95de-781a671a27b2",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Query Response",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"***Chaithuuuuuuu\",\n    \"company_name\": \"Betalectic\",\n    \"product_name\":\"PCFC\",\n    \"requirement_description\":\"ABCCCCCCCCC\",\n    \"mobile_number\":\"+919381093270\",\n    \"user_uuid\":\"e79c0871-1a5b-41ce-a377-f5540cbb4844\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{onboarding_endpoint}}/popular-product-enquiry",
+							"host": [
+								"{{onboarding_endpoint}}"
+							],
+							"path": [
+								"popular-product-enquiry"
+							],
+							"query": [
+								{
+									"key": "product",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
