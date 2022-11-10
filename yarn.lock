@@ -7,19 +7,20 @@
   resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-7.6.0.tgz#9ea331766084288634a9247fcd8b84f16ff4ba07"
   integrity sha512-XK6BTq1NDMo9Xqw/YkYyGjSsg44fbNwYRx7QK2CuoQgyy+f1rrTDHoExVM5PsyXCtfl2vs2vVJ0MN0yN6LppRw==
 
-"@locospec/engine@^0.0.16":
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/@locospec/engine/-/engine-0.0.16.tgz#3c01a67b48cd642d979dc27a54e3206c604e3986"
-  integrity sha512-2R9SaLswB5To8+URKq1oTA85ncnHZTYwg+DW13w3I1EruCYoW9oYcd8bp3rnNN88aNWpLnhzX3rlBTbkzPyryw==
+"@locospec/engine@^0.0.27":
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/@locospec/engine/-/engine-0.0.27.tgz#b94bbada9f073a67155858477a9d39400af2f4c4"
+  integrity sha512-N0VLchR1tkY7PmanVmK7N6FfcskYFZqJJr5iL451i8FwUAbfDsJKZXLhNxFl9Q5ZF8seXrJUmECWlckjtYZbHQ==
   dependencies:
     fs-extra "^10.1.0"
+    typescript "^4.8.4"
     uuid "^9.0.0"
     validate.js "^0.13.1"
 
-"@locospec/operator-knexjs@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@locospec/operator-knexjs/-/operator-knexjs-0.0.8.tgz#b854fed8acb4e57f258dbb18bc63976abc92acb9"
-  integrity sha512-BbKZ0UNBi8Uv21fpIU2KaWI8n9VcHBEJu445be7FbATo8fKtPNAottS5Q3uqoo+8Xa/ia3/nSCwqZppjr+Jqsg==
+"@locospec/operator-knexjs@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@locospec/operator-knexjs/-/operator-knexjs-0.0.9.tgz#569a091037c0ff57e626b4355271bba571bd35fb"
+  integrity sha512-hJ/63PXHtmusfdCBso2fkvq1FBwUKgH5dGqMoimHKExSq3bJAX/ZLA0a9yjLgw3Nik7o90WlB64SOicYJzu5Iw==
   dependencies:
     knex "^2.3.0"
     pg "^8.8.0"
@@ -2200,6 +2201,11 @@ typedarray-to-buffer@^3.1.5:
   integrity sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
   dependencies:
     is-typedarray "^1.0.0"
+
+typescript@^4.8.4:
+  version "4.8.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.8.4.tgz#c464abca159669597be5f96b8943500b238e60e6"
+  integrity sha512-QCh+85mCy+h0IGff8r5XWzOVSbBO+KfeYrMQh7NJ58QujwcE22u+NUSmUxqF+un70P9GXKxa2HCNiTTMJknyjQ==
 
 umzug@^2.3.0:
   version "2.3.0"
