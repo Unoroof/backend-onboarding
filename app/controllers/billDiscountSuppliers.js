@@ -7,6 +7,8 @@ const findUserByEmailMobile = require("../functions/findUserByEmailMobile");
 const updateInvoicesArray = require("../functions/updateInvoicesArray");
 const sendPushNotification = require("../functions/neptune/neptuneCaller");
 const sendEventOnResponse = require("../functions/sendEventOnResponse");
+const checkExistingInvites = require("../functions/checkExistingInvites");
+const upsertInvite = require("../functions/upsertInvite");
 
 module.exports = {
   async index(req, res) {
@@ -46,6 +48,8 @@ module.exports = {
 
   async create(req, res) {
     try {
+      let inviteCount = 0;
+      let pendingCount = 0;
       let profile = await Profile.findOne({
         where: {
           user_uuid: req.user,
@@ -53,7 +57,8 @@ module.exports = {
         },
       });
 
-      req.body.forEach(async (item) => {
+      for (i = 0; i < req.body.length; i++) {
+        const item = req.body[i];
         if (item.email) {
           item.email = item.email.toLowerCase();
         }
@@ -88,16 +93,26 @@ module.exports = {
             }
           })
           .catch((e) => {
-            console.log(e);
+            console.log("Error In fetching seller profile is>>>>", e);
           });
 
-        let supplier = await BillDiscountSuppliers.create({
-          invited_by: profile.uuid,
-          status: "pending",
-          ...item,
-        });
+        let supplier = null;
+        let [inviteExists, inviteStatus] = [false,null];
+        if(item.profile_uuid){
+          [inviteExists, inviteStatus] = await checkExistingInvites(
+            profile.uuid,
+            item.profile_uuid
+          );
+        }
+        if (inviteStatus === "pending") {
+          pendingCount = pendingCount + 1;
+        }
+        if (!inviteExists) {
+          inviteCount = inviteCount + 1;
+          supplier = await upsertInvite(profile.uuid, item.profile_uuid, item);
+        }
 
-        if (supplier) {
+        if (!inviteExists && item.profile_uuid) {
           if (supplier.email) {
             let sellerProfileData = await Profile.findOne({
               where: {
@@ -161,9 +176,14 @@ module.exports = {
             });
           }
         }
-      });
+      }
 
-      return "Invite Sent";
+      return {
+        status: {
+          sent: inviteCount,
+          pending: pendingCount,
+        },
+      };
     } catch (error) {
       consumeError(error);
     }
