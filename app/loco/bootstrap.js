@@ -4,6 +4,7 @@ const path = require("path");
 
 module.exports = (app, indexRouter) => {
   locoFactory.init({
+    locoPath: path.resolve("app/loco"),
     resourcesPath: path.resolve(`app/loco/resources`),
     mixinsPath: path.resolve(`app/loco/mixins`),
     hooksPath: path.resolve(`app/loco/hooks/index.js`),
