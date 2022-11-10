@@ -12,6 +12,7 @@ const getPagination = require("../functions/getPagination");
 const getPagingData = require("../functions/getPagingData");
 const sendPushNotification = require("../functions/neptune/neptuneCaller");
 const sendEventOnResponse = require("../functions/sendEventOnResponse");
+const filterSingleSellers = require("../functions/filterSingleSellers");
 
 module.exports = {
   async index(req) {
@@ -362,6 +363,9 @@ const getEligibleResponders = async (token, sellers) => {
       });
     }
 
+    if(sellers.system_selected_sellers.category){
+      wired_up_users = filterSingleSellers(wired_up_users,"profile_uuid");
+    }
     eligibleResponders["wired_up_users"] = wired_up_users;
 
     return eligibleResponders;
