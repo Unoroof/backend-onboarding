@@ -2,12 +2,15 @@ const models = require("../models");
 const BillDiscountSuppliers = models.BillDiscountSuppliers;
 
 module.exports = async (buyer_uuid, seller_profile_uuid, items) => {
-  const foundInvite = await BillDiscountSuppliers.findOne({
-    where: {
-      invited_by: buyer_uuid,
-      profile_uuid: seller_profile_uuid,
-    },
-  });
+  let foundInvite = null;
+  if (seller_profile_uuid) {
+    foundInvite = await BillDiscountSuppliers.findOne({
+      where: {
+        invited_by: buyer_uuid,
+        profile_uuid: seller_profile_uuid,
+      },
+    });
+  }
 
   const payloadForUpsertQuery = {
     invited_by: buyer_uuid,

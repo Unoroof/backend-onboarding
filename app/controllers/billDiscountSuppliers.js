@@ -97,20 +97,22 @@ module.exports = {
           });
 
         let supplier = null;
-        const [inviteExists, inviteStatus] = await checkExistingInvites(
-          profile.uuid,
-          item.profile_uuid
-        );
+        let [inviteExists, inviteStatus] = [false,null];
+        if(item.profile_uuid){
+          [inviteExists, inviteStatus] = await checkExistingInvites(
+            profile.uuid,
+            item.profile_uuid
+          );
+        }
         if (inviteStatus === "pending") {
           pendingCount = pendingCount + 1;
         }
         if (!inviteExists) {
           inviteCount = inviteCount + 1;
           supplier = await upsertInvite(profile.uuid, item.profile_uuid, item);
-        } else {
         }
 
-        if (!inviteExists) {
+        if (!inviteExists && item.profile_uuid) {
           if (supplier.email) {
             let sellerProfileData = await Profile.findOne({
               where: {
