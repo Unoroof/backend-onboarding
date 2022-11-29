@@ -186,9 +186,11 @@ module.exports = {
             );
           }
         }
+
+        let eligibleResponders;
         if (req.body.type === "customized_quote") {
           console.log("NOW WE ARE CALLING GET ELIGIBLE RESPONDERS");
-          const eligibleResponders = await getEligibleResponders(
+          eligibleResponders = await getEligibleResponders(
             req.token,
             quote.data.sellers
           );
@@ -268,9 +270,33 @@ module.exports = {
             user_id: sellerProfileData.user_uuid,
             data: {
               quote_type: "best_bid",
+              buyer_company_name: profile?.dataValues?.data?.company_name ? profile.dataValues.data.company_name : "Buyer",
               notification_type: "seller_received_quote_for_best_bid",
             },
           });
+        }
+
+        if(quote.type === "customized_quote" && quote.status === "open"){
+          eligibleResponders.wired_up_users.forEach(async (seller)=>{
+            const seller_profile_data = await Profile.findOne(
+              {
+                where: {
+                  uuid: seller.profile_uuid,
+                  type: "fm-buyer",
+                },
+              },
+              { transaction: t }
+            );
+            await sendPushNotification({
+              event_type: "seller_received_quote_for_best_bid",
+              user_id: seller_profile_data.dataValues.user_uuid,
+              data: {
+                quote_type: "customised",
+                buyer_company_name: profile?.dataValues?.data?.company_name ? profile.dataValues.data.company_name : "Buyer",
+                notification_type: "seller_received_quote_for_best_bid",
+              },
+            });
+          })
         }
 
         return quote;
