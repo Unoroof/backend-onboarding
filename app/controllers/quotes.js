@@ -268,6 +268,7 @@ module.exports = {
             user_id: sellerProfileData.user_uuid,
             data: {
               quote_type: "best_bid",
+              buyer_company_name: profile?.dataValues?.data?.company_name ? profile.dataValues.data.company_name : "Buyer",
               notification_type: "seller_received_quote_for_best_bid",
             },
           });
