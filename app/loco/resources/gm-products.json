@@ -106,5 +106,19 @@
         }
       ]
     }
+    ,
+    "userSubTypes": {
+      "localKey": "gm_products.profile_uuid",
+      "operation": "in",
+      "transformations": [
+        {
+          "operation": "json_path_contains",
+          "resource": "profiles",
+          "findByKey": "data.userSubTypes",
+          "findByValue": "userSubTypes",
+          "extract": "uuid"
+        }
+      ]
+    }
   }
 }
