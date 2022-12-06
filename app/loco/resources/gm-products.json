@@ -106,5 +106,45 @@
         }
       ]
     }
+    ,
+    "userSubTypes": {
+      "localKey": "gm_products.profile_uuid",
+      "operation": "in",
+      "transformations": [
+        {
+          "operation": "json_path_contains",
+          "resource": "profiles",
+          "findByKey": "data.userSubTypes",
+          "findByValue": "userSubTypes",
+          "extract": "uuid"
+        }
+      ]
+    },
+    "country": {
+      "localKey": "gm_products.profile_uuid",
+      "operation": "in",
+      "transformations": [
+        {
+          "operation": "json_path_like",
+          "resource": "profiles",
+          "findByKey": "data.country.label",
+          "findByValue": "country",
+          "extract": "uuid"
+        }
+      ]
+    },
+    "city": {
+      "localKey": "gm_products.profile_uuid",
+      "operation": "in",
+      "transformations": [
+        {
+          "operation": "json_path_like",
+          "resource": "profiles",
+          "findByKey": "data.city.label",
+          "findByValue": "city",
+          "extract": "uuid"
+        }
+      ]
+    }
   }
 }
