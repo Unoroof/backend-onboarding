@@ -100,19 +100,6 @@
     }
   },
   "filterBy": {
-    "userSubTypes": {
-      "localKey": "gm_products.profile_uuid",
-      "operation": "in",
-      "transformations": [
-        {
-          "operation": "custom_query_function",
-          "function": "getProfilesByUserSubTypes",
-          "findByValue": "userSubTypes"
-        }
-      ]
-    }
-  },
-  "filterByBackup": {
     "category": {
       "localKey": "gm_products.uuid",
       "operation": "in",
@@ -145,7 +132,8 @@
       "transformations": [
         {
           "operation": "custom_query_function",
-          "extract": "uuid"
+          "function": "getProfilesByUserSubTypes",
+          "findByValue": "userSubTypes"
         }
       ]
     },
