@@ -94,6 +94,7 @@ module.exports = {
               discount: data.joined_program.discount,
             },
           },
+          request_by: profile.uuid,
         },
       });
 
@@ -109,7 +110,7 @@ module.exports = {
 
         if (billDiscountProgram.status === "accepted") {
           await sendPushNotification({
-            event_type: "bd_buyer_accepts_the_quote", 
+            event_type: "bd_buyer_accepts_the_quote",
             user_id: sellerProfileData.user_uuid,
             data: {
               name: billDiscountProgram.data.request_by_company_name,
