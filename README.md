@@ -26,3 +26,13 @@ psql -h host.docker.internal -p 5433 -U postgres
 docker exec -it 86ba3da2b288 sh
 
 # ------
+
+    case "custom_query_function":
+      const rows = await locoConfig.operator.myFunction("lol ----");
+      console.log("rows -------->",rows)
+      transformedValue = rows;
+      arrangedTransformedValue = {};
+      arrangedTransformedValue[transformation.findByValue] = transformedValue;
+      transformedValue = arrangedTransformedValue;
+
+    break;
