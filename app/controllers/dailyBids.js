@@ -155,6 +155,7 @@ module.exports = {
             ? profile.data.company_name
             : "",
         },
+        buyer_bids: req.body.buyer_bids,
       });
 
       console.log("DAILY BIDS CREATED", dailyBids);
@@ -192,6 +193,14 @@ module.exports = {
             ? updateBidsArray(dailyBids.bids, req.body.bids)
             : dailyBids.bids
           : req.body.bids;
+      }
+
+      if (req.body.buyer_bids) {
+        payload["buyer_bids"] = dailyBids.buyer_bids
+          ? req.body.buyer_bids
+            ? updateBidsArray(dailyBids.buyer_bids, req.body.buyer_bids)
+            : dailyBids.buyer_bids
+          : req.body.buyer_bids;
       }
 
       if (req.body.data) {
