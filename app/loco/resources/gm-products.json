@@ -1,24 +1,34 @@
 {
   "name": "gm-products",
   "label": "GM Products",
-  "primary": ["uuid"],
+  "primary": [
+    "uuid"
+  ],
   "softDelete": true,
   "meta": {
     "table": "gm_products",
     "deleted_at_column": "deletedAt"
   },
-  "mixins": ["datetime-in-resource.json"],
+  "mixins": [
+    "datetime-in-resource.json"
+  ],
   "attributes": {
     "uuid": {
       "label": "UUID",
       "operations": {
         "create": {
           "generate": "uuid",
-          "validate": [{ "type": "uuid" }]
+          "validate": [
+            {
+              "type": "uuid"
+            }
+          ]
         },
         "update": {
           "validate": [
-            { "type": "required" },
+            {
+              "type": "required"
+            },
             {
               "type": "exists",
               "table": "gm_products",
@@ -43,11 +53,17 @@
       },
       "operations": {
         "create": {
-          "validate": [{ "type": "uuid" }]
+          "validate": [
+            {
+              "type": "uuid"
+            }
+          ]
         },
         "update": {
           "validate": [
-            { "type": "required" },
+            {
+              "type": "required"
+            },
             {
               "type": "exists",
               "table": "profiles",
@@ -62,7 +78,11 @@
       "operations": {
         "*": {},
         "create,update": {
-          "validate": [{ "type": "required" }]
+          "validate": [
+            {
+              "type": "required"
+            }
+          ]
         }
       }
     },
@@ -80,6 +100,19 @@
     }
   },
   "filterBy": {
+    "userSubTypes": {
+      "localKey": "gm_products.profile_uuid",
+      "operation": "in",
+      "transformations": [
+        {
+          "operation": "custom_query_function",
+          "function": "getProfilesByUserSubTypes",
+          "findByValue": "userSubTypes"
+        }
+      ]
+    }
+  },
+  "filterByBackup": {
     "category": {
       "localKey": "gm_products.uuid",
       "operation": "in",
@@ -105,17 +138,13 @@
           "extract": "uuid"
         }
       ]
-    }
-    ,
+    },
     "userSubTypes": {
       "localKey": "gm_products.profile_uuid",
       "operation": "in",
       "transformations": [
         {
-          "operation": "json_path_contains",
-          "resource": "profiles",
-          "findByKey": "data.userSubTypes",
-          "findByValue": "userSubTypes",
+          "operation": "custom_query_function",
           "extract": "uuid"
         }
       ]
@@ -138,7 +167,7 @@
       "operation": "in",
       "transformations": [
         {
-          "operation": "json_path_like",
+          "operation": "json_path_contains",
           "resource": "profiles",
           "findByKey": "data.city.label",
           "findByValue": "city",
