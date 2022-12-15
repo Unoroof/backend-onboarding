@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
       bids: {
         type: DataTypes.JSONB,
       },
+      buyer_bids: {
+        type: DataTypes.JSONB,
+      },
       data: {
         type: DataTypes.JSONB,
       },

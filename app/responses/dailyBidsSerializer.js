@@ -1,5 +1,5 @@
 module.exports = (instance) => {
-  const attributes = ["uuid", "profile_uuid", "bids", "data"];
+  const attributes = ["uuid", "profile_uuid", "bids", "data", "buyer_bids"];
 
   const result = {};
 

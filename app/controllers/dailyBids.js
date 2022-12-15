@@ -147,15 +147,21 @@ module.exports = {
         },
       });
 
-      let dailyBids = await DailyBids.create({
+      const payload = {
         profile_uuid: profile.uuid,
-        bids: req.body.bids,
         data: {
           company_name: profile.data.company_name
             ? profile.data.company_name
             : "",
         },
-      });
+      };
+      if (req.body.bids) {
+        payload["bids"] = req.body.bids;
+      }
+      if (req.body.buyer_bids) {
+        payload["buyer_bids"] = req.body.buyer_bids;
+      }
+      let dailyBids = await DailyBids.create(payload);
 
       console.log("DAILY BIDS CREATED", dailyBids);
 
@@ -192,6 +198,14 @@ module.exports = {
             ? updateBidsArray(dailyBids.bids, req.body.bids)
             : dailyBids.bids
           : req.body.bids;
+      }
+
+      if (req.body.buyer_bids) {
+        payload["buyer_bids"] = dailyBids.buyer_bids
+          ? req.body.buyer_bids
+            ? updateBidsArray(dailyBids.buyer_bids, req.body.buyer_bids)
+            : dailyBids.buyer_bids
+          : req.body.buyer_bids;
       }
 
       if (req.body.data) {
