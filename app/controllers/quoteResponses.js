@@ -244,6 +244,7 @@ module.exports = {
             user_id: buyerProfileData.user_uuid,
             data: {
               name: quoteResponse.data.seller_product_info.name,
+              comany_name: buyerProfileData?.data?.company_name,
               quote_type: "best-bid",
               notification_type: "seller_added_invoices_for_best_bid",
             },
@@ -259,6 +260,7 @@ module.exports = {
             user_id: buyerProfileData.user_uuid,
             data: {
               name: quoteResponse.data.seller_product_info.name,
+              comany_name: buyerProfileData?.data?.company_name,
               quote_type: "custom-quote",
               notification_type: "seller_added_invoices_for_custom_quotes",
             },
