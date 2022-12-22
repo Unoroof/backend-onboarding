@@ -267,7 +267,8 @@ module.exports = {
 
         if (
           quoteResponse.quote_type === "best_bids_quote" &&
-          quoteResponse.status === "buyer_accepted_the_quote"
+          quoteResponse.status === "buyer_accepted_the_quote" && 
+          quoteResponse.seller_payment_status === null
         ) {
           let sellerProfileData = await Profile.findOne(
             {
@@ -289,7 +290,8 @@ module.exports = {
           });
         } else if (
           quoteResponse.quote_type === "best_bids_quote" &&
-          quoteResponse.status === "buyer_rejected_the_quote"
+          quoteResponse.status === "buyer_rejected_the_quote" && 
+          quoteResponse.seller_payment_status === null
         ) {
           let sellerProfileData = await Profile.findOne(
             {
