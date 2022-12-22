@@ -193,7 +193,7 @@ module.exports = {
         }
         if (
           quoteResponse.quote_type === "customized_quote" &&
-          quoteResponse.status === "seller_responded_to_quote"  &&
+          quoteResponse.status === "seller_responded_to_quote" &&
           quoteResponse.seller_payment_status === null
         ) {
           await sendPushNotification({
@@ -267,7 +267,7 @@ module.exports = {
 
         if (
           quoteResponse.quote_type === "best_bids_quote" &&
-          quoteResponse.status === "buyer_accepted_the_quote" && 
+          quoteResponse.status === "buyer_accepted_the_quote" &&
           quoteResponse.seller_payment_status === null
         ) {
           let sellerProfileData = await Profile.findOne(
@@ -283,6 +283,7 @@ module.exports = {
             event_type: "buyer_accepts_best_bid_quotation",
             user_id: sellerProfileData.user_uuid,
             data: {
+              company_name: buyerProfileData?.data?.company_name,
               name: quoteResponse.data.seller_product_info.name,
               quote_type: "best-bid",
               notification_type: "buyer_accepts_best_bid_quotation",
@@ -290,7 +291,7 @@ module.exports = {
           });
         } else if (
           quoteResponse.quote_type === "best_bids_quote" &&
-          quoteResponse.status === "buyer_rejected_the_quote" && 
+          quoteResponse.status === "buyer_rejected_the_quote" &&
           quoteResponse.seller_payment_status === null
         ) {
           let sellerProfileData = await Profile.findOne(
@@ -308,6 +309,56 @@ module.exports = {
             data: {
               name: quoteResponse.data.seller_product_info.name,
               quote_type: "best-bid",
+              notification_type: "buyer_rejects_best_bid_quotation",
+            },
+          });
+        }
+
+        if (
+          quoteResponse.quote_type === "customized_quote" &&
+          quoteResponse.status === "buyer_accepted_the_quote" &&
+          quoteResponse.seller_payment_status === null
+        ) {
+          let sellerProfileData = await Profile.findOne(
+            {
+              where: {
+                uuid: quoteResponse.owner_uuid,
+                type: "fm-buyer",
+              },
+            },
+            { transaction: t }
+          );
+          await sendPushNotification({
+            event_type: "buyer_accepts_best_bid_quotation",
+            user_id: sellerProfileData.user_uuid,
+            data: {
+              company_name: buyerProfileData?.data?.company_name,
+              name: quoteResponse.data.seller_product_info.name,
+              quote_type: "customised",
+              notification_type: "buyer_accepts_best_bid_quotation",
+            },
+          });
+        } else if (
+          quoteResponse.quote_type === "best_bids_quote" &&
+          quoteResponse.status === "buyer_rejected_the_quote" &&
+          quoteResponse.seller_payment_status === null
+        ) {
+          let sellerProfileData = await Profile.findOne(
+            {
+              where: {
+                uuid: quoteResponse.owner_uuid,
+                type: "fm-buyer",
+              },
+            },
+            { transaction: t }
+          );
+          await sendPushNotification({
+            event_type: "buyer_rejects_best_bid_quotation",
+            user_id: sellerProfileData.user_uuid,
+            data: {
+              company_name: buyerProfileData?.data?.company_name,
+              name: quoteResponse.data.seller_product_info.name,
+              quote_type: "customised",
               notification_type: "buyer_rejects_best_bid_quotation",
             },
           });
