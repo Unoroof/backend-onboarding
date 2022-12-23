@@ -223,26 +223,33 @@ module.exports = {
           quoteResponse.data.seller_invoices &&
           quoteResponse.data.seller_invoices.length > 0
         ) {
-          const file_response = await axiosCallToGetUrl(req.token, quoteResponse.data.seller_invoices[0]);
+          const file_response = await axiosCallToGetUrl(
+            req.token,
+            quoteResponse.data.seller_invoices[0]
+          );
           const download_url = file_response.download_url;
-          if(quoteResponse.quote_type === "customized_quote"){
+          if (quoteResponse.quote_type === "customized_quote") {
             await sendPushNotification({
               event_type: "seller_added_invoices_for_custom_quotes",
               user_id: buyerProfileData.user_uuid,
               data: {
-                name: quoteResponse.data.seller_product_info.name,
+                name: quoteResponse.data.seller_product_info.name
+                  ? quoteResponse.data.seller_product_info.name
+                  : "Product",
                 company_name: buyerProfileData?.data?.company_name,
                 quote_type: "custom-quote",
                 download_url: download_url,
                 notification_type: "seller_added_invoices_for_custom_quotes",
               },
             });
-          }else{
+          } else {
             await sendPushNotification({
               event_type: "seller_added_invoices_for_best_bid",
               user_id: buyerProfileData.user_uuid,
               data: {
-                name: quoteResponse.data.seller_product_info.name,
+                name: quoteResponse.data.seller_product_info.name
+                  ? quoteResponse.data.seller_product_info.name
+                  : "Product",
                 company_name: buyerProfileData?.data?.company_name,
                 quote_type: "best-bid",
                 download_url: download_url,
