@@ -176,8 +176,37 @@ module.exports = {
           { transaction: t }
         );
 
+        // if (
+        //   quoteResponse.quote_type === "best_bids_quote" &&
+        //   quoteResponse.status === "seller_responded_to_quote" &&
+        //   quoteResponse.seller_payment_status === null
+        // ) {
+        //   await sendPushNotification({
+        //     event_type: "buyer_received_quote_for_best_bid",
+        //     user_id: buyerProfileData.user_uuid,
+        //     data: {
+        //       name: quoteResponse.data.product_name,
+        //       quote_type: "best_bid",
+        //       notification_type: "buyer_received_quote_for_best_bid",
+        //     },
+        //   });
+        // }
+        // if (
+        //   quoteResponse.quote_type === "customized_quote" &&
+        //   quoteResponse.status === "seller_responded_to_quote" &&
+        //   quoteResponse.seller_payment_status === null
+        // ) {
+        //   await sendPushNotification({
+        //     event_type: "buyer_received_quote_for_best_bid",
+        //     user_id: buyerProfileData.user_uuid,
+        //     data: {
+        //       name: quoteResponse.data.product_name,
+        //       quote_type: "customized",
+        //       notification_type: "buyer_received_quote_for_best_bid",
+        //     },
+        //   });
+        // }
         if (
-          quoteResponse.quote_type === "best_bids_quote" &&
           quoteResponse.status === "seller_responded_to_quote" &&
           quoteResponse.seller_payment_status === null
         ) {
@@ -186,22 +215,10 @@ module.exports = {
             user_id: buyerProfileData.user_uuid,
             data: {
               name: quoteResponse.data.product_name,
-              quote_type: "best_bid",
-              notification_type: "buyer_received_quote_for_best_bid",
-            },
-          });
-        }
-        if (
-          quoteResponse.quote_type === "customized_quote" &&
-          quoteResponse.status === "seller_responded_to_quote" &&
-          quoteResponse.seller_payment_status === null
-        ) {
-          await sendPushNotification({
-            event_type: "buyer_received_quote_for_best_bid",
-            user_id: buyerProfileData.user_uuid,
-            data: {
-              name: quoteResponse.data.product_name,
-              quote_type: "customized",
+              quote_type:
+                quoteResponse.quote_type === "customized_quote"
+                  ? "customized"
+                  : "best_bids",
               notification_type: "buyer_received_quote_for_best_bid",
             },
           });
