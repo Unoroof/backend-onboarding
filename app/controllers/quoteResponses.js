@@ -8,6 +8,8 @@ const getPagination = require("../functions/getPagination");
 const getPagingData = require("../functions/getPagingData");
 const sendPushNotification = require("../functions/neptune/neptuneCaller");
 const sendEventOnResponse = require("../functions/sendEventOnResponse");
+const axiosCallToGetUrl = require("../functions/axiosCallToGetUrl");
+
 module.exports = {
   async index(req) {
     try {
@@ -176,36 +178,6 @@ module.exports = {
           { transaction: t }
         );
 
-        // if (
-        //   quoteResponse.quote_type === "best_bids_quote" &&
-        //   quoteResponse.status === "seller_responded_to_quote" &&
-        //   quoteResponse.seller_payment_status === null
-        // ) {
-        //   await sendPushNotification({
-        //     event_type: "buyer_received_quote_for_best_bid",
-        //     user_id: buyerProfileData.user_uuid,
-        //     data: {
-        //       name: quoteResponse.data.product_name,
-        //       quote_type: "best_bid",
-        //       notification_type: "buyer_received_quote_for_best_bid",
-        //     },
-        //   });
-        // }
-        // if (
-        //   quoteResponse.quote_type === "customized_quote" &&
-        //   quoteResponse.status === "seller_responded_to_quote" &&
-        //   quoteResponse.seller_payment_status === null
-        // ) {
-        //   await sendPushNotification({
-        //     event_type: "buyer_received_quote_for_best_bid",
-        //     user_id: buyerProfileData.user_uuid,
-        //     data: {
-        //       name: quoteResponse.data.product_name,
-        //       quote_type: "customized",
-        //       notification_type: "buyer_received_quote_for_best_bid",
-        //     },
-        //   });
-        // }
         if (
           quoteResponse.status === "seller_responded_to_quote" &&
           quoteResponse.seller_payment_status === null
@@ -224,64 +196,60 @@ module.exports = {
           });
         }
 
-        if (
-          quoteResponse.quote_type === "best_bids_quote" &&
-          quoteResponse.status === "seller_ignored_the_quote"
-        ) {
-          await sendPushNotification({
-            event_type: "seller_rejected_the_quote_for_best_bid",
-            user_id: buyerProfileData.user_uuid,
-            data: {
-              query_type: "best_bid",
-              notification_type: "seller_rejected_the_quote_for_best_bid",
-            },
-          });
-        } else if (
-          quoteResponse.quote_type === "customized_quote" &&
-          quoteResponse.status === "seller_ignored_the_quote"
-        ) {
-          await sendPushNotification({
-            event_type: "seller_rejected_the_customized_quote",
-            user_id: buyerProfileData.user_uuid,
-            data: {
-              query_type: "customized",
-              notification_type: "seller_rejected_the_customized_quote",
-            },
-          });
+        if (quoteResponse.status === "seller_ignored_the_quote") {
+          if (quoteResponse.quote_type === "customized_quote") {
+            await sendPushNotification({
+              event_type: "seller_rejected_the_customized_quote",
+              user_id: buyerProfileData.user_uuid,
+              data: {
+                query_type: "customized",
+                notification_type: "seller_rejected_the_customized_quote",
+              },
+            });
+          } else {
+            await sendPushNotification({
+              event_type: "seller_rejected_the_quote_for_best_bid",
+              user_id: buyerProfileData.user_uuid,
+              data: {
+                query_type: "best_bid",
+                notification_type: "seller_rejected_the_quote_for_best_bid",
+              },
+            });
+          }
         }
 
         if (
-          quoteResponse.quote_type === "best_bids_quote" &&
           quoteResponse.status === "buyer_accepted_the_quote" &&
           quoteResponse.data.seller_invoices &&
           quoteResponse.data.seller_invoices.length > 0
         ) {
-          await sendPushNotification({
-            event_type: "seller_added_invoices_for_best_bid",
-            user_id: buyerProfileData.user_uuid,
-            data: {
-              name: quoteResponse.data.seller_product_info.name,
-              company_name: buyerProfileData?.data?.company_name,
-              quote_type: "best-bid",
-              notification_type: "seller_added_invoices_for_best_bid",
-            },
-          });
-        } else if (
-          quoteResponse.quote_type === "customized_quote" &&
-          quoteResponse.status === "buyer_accepted_the_quote" &&
-          quoteResponse.data.seller_invoices &&
-          quoteResponse.data.seller_invoices.length > 0
-        ) {
-          await sendPushNotification({
-            event_type: "seller_added_invoices_for_custom_quotes",
-            user_id: buyerProfileData.user_uuid,
-            data: {
-              name: quoteResponse.data.seller_product_info.name,
-              company_name: buyerProfileData?.data?.company_name,
-              quote_type: "custom-quote",
-              notification_type: "seller_added_invoices_for_custom_quotes",
-            },
-          });
+          const file_response = await axiosCallToGetUrl(req.token, quoteResponse.data.seller_invoices[0]);
+          const download_url = file_response.download_url;
+          if(quoteResponse.quote_type === "customized_quote"){
+            await sendPushNotification({
+              event_type: "seller_added_invoices_for_custom_quotes",
+              user_id: buyerProfileData.user_uuid,
+              data: {
+                name: quoteResponse.data.seller_product_info.name,
+                company_name: buyerProfileData?.data?.company_name,
+                quote_type: "custom-quote",
+                download_url: download_url,
+                notification_type: "seller_added_invoices_for_custom_quotes",
+              },
+            });
+          }else{
+            await sendPushNotification({
+              event_type: "seller_added_invoices_for_best_bid",
+              user_id: buyerProfileData.user_uuid,
+              data: {
+                name: quoteResponse.data.seller_product_info.name,
+                company_name: buyerProfileData?.data?.company_name,
+                quote_type: "best-bid",
+                download_url: download_url,
+                notification_type: "seller_added_invoices_for_best_bid",
+              },
+            });
+          }
         }
 
         if (
