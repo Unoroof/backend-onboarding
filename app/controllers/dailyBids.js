@@ -8,6 +8,7 @@ const updateBidsArray = require("../functions/updateBidsArray");
 const { Op } = require("sequelize");
 const sendPushNotification = require("../functions/neptune/neptuneCaller");
 const sendEventOnResponse = require("../functions/sendEventOnResponse");
+const getUserUUIDAndSendNeptuneCall = require("../functions/getUserUUIDAndSendNeptuneCall");
 
 module.exports = {
   async index(req, res) {
@@ -210,6 +211,35 @@ module.exports = {
 
       if (req.body.data) {
         payload["data"] = { ...dailyBids.data, ...req.body.data };
+      }
+
+      if (payload["bids"]) {
+        let connected_user_data = await BillDiscountSuppliers.findAll({
+          where: {
+            profile_uuid: dailyBids.profile_uuid,
+            status: "accepted",
+          },
+        });
+
+        await getUserUUIDAndSendNeptuneCall(
+          connected_user_data.map((user) => user.invited_by),
+          connected_user_data[0].company_name,
+          "bd_seller_updated_discount_rates"
+        );
+      }
+      if (payload["buyer_bids"]) {
+        let connected_user_data = await BillDiscountSuppliers.findAll({
+          where: {
+            invited_by: dailyBids.profile_uuid,
+            status: "accepted",
+          },
+        });
+
+        await getUserUUIDAndSendNeptuneCall(
+          connected_user_data.map((user) => user.profile_uuid),
+          connected_user_data[0].buyer_company_name,
+          "bd_buyer_updated_discount_rates"
+        );
       }
 
       dailyBids = await dailyBids.update(payload);
