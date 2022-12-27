@@ -113,6 +113,7 @@ module.exports = {
             event_type: "bd_buyer_accepts_the_quote",
             user_id: sellerProfileData.user_uuid,
             data: {
+              program: data?.joined_program,
               name: billDiscountProgram.data.request_by_company_name,
               quote_type: "bill discounting",
               notification_type: "bd_buyer_accepts_the_quote",
@@ -126,6 +127,7 @@ module.exports = {
             user_id: sellerProfileData.user_uuid,
             data: {
               name: billDiscountProgram.data.request_by_company_name,
+              program: data?.joined_program,
               query_type: "bill discounting",
               notification_type: "bd_buyer_rejects_the_discount",
             },
