@@ -92,13 +92,37 @@ module.exports = {
               }
             }
           })
-          .catch((e) => {
-            console.log("Error In fetching seller profile is>>>>", e);
+          .catch(async (e) => {
+            console.log("Error In fetching seller profile is>>>>", e.status);
+            if (e.status == "404") {
+              const contact_info = [];
+              if(Object.keys(item).includes("phone_number")){
+                contact_info.push({
+                  type: "mobile_number",
+                  value: item.phone_number,
+                })
+              }
+              if(Object.keys(item).includes("email")){
+                contact_info.push({
+                  type: "email",
+                  value: item.email,
+                })
+              }
+              await sendEvent({
+                event_type: "buyer_sent_a_bill_discount_invitation",
+                user_id: profile.user_uuid,
+                data: {
+                  company_name: profile.data.company_name,
+                },
+                ignore_user_contacts: true,
+                contact_infos: contact_info,
+              });
+            }
           });
 
         let supplier = null;
-        let [inviteExists, inviteStatus] = [false,null];
-        if(item.profile_uuid){
+        let [inviteExists, inviteStatus] = [false, null];
+        if (item.profile_uuid) {
           [inviteExists, inviteStatus] = await checkExistingInvites(
             profile.uuid,
             item.profile_uuid
@@ -136,7 +160,7 @@ module.exports = {
               data: {
                 company_name: profile.data.company_name,
               },
-              ignore_user_contacts: true,
+              ignore_user_contacts: false,
               contact_infos: [
                 {
                   type: "email",

@@ -271,14 +271,16 @@ module.exports = {
             user_id: sellerProfileData.user_uuid,
             data: {
               quote_type: "best_bid",
-              buyer_company_name: profile?.dataValues?.data?.company_name ? profile.dataValues.data.company_name : "Buyer",
+              buyer_company_name: profile?.dataValues?.data?.company_name
+                ? profile.dataValues.data.company_name
+                : "Buyer",
               notification_type: "seller_received_quote_for_best_bid",
             },
           });
         }
 
-        if(quote.type === "customized_quote" && quote.status === "open"){
-          eligibleResponders.wired_up_users.forEach(async (seller)=>{
+        if (quote.type === "customized_quote" && quote.status === "open") {
+          eligibleResponders.wired_up_users.forEach(async (seller) => {
             const seller_profile_data = await Profile.findOne(
               {
                 where: {
@@ -293,11 +295,13 @@ module.exports = {
               user_id: seller_profile_data.dataValues.user_uuid,
               data: {
                 quote_type: "customised",
-                buyer_company_name: profile?.dataValues?.data?.company_name ? profile.dataValues.data.company_name : "Buyer",
+                buyer_company_name: profile?.dataValues?.data?.company_name
+                  ? profile.dataValues.data.company_name
+                  : "Buyer",
                 notification_type: "seller_received_quote_for_best_bid",
               },
             });
-          })
+          });
         }
 
         return quote;
@@ -390,8 +394,8 @@ const getEligibleResponders = async (token, sellers) => {
       });
     }
 
-    if(sellers.system_selected_sellers.category){
-      wired_up_users = filterSingleSellers(wired_up_users,"profile_uuid");
+    if (sellers.system_selected_sellers.category) {
+      wired_up_users = filterSingleSellers(wired_up_users, "profile_uuid");
     }
     eligibleResponders["wired_up_users"] = wired_up_users;
 
