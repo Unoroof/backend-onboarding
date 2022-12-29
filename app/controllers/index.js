@@ -21,6 +21,7 @@ const OnboardingModuleDropdownsController = require("./onboardingModuleDropdowns
 const PopularProductEnquiryController = require("./popularProductEnquiry");
 const SearchFilterGmProductsController = require("./searchFilterGmProducts");
 const GetGmSellerProductsController = require("./getGmSellerProducts");
+const CreateNewGmCategoryRequestController = require("./gmCategoryRequests");
 
 module.exports = {
   ProfileController,
@@ -46,4 +47,5 @@ module.exports = {
   PopularProductEnquiryController,
   SearchFilterGmProductsController,
   GetGmSellerProductsController,
+  CreateNewGmCategoryRequestController,
 };

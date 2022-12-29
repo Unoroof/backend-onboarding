@@ -80,6 +80,13 @@ const createGmCategoryRequest = require("../app/requests/createGmCategory");
 const gmCategoryCollectionResponse = require("../app/responses/gmCategoryCollection");
 const gmCategoryResourceResponse = require("../app/responses/gmCategoryResource");
 
+const NewGmCategoryRequestController =
+  require("../app/controllers").CreateNewGmCategoryRequestController;
+const gmNewCategoryRequest = require("../app/requests/createGmCategoryRequests");
+const changeGmCategoryRequestStatus = require("../app/requests/changeGmCategoryRequestStatus");
+const gmNewCategoryRequestCollectionResponse = require("../app/responses/gmCategoryRequestsCollection");
+const gmNewCategoryRequestResourceResponse = require("../app/responses/gmCategoryRequestsResource");
+
 const GmBulkProductController =
   require("../app/controllers").GmBulkProductController;
 const gmBulkUploadResourceResponse = require("../app/responses/gmBulkUploadResource");
@@ -346,6 +353,26 @@ router.get(
   "/gm-categories",
   executeForResult(GmCategoryController.index),
   executeForResponse(gmCategoryCollectionResponse)
+);
+
+router.post(
+  "/gm-category-requests",
+  gmNewCategoryRequest,
+  executeForResult(NewGmCategoryRequestController.store),
+  executeForResponse(gmNewCategoryRequestResourceResponse)
+);
+
+router.get(
+  "/gm-category-requests",
+  executeForResult(NewGmCategoryRequestController.index),
+  executeForResponse(gmNewCategoryRequestCollectionResponse)
+);
+
+router.put(
+  "/gm-category-requests/:id",
+  changeGmCategoryRequestStatus,
+  executeForResult(NewGmCategoryRequestController.update),
+  executeForResponse(gmNewCategoryRequestResourceResponse)
 );
 
 router.post(
