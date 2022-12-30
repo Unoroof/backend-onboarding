@@ -3,6 +3,22 @@ const GmCategoryRequests = require("../models").GmCategoryRequests;
 const Profile = require("../models").Profile;
 const sequelize = require("../models").sequelize;
 const GmCategory = require("../models").GmCategory;
+const sendEmailNotification = require("../functions/neptune/neptuneCaller");
+
+const adminEmailContacts = [
+  {
+    type: "email",
+    value: "sonali@unoroof.in",
+  },
+  {
+    type: "email",
+    value: "manasa@betalectic.com",
+  },
+  // {
+  //   type: "email",
+  //   value: "subrahmanyam@betalectic.com",
+  // },
+];
 
 module.exports = {
   async store(req, res) {
@@ -19,6 +35,22 @@ module.exports = {
         created_by: profile.uuid,
         status: "pending",
       });
+
+      if (gmCategoryRequest) {
+        await sendEmailNotification({
+          event_type: "user_added_category_request",
+          user_id: profile.data.user_uuid,
+          data: {
+            name: profile.data.full_name,
+            category_name: req.body.name,
+            email: profile.data.email,
+            mobile: profile.data.mobile,
+          },
+          ignore_user_contacts: true,
+          contact_infos: adminEmailContacts,
+        });
+      }
+
       return gmCategoryRequest;
     } catch (error) {
       consumeError(error);
@@ -27,10 +59,13 @@ module.exports = {
 
   async index(req, res) {
     try {
+      let where = {};
+      if (req.query.status) {
+        where.status = req.query.status;
+      }
+
       const categoryRequestsList = await GmCategoryRequests.findAll({
-        where: {
-          status: req.query.status || "pending",
-        },
+        where: where,
         attributes: {
           include: [
             [
@@ -73,6 +108,39 @@ module.exports = {
       }
 
       gmCategoryRequest = await gmCategoryRequest.update(payload);
+
+      const gmSellerProfile = await Profile.findOne({
+        where: {
+          uuid: gmCategoryRequest.created_by,
+        },
+      });
+
+      if (gmSellerProfile) {
+        await sendEmailNotification({
+          event_type:
+            gmCategoryRequest.status === "accepted"
+              ? "admin_approves_category_request"
+              : "admin_rejects_category_request",
+          user_id: req.user,
+          data: {
+            name: gmSellerProfile.data.full_name,
+            category_name: gmCategoryRequest.category_name,
+          },
+          ignore_user_contacts: true,
+          contact_infos: [
+            {
+              type: "email",
+              value: gmSellerProfile.data.email,
+            },
+            ...adminEmailContacts.map((item) => {
+              return {
+                ...item,
+                cc: true,
+              };
+            }),
+          ],
+        });
+      }
 
       const gmCategory = await GmCategory.findOne({
         where: {
