@@ -156,17 +156,11 @@ module.exports = {
             });
             await sendEvent({
               event_type: "buyer_sent_a_bill_discount_invitation",
-              user_id: profile.user_uuid,
+              user_id: sellerProfileData.user_uuid,
               data: {
                 company_name: profile.data.company_name,
               },
               ignore_user_contacts: false,
-              contact_infos: [
-                {
-                  type: "email",
-                  value: supplier.email,
-                },
-              ],
             });
           } else if (supplier.phone_number) {
             let sellerProfileData = await Profile.findOne({
@@ -186,17 +180,11 @@ module.exports = {
             });
             await sendEvent({
               event_type: "buyer_sent_a_bill_discount_invitation",
-              user_id: profile.user_uuid,
+              user_id: sellerProfileData.user_uuid,
               data: {
                 company_name: profile.data.company_name.substr(0, 30),
               },
-              ignore_user_contacts: true,
-              contact_infos: [
-                {
-                  type: "mobile_number",
-                  value: supplier.phone_number,
-                },
-              ],
+              ignore_user_contacts: false,
             });
           }
         }
