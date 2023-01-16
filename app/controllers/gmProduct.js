@@ -90,6 +90,9 @@ module.exports = {
           discount: req.body.discount,
           data: req.body.data,
         };
+        if (req.body.max_price) {
+          payload["max_price"] = req.body.max_price;
+        }
 
         if (req.body.status) {
           payload["status"] = req.body.status;
@@ -152,6 +155,10 @@ module.exports = {
 
       if (req.body.status) {
         payload["status"] = req.body.status;
+      }
+
+      if(req.body.max_price){
+        payload["max_price"] = { ...gmProduct.max_price, ...req.body.max_price };
       }
 
       gmProduct = await gmProduct.update(payload);
