@@ -5,6 +5,7 @@ module.exports = (instance) => {
     "profile_uuid",
     "brand_name",
     "price",
+    "max_price",
     "discount",
     "data",
     "status",

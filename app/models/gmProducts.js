@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       price: { type: DataTypes.JSONB },
+      max_price: {type: DataTypes.JSONB},
       discount: { type: DataTypes.JSONB },
       data: {
         type: DataTypes.JSONB,
