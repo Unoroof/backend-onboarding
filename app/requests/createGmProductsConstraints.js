@@ -84,6 +84,23 @@ validate.validators.categoriesValidator = function (value) {
   });
 };
 
+validate.validators.maxPriceValidator = function (value, flag, key, data) {
+  return new validate.Promise(function (resolve, reject) {
+    if (value) {
+      // value should be in number format
+      const maxValueRegex = /^[1-9]\d*(\.\d+)?$/;
+      if (!maxValueRegex.test(value)) resolve("^Enter valid max price");
+
+      // value should be grater than the min value
+      if (+data.price.amount > +value) resolve("^Enter valid max price");
+
+      resolve();
+    } else {
+      resolve();
+    }
+  });
+};
+
 const constraints = {
   name: {
     presence: {
@@ -119,6 +136,10 @@ const constraints = {
       message: "^Select unit",
     },
     unitsValidator: true,
+  },
+  "max_price.amount": {
+    presence: false,
+    maxPriceValidator: true,
   },
   "data.country_of_origin": {
     presence: {
