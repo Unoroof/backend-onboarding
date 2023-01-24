@@ -279,7 +279,7 @@ module.exports = {
           }
 
           // Validate product method will returns either empty object or object with error keys
-          const validationResult = await validateProduct(product, constraints);
+          const validationResult = await validateProduct(product);
           console.log("validate res....", validationResult);
 
           if (Object.keys(validationResult).length > 0) {
