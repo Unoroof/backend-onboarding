@@ -88,7 +88,7 @@ validate.validators.maxPriceValidator = function (value, flag, key, data) {
   return new validate.Promise(function (resolve, reject) {
     if (value) {
       // value should be in number format
-      const maxValueRegex = /^[1-9]\d*(\.\d+)?$/;
+      const maxValueRegex = /^[0-9]\d*(\.\d+)?$/;
       if (!maxValueRegex.test(value)) resolve("^Enter valid max price");
 
       // value should be grater than the min value
@@ -105,7 +105,7 @@ validate.validators.numberValidator = function (value) {
   return new validate.Promise(function (resolve, reject) {
     if (value) {
       // value should be in number format
-      const numberRegex = /^[1-9]\d*(\.\d+)?$/;
+      const numberRegex = /^[0-9]\d*(\.\d+)?$/;
       if (!numberRegex.test(value)) resolve("^Enter valid price");
 
       resolve();
