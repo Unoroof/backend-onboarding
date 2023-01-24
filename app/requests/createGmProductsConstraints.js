@@ -101,6 +101,20 @@ validate.validators.maxPriceValidator = function (value, flag, key, data) {
   });
 };
 
+validate.validators.numberValidator = function (value) {
+  return new validate.Promise(function (resolve, reject) {
+    if (value) {
+      // value should be in number format
+      const numberRegex = /^[1-9]\d*(\.\d+)?$/;
+      if (!numberRegex.test(value)) resolve("^Enter valid price");
+
+      resolve();
+    } else {
+      resolve();
+    }
+  });
+};
+
 const constraints = {
   name: {
     presence: {
@@ -129,6 +143,7 @@ const constraints = {
       allowEmpty: false,
       message: "^Enter amount",
     },
+    numberValidator: true,
   },
   "price.unit": {
     presence: {
