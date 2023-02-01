@@ -100,12 +100,7 @@ module.exports = async (enquiry, profile) => {
             type: "email",
             value: "manasa@betalectic.com",
             cc: true,
-          },
-          {
-            type: "email",
-            value: "rajesh@betalectic.com",
-            cc: true,
-          },
+          }
         ],
       });
     } else if (enquiry.type === "for_product") {
@@ -204,12 +199,7 @@ module.exports = async (enquiry, profile) => {
             type: "email",
             value: "manasa@betalectic.com",
             cc: true,
-          },
-          {
-            type: "email",
-            value: "rajesh@betalectic.com",
-            cc: true,
-          },
+          }
         ],
       });
     } else if (enquiry.type === "for_credit_profile") {
@@ -244,12 +234,7 @@ module.exports = async (enquiry, profile) => {
             type: "email",
             value: "manasa@betalectic.com",
             cc: true,
-          },
-          {
-            type: "email",
-            value: "rajesh@betalectic.com",
-            cc: true,
-          },
+          }
         ],
       });
     }
