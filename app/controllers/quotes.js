@@ -13,6 +13,7 @@ const getPagingData = require("../functions/getPagingData");
 const sendPushNotification = require("../functions/neptune/neptuneCaller");
 const sendEventOnResponse = require("../functions/sendEventOnResponse");
 const filterSingleSellers = require("../functions/filterSingleSellers");
+// const adminContacts = require("../static/adminContacts");
 
 module.exports = {
   async index(req) {
@@ -105,8 +106,6 @@ module.exports = {
           { transaction: t }
         );
 
-        //console.log("QUOTE LOGGGGGGGG", quote);
-        console.log("QUOTE LOGGGGGGGG****", quote.data.sellers);
 
         // here we need to add the notification once the  buyer has created the  query.
 
@@ -127,10 +126,6 @@ module.exports = {
             },
           };
 
-          // console.log(
-          //   "check here constraints for checking best-bid seller quote response creation",
-          //   JSON.stringify(constraints)
-          // );
 
           let eligibleGlobalSellerGmProduct = await GmProduct.findOne(
             constraints,
@@ -138,20 +133,12 @@ module.exports = {
               transaction: t,
             }
           );
-          console.log(
-            "check here eligibleGlobalSellerGmProduct best-bid",
-            JSON.stringify(eligibleGlobalSellerGmProduct)
-          );
 
           if (eligibleGlobalSellerGmProduct) {
             let data = [quote.data].map(({ seller_uuid, ...rest }) => ({
               ...rest,
               seller_product_info: eligibleGlobalSellerGmProduct,
             }));
-            console.log(
-              "data in best bids quote---->",
-              JSON.stringify(data[0])
-            );
             let checkData = await QuoteResponse.create(
               {
                 buyer_uuid: quote.profile_uuid,
@@ -164,16 +151,11 @@ module.exports = {
               { transaction: t }
             );
 
-            console.log("CHECKKKKKKK DATA", checkData);
           } else {
             let data = [quote.data].map(({ seller_uuid, ...rest }) => ({
               ...rest,
               seller_product_info: null,
             }));
-            console.log(
-              "data in best bids quote---->",
-              JSON.stringify(data[0])
-            );
             await QuoteResponse.create(
               {
                 buyer_uuid: quote.profile_uuid,
@@ -190,29 +172,19 @@ module.exports = {
 
         let eligibleResponders;
         if (req.body.type === "customized_quote") {
-          console.log("NOW WE ARE CALLING GET ELIGIBLE RESPONDERS");
           eligibleResponders = await getEligibleResponders(
             req.token,
             quote.data.sellers
           );
 
-          console.log(
-            "QuotesEligibleResponders",
-            JSON.stringify(eligibleResponders)
-          );
 
           if (
             eligibleResponders &&
             eligibleResponders.wired_up_users &&
             eligibleResponders.wired_up_users.length > 0
           ) {
-            console.log(
-              "if QuotesEligibleResponders ****",
-              JSON.stringify(eligibleResponders)
-            );
             eligibleResponders.wired_up_users.forEach(
               async ({ profile_uuid, seller_product_info }) => {
-                console.log("profile_uuid", JSON.stringify(profile_uuid));
                 let data = [quote.data].map(({ sellers, ...rest }) => ({
                   ...rest,
                   seller_product_info: seller_product_info,
@@ -225,7 +197,6 @@ module.exports = {
                   owner_uuid: profile_uuid,
                   quote_type: quote.type,
                 });
-                console.log("QUOTE RESPONSE for wiredupusers", quoteResponse);
               }
             );
           } else {
@@ -233,10 +204,6 @@ module.exports = {
               ...rest,
               seller_product_info: null,
             }));
-            console.log(
-              "else data in customized quote---->",
-              JSON.stringify(data[0])
-            );
             let quoteResponse = await QuoteResponse.create({
               buyer_uuid: quote.profile_uuid, // quote creator
               quote_uuid: quote.uuid,
@@ -245,13 +212,8 @@ module.exports = {
               owner_uuid: null,
               quote_type: quote.type,
             });
-            console.log(
-              "else quoteResponse customized",
-              JSON.stringify(quoteResponse)
-            );
           }
         }
-        console.log("NEW QUOTE CREATED**************8", quote);
         let sellerProfileData;
         if (quote.data.seller_uuid) {
           sellerProfileData = await Profile.findOne(
@@ -276,6 +238,8 @@ module.exports = {
                 : "Buyer",
               notification_type: "seller_received_quote_for_best_bid",
             },
+            // ignore_user_contacts: false,
+            // contact_infos: adminContacts,
           });
         }
 
@@ -300,6 +264,8 @@ module.exports = {
                   : "Buyer",
                 notification_type: "seller_received_quote_for_best_bid",
               },
+              // ignore_user_contacts: false,
+              // contact_infos: adminContacts,
             });
           });
         }
@@ -388,7 +354,6 @@ const getEligibleResponders = async (token, sellers) => {
         token,
         sellers.addressbook_contacts
       );
-      console.log("check here addressbook", JSON.stringify(addressbookSellers));
       addressbookSellers.forEach((item) => {
         wired_up_users.push({ profile_uuid: item, seller_product_info: null });
       });
@@ -406,7 +371,6 @@ const getEligibleResponders = async (token, sellers) => {
 };
 
 const findSystemSelectedSellers = async (condition) => {
-  console.log("CATEGORY PAYLOAD", condition);
   try {
     let where = {
       // name: {
@@ -434,10 +398,8 @@ const findSystemSelectedSellers = async (condition) => {
       },
     };
 
-    console.log("chck here constraints", JSON.stringify(constraints));
 
     let profiles = await GmProduct.findAll(constraints);
-    console.log("check here profiles", JSON.stringify(profiles));
     return profiles;
   } catch (error) {
     consumeError(error);
@@ -453,13 +415,8 @@ const findAddressbookSellers = async (token, contacts) => {
           email: item.email,
           mobile: item.mobile,
         };
-        console.log("payload of addressbook finding", JSON.stringify(payload));
         await findUserByEmailMobile(token, payload)
           .then(async (res) => {
-            console.log(
-              "address book profile response------>",
-              JSON.stringify(res)
-            );
             if (res.user_uuid) {
               let sellerProfile = await Profile.findOne({
                 where: {
@@ -475,11 +432,9 @@ const findAddressbookSellers = async (token, contacts) => {
           .catch((e) => {
             console.log(e);
           });
-        console.log("check here userProfiles", JSON.stringify(userProfiles));
         return userProfiles;
       })
     );
-    console.log("check here userProfiles3", JSON.stringify(userProfiles));
     return userProfiles;
   } catch (error) {
     consumeError(error);
