@@ -22,6 +22,7 @@ module.exports = async (users_profile_uuid, company_name, event_type) => {
         user_id: user_uuid,
         data: {
           name: company_name,
+          notification_type: event_type,
         },
         ignore_user_contacts: false,
       });
