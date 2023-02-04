@@ -1,0 +1,52 @@
+{
+    "name": "profiles-filter",
+    "label": "Profiles-filter",
+    "primary": [
+      "uuid"
+    ],
+    "softDelete": true,
+    "meta": {
+      "table": "profiles",
+      "deleted_at_column": "deletedAt"
+    },
+    "mixins": [
+      "datetime-in-resource.json"
+    ],
+    "attributes": {
+      "uuid": {
+        "label": "UUID"
+      },
+      "type": {
+        "label": "Type"
+      },
+      "data": {
+        "label": "Data"
+      }
+    },
+    "filterBy": {
+      "company_name": {
+        "localKey": "profiles.uuid",
+        "operation": "in",
+        "transformations": [
+          {
+            "operation": "json_path_like",
+            "resource": "profiles",
+            "findByKey": "data.company_name",
+            "findByValue": "company_name",
+            "extract": "uuid"
+          }
+        ]
+      },
+      "business_type": {
+        "localKey": "profiles.uuid",
+        "operation": "in",
+        "transformations": [
+          {
+            "operation": "custom_query_function",
+            "function": "getProfilesByUserSubTypes",
+            "findByValue": "business_type"
+          }
+        ]
+      }
+    }
+  }

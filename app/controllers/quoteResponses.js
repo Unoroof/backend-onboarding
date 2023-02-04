@@ -9,6 +9,7 @@ const getPagingData = require("../functions/getPagingData");
 const sendPushNotification = require("../functions/neptune/neptuneCaller");
 const sendEventOnResponse = require("../functions/sendEventOnResponse");
 const axiosCallToGetUrl = require("../functions/axiosCallToGetUrl");
+const adminContacts = require("../static/adminContacts");
 
 module.exports = {
   async index(req) {
@@ -193,6 +194,8 @@ module.exports = {
                   : "best_bids",
               notification_type: "buyer_received_quote_for_best_bid",
             },
+            ignore_user_contacts: false,
+            contact_infos: adminContacts,
           });
         }
 
@@ -241,6 +244,8 @@ module.exports = {
                 download_url: download_url,
                 notification_type: "seller_added_invoices_for_custom_quotes",
               },
+              ignore_user_contacts: false,
+              contact_infos: adminContacts,
             });
           } else {
             await sendPushNotification({
@@ -255,6 +260,8 @@ module.exports = {
                 download_url: download_url,
                 notification_type: "seller_added_invoices_for_best_bid",
               },
+              ignore_user_contacts: false,
+              contact_infos: adminContacts,
             });
           }
         }
@@ -282,6 +289,8 @@ module.exports = {
               quote_type: "best-bid",
               notification_type: "buyer_accepts_best_bid_quotation",
             },
+            ignore_user_contacts: false,
+            contact_infos: adminContacts,
           });
         } else if (
           quoteResponse.quote_type === "best_bids_quote" &&
@@ -331,6 +340,8 @@ module.exports = {
               quote_type: "customised",
               notification_type: "buyer_accepts_best_bid_quotation",
             },
+            ignore_user_contacts: false,
+            contact_infos: adminContacts,
           });
         } else if (
           quoteResponse.quote_type === "best_bids_quote" &&

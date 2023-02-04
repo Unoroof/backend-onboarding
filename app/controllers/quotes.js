@@ -13,7 +13,7 @@ const getPagingData = require("../functions/getPagingData");
 const sendPushNotification = require("../functions/neptune/neptuneCaller");
 const sendEventOnResponse = require("../functions/sendEventOnResponse");
 const filterSingleSellers = require("../functions/filterSingleSellers");
-// const adminContacts = require("../static/adminContacts");
+const adminContacts = require("../static/adminContacts");
 
 module.exports = {
   async index(req) {
@@ -238,8 +238,8 @@ module.exports = {
                 : "Buyer",
               notification_type: "seller_received_quote_for_best_bid",
             },
-            // ignore_user_contacts: false,
-            // contact_infos: adminContacts,
+            ignore_user_contacts: false,
+            contact_infos: adminContacts,
           });
         }
 
@@ -264,8 +264,8 @@ module.exports = {
                   : "Buyer",
                 notification_type: "seller_received_quote_for_best_bid",
               },
-              // ignore_user_contacts: false,
-              // contact_infos: adminContacts,
+              ignore_user_contacts: false,
+              contact_infos: adminContacts,
             });
           });
         }
