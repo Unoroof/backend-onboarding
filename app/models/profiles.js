@@ -32,6 +32,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
       },
+      video_consultation_enabled: {
+        allowNull: true,
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      video_consultation_data: {
+        allowNull: true,
+        type: DataTypes.JSONB,
+      },
     },
     {
       sequelize,
