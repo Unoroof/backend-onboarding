@@ -21,6 +21,12 @@
       },
       "data": {
         "label": "Data"
+      },
+      "video_consultation_enabled": {
+        "label": "type"
+      },
+      "video_consultation_data":{
+        "label": "consultation data"
       }
     },
     "filterBy": {
@@ -45,6 +51,75 @@
             "operation": "custom_query_function",
             "function": "getProfilesByUserSubTypes",
             "findByValue": "business_type"
+          }
+        ]
+      },
+      "designation": {
+        "localKey": "profiles.uuid",
+        "operation": "in",
+        "transformations": [
+          {
+            "operation": "json_path_like",
+            "resource": "profiles",
+            "findByKey": "data.designation",
+            "findByValue": "designation",
+            "extract": "uuid"
+          }
+        ]
+      },
+      "country": {
+        "localKey": "profiles.uuid",
+        "operation": "in",
+        "transformations": [
+          {
+            "operation": "json_path_like",
+            "resource": "profiles",
+            "findByKey": "data.country.label",
+            "findByValue": "country",
+            "extract": "uuid"
+          }
+        ]
+      },
+      "city": {
+        "localKey": "profiles.uuid",
+        "operation": "in",
+        "transformations": [
+          {
+            "operation": "json_path_contains",
+            "resource": "profiles",
+            "findByKey": "data.city.label",
+            "findByValue": "city",
+            "extract": "uuid"
+          }
+        ]
+      },
+      "product_uuids": { 
+        "localKey": "profiles.uuid",
+        "operation": "in",
+        "transformations": [
+          {
+            "operation": "custom_query_function",
+            "function": "getProfilesByProductUUIDs",
+            "findByValue": "product_uuids",
+            "extract": "uuid"
+          }
+        ]
+      },
+      "category_uuid": {
+        "localKey": "profiles.uuid",
+        "operation": "in",
+        "transformations": [
+          {
+            "operation": "in",
+            "resource": "fm-products-categories",
+            "findByKey": "category_uuid",
+            "findByValue": "category_uuid",
+            "extract": "product_uuid"
+          },
+          {
+            "operation": "custom_query_function",
+            "function": "getProfilesByProductUUIDs",
+            "findByValue": "category_uuid"
           }
         ]
       }

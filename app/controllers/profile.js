@@ -197,11 +197,15 @@ module.exports = {
       });
 
       if (profile) {
-        return [
-          await profile.update({
-            video_consultation_enabled: req.body.enable,
-          }),
-        ];
+        const updateData = {
+          video_consultation_enabled: req.body.enable,
+        };
+
+        if (!req.body.enable) {
+          updateData.video_consultation_data = null;
+        }
+
+        return [await profile.update(updateData)];
       }
 
       throw new Error("Seller not found");
@@ -223,6 +227,7 @@ module.exports = {
       if (profile) {
         return [
           await profile.update({
+            video_consultation_enabled: true,
             video_consultation_data: {
               currency_type: req.body.currency_type,
               consultation_charge: req.body.consultation_charge,
