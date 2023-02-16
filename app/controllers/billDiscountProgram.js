@@ -6,6 +6,7 @@ const consumeError = require("../functions/consumeError");
 const updateInvoicesArray = require("../functions/updateInvoicesArray");
 const sendPushNotification = require("../functions/neptune/neptuneCaller");
 const sendEventOnResponse = require("../functions/sendEventOnResponse");
+const adminContacts = require("../static/adminContacts");
 
 const { Op } = require("sequelize");
 
@@ -118,6 +119,8 @@ module.exports = {
               quote_type: "bill discounting",
               notification_type: "bd_buyer_accepts_the_quote",
             },
+            ignore_user_contacts: false,
+            contact_infos: adminContacts,
           });
         }
 
@@ -194,6 +197,8 @@ module.exports = {
             ...billDiscountProgram.data,
             notification_type: "bd_seller_uploaded_invoices",
           },
+          ignore_user_contacts: false,
+          contact_infos: adminContacts,
         });
       }
       return billDiscountProgram;
