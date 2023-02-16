@@ -1,4 +1,5 @@
 const callNeptune = require("../functions/neptune/neptuneCaller");
+const adminContacts = require("../static/adminContacts");
 
 module.exports = async (status, queryResponse) => {
   try {
@@ -27,6 +28,8 @@ module.exports = async (status, queryResponse) => {
             ...queryResponse.data,
             notification_type: "buyer_received_quote_to_a_financing_query",
           },
+          ignore_user_contacts: false,
+          contact_infos: adminContacts,
         });
       } else {
         await callNeptune({
@@ -53,6 +56,8 @@ module.exports = async (status, queryResponse) => {
             ...queryResponse.data,
             notification_type: "buyer_received_quote_to_a_non_financing_query",
           },
+          ignore_user_contacts: false,
+          contact_infos: adminContacts,
         });
       }
     } else if (status === "approved") {
@@ -83,6 +88,8 @@ module.exports = async (status, queryResponse) => {
             notification_type:
               "seller_received_accepted_response_to_a_financing_query", //query detail page
           },
+          ignore_user_contacts: false,
+          contact_infos: adminContacts,
         });
       }
     } else if (status === "rejected") {
@@ -141,6 +148,8 @@ module.exports = async (status, queryResponse) => {
             notification_type:
               "seller_received_requote_request_to_a_financing_query", //query detail page
           },
+          ignore_user_contacts: false,
+          contact_infos: adminContacts,
         });
       }
     } else if (status === "requote_request_responded") {

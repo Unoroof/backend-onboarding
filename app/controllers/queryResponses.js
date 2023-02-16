@@ -8,6 +8,7 @@ const getBuyersLeads = require("../functions/getBuyersLeads");
 const getAddressbookUsersProfile = require("../functions/getAddressbookUsersProfile");
 const sendPushNotification = require("../functions/neptune/neptuneCaller");
 const sendEventOnResponse = require("../functions/sendEventOnResponse");
+const adminContacts = require("../static/adminContacts");
 
 module.exports = {
   async index(req, res) {
@@ -176,6 +177,8 @@ module.exports = {
             ...queryResponse.data,
             notification_type: "seller_received_a_financing_query",
           },
+          ignore_user_contacts: false,
+          contact_infos: adminContacts,
         });
       } else {
         await sendPushNotification({
@@ -190,6 +193,8 @@ module.exports = {
             ...queryResponse.data,
             notification_type: "seller_received_a_non_financing_query",
           },
+          ignore_user_contacts: false,
+          contact_infos: adminContacts,
         });
       }
       return queryResponse;
