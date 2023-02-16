@@ -1,0 +1,13 @@
+{
+    "name": "fm-products-categories",
+    "label": "Fm-products-categories",
+    "softDelete": true,
+    "meta": {
+      "table": "fm_products_categories",
+      "deleted_at_column": "deletedAt"
+    },
+    "mixins": [
+    ],
+    "attributes": {},
+    "filterBy": {}
+  }
