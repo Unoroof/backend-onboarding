@@ -9,6 +9,7 @@ const sendPushNotification = require("../functions/neptune/neptuneCaller");
 const sendEventOnResponse = require("../functions/sendEventOnResponse");
 const checkExistingInvites = require("../functions/checkExistingInvites");
 const upsertInvite = require("../functions/upsertInvite");
+const adminContacts = require("../static/adminContacts");
 
 module.exports = {
   async index(req, res) {
@@ -96,17 +97,17 @@ module.exports = {
             console.log("Error In fetching seller profile is>>>>", e.status);
             if (e.status == "404") {
               const contact_info = [];
-              if(Object.keys(item).includes("phone_number")){
+              if (Object.keys(item).includes("phone_number")) {
                 contact_info.push({
                   type: "mobile_number",
                   value: item.phone_number,
-                })
+                });
               }
-              if(Object.keys(item).includes("email")){
+              if (Object.keys(item).includes("email")) {
                 contact_info.push({
                   type: "email",
                   value: item.email,
-                })
+                });
               }
               await sendEvent({
                 event_type: "buyer_sent_a_bill_discount_invitation",
@@ -153,6 +154,8 @@ module.exports = {
                 name: profile.data.company_name,
                 notification_type: "buyer_invited_supplier",
               },
+              ignore_user_contacts: false,
+              contact_infos: adminContacts,
             });
             await sendEvent({
               event_type: "buyer_sent_a_bill_discount_invitation",
@@ -177,6 +180,8 @@ module.exports = {
                 name: profile.data.company_name,
                 notification_type: "buyer_invited_supplier",
               },
+              ignore_user_contacts: false,
+              contact_infos: adminContacts,
             });
             await sendEvent({
               event_type: "buyer_sent_a_bill_discount_invitation",
@@ -249,6 +254,8 @@ module.exports = {
             quote_type: "bill discounting",
             notification_type: "bd_seller_accepts_the_invite",
           },
+          ignore_user_contacts: false,
+          contact_infos: adminContacts,
         });
       } else if (bdSupplier.status === "rejected") {
         await sendPushNotification({
