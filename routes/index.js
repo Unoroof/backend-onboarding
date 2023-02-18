@@ -124,6 +124,7 @@ const BillDiscountProgramController =
   require("../app/controllers").BillDiscountProgramController;
 const BillDiscountProgramCollectionResponse = require("../app/responses/billDiscountProgramCollection");
 const BillDiscountProgramResourceResponse = require("../app/responses/billDiscountProgramResource");
+const createVideoConsultationProfile = require("../app/requests/createVideoConsultationProfile");
 
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
@@ -159,6 +160,25 @@ router.post(
 router.get(
   "/buyer-profiles",
   executeForResult(profileController.getBuyerForProduct, "profileList"),
+  executeForResponse(profileCollectionResponse)
+);
+
+router.post(
+  "/profile/:profile_uuid/enable_video_consultation",
+  executeForResult(
+    profileController.updateVideoConsultationStatus,
+    "profileList"
+  ),
+  executeForResponse(profileCollectionResponse)
+);
+
+router.post(
+  "/profile/:profile_uuid/video_consultation_configuration",
+  createVideoConsultationProfile,
+  executeForResult(
+    profileController.updateVideoConsultationData,
+    "profileList"
+  ),
   executeForResponse(profileCollectionResponse)
 );
 

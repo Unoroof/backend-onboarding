@@ -140,7 +140,7 @@ module.exports = {
             : profile.data,
         });
 
-        if(profile.type === "fm-buyer"){
+        if (profile.type === "fm-buyer") {
           await updateBillDiscountingSuppliers(profile);
         }
 
@@ -182,6 +182,64 @@ module.exports = {
 
       let profiles = await Profile.findAll(constraints);
       return profiles;
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async updateVideoConsultationStatus(req, res) {
+    try {
+      const profile = await Profile.findOne({
+        where: {
+          uuid: req.params.profile_uuid,
+          type: "fm-seller",
+        },
+      });
+
+      if (profile) {
+        const updateData = {
+          video_consultation_enabled: req.body.enable,
+        };
+
+        if (!req.body.enable) {
+          updateData.video_consultation_data = null;
+        }
+
+        return [await profile.update(updateData)];
+      }
+
+      throw new Error("Seller not found");
+    } catch (error) {
+      consumeError(error);
+    }
+  },
+
+  async updateVideoConsultationData(req, res) {
+    try {
+      console.log("seller uuid", req.params.profile_uuid, req.params, req.body);
+      const profile = await Profile.findOne({
+        where: {
+          uuid: req.params.profile_uuid,
+          type: "fm-seller",
+        },
+      });
+
+      if (profile) {
+        return [
+          await profile.update({
+            video_consultation_enabled: true,
+            video_consultation_data: {
+              currency_type: req.body.currency_type,
+              consultation_charge: req.body.consultation_charge,
+              area_of_specifications: req.body.area_of_specifications,
+              official_email_id: req.body.official_email_id,
+              official_email_verified: req.body.official_email_verified,
+            },
+          }),
+        ];
+      }
+
+      throw new Error("Seller not found");
     } catch (error) {
       consumeError(error);
     }

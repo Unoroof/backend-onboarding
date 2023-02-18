@@ -10,6 +10,8 @@ module.exports = (instance) => {
     "updatedAt",
     "company_name",
     "profiles",
+    "video_consultation_enabled",
+    "video_consultation_data",
   ];
 
   const result = {};

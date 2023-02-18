@@ -1,17 +1,13 @@
 {
   "name": "profiles-filter",
   "label": "Profiles-filter",
-  "primary": [
-    "uuid"
-  ],
+  "primary": ["uuid"],
   "softDelete": true,
   "meta": {
     "table": "profiles",
     "deleted_at_column": "deletedAt"
   },
-  "mixins": [
-    "datetime-in-resource.json"
-  ],
+  "mixins": ["datetime-in-resource.json"],
   "attributes": {
     "uuid": {
       "label": "UUID"
@@ -28,7 +24,7 @@
     "video_consultation_enabled": {
       "label": "type"
     },
-    "video_consultation_data":{
+    "video_consultation_data": {
       "label": "consultation data"
     }
   },
@@ -96,7 +92,7 @@
         }
       ]
     },
-    "product_uuids": { 
+    "product_uuids": {
       "localKey": "profiles.uuid",
       "operation": "in",
       "transformations": [

@@ -224,7 +224,7 @@ module.exports = {
         await getUserUUIDAndSendNeptuneCall(
           connected_user_data.map((user) => user.invited_by),
           connected_user_data[0].company_name,
-          "bd_seller_updated_discount_rates"
+          "bd_seller_updates_discount_rates"
         );
       }
       if (payload["buyer_bids"]) {

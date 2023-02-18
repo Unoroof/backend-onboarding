@@ -6,6 +6,7 @@ const findUserByEmailMobile = require("./findUserByEmailMobile");
 const getAddressbookUsersProfile = require("./getAddressbookUsersProfile");
 const getAddressbookContactsByUserUuid = require("./getAddressbookContactsByUserUuid");
 const sendPushNotification = require("./neptune/neptuneCaller");
+const adminContacts = require("../static/adminContacts");
 
 module.exports = async (token, queryResponse) => {
   try {
@@ -91,6 +92,8 @@ module.exports = async (token, queryResponse) => {
             ...queryResponse.data,
             notification_type: "seller_received_a_financing_query", //query detail page
           },
+          ignore_user_contacts: false,
+          contact_infos: adminContacts,
         });
       } else {
         await sendPushNotification({
@@ -105,6 +108,8 @@ module.exports = async (token, queryResponse) => {
             ...queryResponse.data,
             notification_type: "seller_received_a_non_financing_query", //query detail page
           },
+          ignore_user_contacts: false,
+          contact_infos: adminContacts,
         });
       }
     } else {
@@ -143,6 +148,8 @@ module.exports = async (token, queryResponse) => {
               ...queryResponse.data,
               notification_type: "seller_received_a_financing_query", //query detail page
             },
+            ignore_user_contacts: false,
+            contact_infos: adminContacts,
           });
         } else {
           await sendPushNotification({
@@ -157,6 +164,8 @@ module.exports = async (token, queryResponse) => {
               ...queryResponse.data,
               notification_type: "seller_received_a_non_financing_query", //query detail page
             },
+            ignore_user_contacts: false,
+            contact_infos: adminContacts,
           });
         }
       } else if (ownerProfile.data.assign_wiredup_leads_to === "reject") {
@@ -195,6 +204,8 @@ module.exports = async (token, queryResponse) => {
               ...queryResponse.data,
               notification_type: "seller_received_a_financing_query", //query detail page
             },
+            ignore_user_contacts: false,
+            contact_infos: adminContacts,
           });
         } else {
           await sendPushNotification({
@@ -209,6 +220,8 @@ module.exports = async (token, queryResponse) => {
               ...queryResponse.data,
               notification_type: "seller_received_a_non_financing_query", //query detail page
             },
+            ignore_user_contacts: false,
+            contact_infos: adminContacts,
           });
         }
       } else if (ownerProfile.data.assign_wiredup_leads_to === "auto_assign") {
@@ -254,6 +267,8 @@ module.exports = async (token, queryResponse) => {
                 ...queryResponse.data,
                 notification_type: "seller_received_a_financing_query", //query detail page
               },
+              ignore_user_contacts: false,
+              contact_infos: adminContacts,
             });
           } else {
             await sendPushNotification({
@@ -268,6 +283,8 @@ module.exports = async (token, queryResponse) => {
                 ...queryResponse.data,
                 notification_type: "seller_received_a_non_financing_query", //query detail page
               },
+              ignore_user_contacts: false,
+              contact_infos: adminContacts,
             });
           }
         } else {
@@ -337,6 +354,8 @@ module.exports = async (token, queryResponse) => {
                         ...queryResponse.data,
                         notification_type: "seller_received_a_financing_query", //query detail page
                       },
+                      ignore_user_contacts: false,
+                      contact_infos: adminContacts,
                     });
                   } else {
                     await sendPushNotification({
@@ -352,6 +371,8 @@ module.exports = async (token, queryResponse) => {
                         notification_type:
                           "seller_received_a_non_financing_query",
                       },
+                      ignore_user_contacts: false,
+                      contact_infos: adminContacts,
                     });
                   }
                 } else {
@@ -391,6 +412,8 @@ module.exports = async (token, queryResponse) => {
                         ...queryResponse.data,
                         notification_type: "seller_received_a_financing_query", //query detail page
                       },
+                      ignore_user_contacts: false,
+                      contact_infos: adminContacts,
                     });
                   } else {
                     await sendPushNotification({
@@ -406,6 +429,8 @@ module.exports = async (token, queryResponse) => {
                         notification_type:
                           "seller_received_a_non_financing_query", //query detail page
                       },
+                      ignore_user_contacts: false,
+                      contact_infos: adminContacts,
                     });
                   }
                 }
@@ -445,6 +470,8 @@ module.exports = async (token, queryResponse) => {
                       ...queryResponse.data,
                       notification_type: "seller_received_a_financing_query", //query detail page
                     },
+                    ignore_user_contacts: false,
+                    contact_infos: adminContacts,
                   });
                 } else {
                   await sendPushNotification({
@@ -460,6 +487,8 @@ module.exports = async (token, queryResponse) => {
                       notification_type:
                         "seller_received_a_non_financing_query",
                     },
+                    ignore_user_contacts: false,
+                    contact_infos: adminContacts,
                   });
                 }
               }
@@ -544,6 +573,8 @@ module.exports = async (token, queryResponse) => {
                       ...queryResponse.data,
                       notification_type: "seller_received_a_financing_query",
                     },
+                    ignore_user_contacts: false,
+                    contact_infos: adminContacts,
                   });
                 } else {
                   await sendPushNotification({
@@ -559,6 +590,8 @@ module.exports = async (token, queryResponse) => {
                       notification_type:
                         "seller_received_a_non_financing_query",
                     },
+                    ignore_user_contacts: false,
+                    contact_infos: adminContacts,
                   });
                 }
               } else {
