@@ -1,0 +1,224 @@
+{
+    "name":"video-consultation",
+    "label": "Video-consultation",
+    "primary": ["uuid"],
+    "softDelete": true,
+    "meta": {
+        "table": "video_consultations",
+        "deleted_at_column": "deletedAt"
+      },
+    "mixins": ["datetime-in-resource.json"],
+    "attributes": {
+        "uuid": {
+            "label": "UUID",
+            "operations": {
+              "create": {
+                "generate": "uuid",
+                "validate": [{ "type": "uuid" }]
+              },
+              "update": {
+                "validate": [{ "type": "required" },{
+                    "type": "exists",
+                    "table": "video_consultations",
+                    "column": "uuid"
+                  }]}
+            },
+            "ui": {
+              "detail": {
+                "display": true
+              }
+            }
+          },
+        "buyer_uuid": {
+            "label": "Buyer UUID",
+            "operations": {
+              "*": {},
+              "create": {
+                "validate": [
+                  {
+                   
+                    "table": "profiles",
+                    "column": "uuid"
+                  }
+                ]
+              },
+              "update": {}
+            },
+            "ui": {
+              "detail": {
+                "display": true
+              }
+            }
+        },
+        "banker_uuid": {
+            "label": "Banker UUID",
+            "operations": {
+              "*": {},
+              "create": {
+                "validate": [
+                  {
+               
+                    "table": "profiles",
+                    "column": "uuid"
+                  }
+                ]
+              },
+              "update": {}
+            },
+            "ui": {
+              "detail": {
+                "display": true
+              }
+            }
+        },
+        "type": {
+            "label": "Type",
+            "operations": {
+              "create": {},
+              "update": {}
+            },
+            "ui": {
+              "detail": {
+                "display": true
+              }
+            }
+        },
+        "query_category": {
+            "label": "query_category",
+            "operations": {
+              "*": {},
+              "create": {
+                "validate": [
+                  {
+                    "table": "fm_categories"
+                  }
+                ]
+              },
+              "update": {}
+            },
+            "ui": {
+              "list": {
+                "display": true,
+                "filterBy": "like"
+              },
+              "detail": {
+                "display": true
+              }
+            }
+         },
+         "query_date_time":{
+            "label": "Date Time",
+            "operations": {
+                "create": {},
+                "update": {}
+              },
+              "ui": {
+                "detail": {
+                  "display": true
+                }
+              }
+         },
+         "request_status":{
+                "label": "Request Status",
+                "operations":{
+                    "create": {},
+                    "update": {}
+                },
+                "ui": {
+                    "detail": {
+                      "display": true
+                    }
+                  }
+         },
+         "first_time_borrower":{
+            "label": "First Time Borrower",
+            "operations":{
+                "create": {},
+                "update": {}
+            },
+            "ui": {
+                "detail": {
+                  "display": true
+                }
+              }
+         },
+         "company_vintage_years": {
+            "label": "Company Vintage Years",
+            "operations":{
+                "create": {},
+                "update": {}
+            },
+            "ui": {
+                "detail": {
+                  "display": true
+                }
+              }
+         },
+         "company_vintage_months": {
+            "label": "Company Vintage Months",
+            "operations":{
+                "create": {},
+                "update": {}
+            },
+            "ui": {
+                "detail": {
+                  "display": true
+                }
+              }
+         },
+         "requirement_description": {
+            "label": "Requirement Description",
+            "operations":{
+                "create": {},
+                "update": {}
+            },
+            "ui": {
+                "detail": {
+                  "display": true
+                }
+              }
+         }
+    },
+    "filterBy": {
+        "buyer_uuid": {
+          "localKey": "video_consultations.uuid",
+          "operation": "in",
+          "transformations": [
+             {
+            "operation": "in",
+            "resource": "video_consultations",
+            "findByKey": "data.buyer_uuid",
+            "findByValue": "buyer_uuid",
+            "extract": "uuid"
+        }
+      ]
+        },
+        "type": {
+            "localKey": "video_consultations.uuid",
+            "operation": "in",
+            "transformations": [
+              {
+                "operation": "json_path_like",
+                "resource": "video_consultations",
+                "findByKey": "data.type",
+                "findByValue": "type",
+                "extract": "uuid"
+              }
+            ]
+        },
+        "request_status": {
+            "localKey": "video_consultations.uuid",
+            "operation": "in",
+            "transformations": [
+              {
+                "operation": "json_path_like",
+                "resource": "video_consultations",
+                "findByKey": "data.request_status",
+                "findByValue": "type",
+                "extract": "uuid"
+              }
+            ]
+        }
+    }
+   
+}
