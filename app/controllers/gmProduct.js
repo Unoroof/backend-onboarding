@@ -6,7 +6,7 @@ const { Op, Sequelize } = require("sequelize");
 const getSearchQueries = require("../functions/getSearchQueries");
 const getGmProducts = require("../functions/getGmProducts");
 const getCompanyProducts = require("../functions/getCompanyProducts");
-
+const sendPushNotification = require("../functions/neptune/neptuneCaller");
 const sequelize = require("../models").sequelize;
 
 module.exports = {
@@ -79,6 +79,48 @@ module.exports = {
           user_uuid: req.user,
           type: "fm-buyer",
         },
+      });
+
+      let profileUuids = await sequelize.query(
+        `select distinct profile_uuid  from gm_products where ((data->>'category')::jsonb)->>'value'='${req.body.categories}'AND profile_uuid !='${profile.uuid}'`
+      );
+
+      profileUuids[0].map(async (item, index) => {
+        let receiverProfile = await Profile.findOne({
+          where: {
+            uuid: item.profile_uuid,
+            type: "fm-buyer",
+          },
+        });
+        await sendPushNotification({
+          event_type: "new_product_added_in_category",
+          user_id: receiverProfile.user_uuid,
+          data: {
+            creator_name: profile.data.full_name,
+            product_name: req.body.data.product_name,
+            category_name: req.body.data.category.label,
+            receiver_name: receiverProfile.data.full_name,
+            notification_type: "buyer_has_added_new_product",
+            category_uuid: req.body.data.category.value,
+          },
+          ignore_user_contacts: false,
+          contact_infos: [
+            {
+              type: "email",
+              value: receiverProfile.data.email,
+            },
+            {
+              type: "email",
+              value: "sonali@unoroof.in",
+              cc: true,
+            },
+            {
+              type: "email",
+              value: "manasa@betalectic.com",
+              cc: true,
+            },
+          ],
+        });
       });
 
       if (profile) {
@@ -157,8 +199,11 @@ module.exports = {
         payload["status"] = req.body.status;
       }
 
-      if(req.body.max_price){
-        payload["max_price"] = { ...gmProduct.max_price, ...req.body.max_price };
+      if (req.body.max_price) {
+        payload["max_price"] = {
+          ...gmProduct.max_price,
+          ...req.body.max_price,
+        };
       }
 
       gmProduct = await gmProduct.update(payload);
@@ -305,8 +350,6 @@ module.exports = {
       });
 
       gmProducts = JSON.parse(JSON.stringify(gmProducts));
-
-      console.log("GM products data", gmProducts);
       return gmProducts;
     } catch (error) {
       consumeError(error);
