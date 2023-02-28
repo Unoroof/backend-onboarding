@@ -8,6 +8,7 @@ const getGmProducts = require("../functions/getGmProducts");
 const getCompanyProducts = require("../functions/getCompanyProducts");
 const sendPushNotification = require("../functions/neptune/neptuneCaller");
 const sequelize = require("../models").sequelize;
+const adminContacts = require("../static/adminContacts");
 
 module.exports = {
   async index(req, res) {
@@ -104,22 +105,7 @@ module.exports = {
             category_uuid: req.body.data.category.value,
           },
           ignore_user_contacts: false,
-          contact_infos: [
-            {
-              type: "email",
-              value: receiverProfile.data.email,
-            },
-            {
-              type: "email",
-              value: "sonali@unoroof.in",
-              cc: true,
-            },
-            {
-              type: "email",
-              value: "manasa@betalectic.com",
-              cc: true,
-            },
-          ],
+          contact_infos: adminContacts,
         });
       });
 
