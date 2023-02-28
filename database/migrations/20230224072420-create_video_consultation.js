@@ -53,6 +53,10 @@ module.exports = {
         type: "TIMESTAMP",
         allowNull: true,
       },
+      banker_rejected_on: {
+        type: "TIMESTAMP",
+        allowNull: true,
+      },
       banker_config_info: {
         type: Sequelize.JSONB,
         allowNull: true,
