@@ -89,6 +89,10 @@
           "validate": [
             {
               "type": "required"
+            },
+            {
+              "type": "custom_validator",
+              "value": "isValidConsultationType"            
             }
           ]
         }
@@ -171,7 +175,11 @@
         "create": {
           "validate": [
             {
-              "type": "required"
+              "type": "required"            
+            },
+            {
+              "type": "custom_validator",
+              "value": "isValidDateTime"            
             }
           ]
         }
@@ -189,13 +197,21 @@
           "validate": [
             {
               "type": "required"
+            },
+            {
+              "type": "custom_validator",
+              "value": "isValidConsultationStatus"            
             }
           ]
-        },
-        "update": {
+        },     
+        "patch": {
           "validate": [
             {
               "type": "required"
+            },
+            {
+              "type": "custom_validator",
+              "value": "isValidConsultationStatus"            
             }
           ]
         }
@@ -209,11 +225,15 @@
     "banker_accepted_on": {
       "label": "Banker accepted on",
       "operations": {
-        "update": {
+        "patch":{
           "validate": [
             {
               "type": "required"
-            }
+            },
+            {
+              "type": "custom_validator",
+              "value": "isValidDateTime"            
+            }            
           ]
         }
       },
@@ -226,11 +246,15 @@
     "banker_rejected_on": {
       "label": "Banker rejected on",
       "operations": {
-        "update": {
+        "patch":{
           "validate": [
             {
               "type": "required"
-            }
+            },
+            {
+              "type": "custom_validator",
+              "value": "isValidDateTime"            
+            }            
           ]
         }
       },

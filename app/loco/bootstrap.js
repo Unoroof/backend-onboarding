@@ -24,6 +24,7 @@ module.exports = (app, indexRouter) => {
     indexRouter[mentalRoute.method](
       mentalRoute.path,
       async (req, res, next) => {
+        try{
         let result = await executeRoute(mentalRoute, {
           req: req,
           reqBody: req.body,
@@ -32,6 +33,18 @@ module.exports = (app, indexRouter) => {
           reqHeaders: req.headers,
         });
         return res.status(200).send(result["respondResult"]);
+      }catch(err){
+        if (err.statusCode) {
+          let statusCode = err.statusCode;
+          delete err.statusCode;
+          return res.status(statusCode).send(err);
+        }
+        if (process.env.DEBUG === "true") {
+          return res.status(500).send({ message: err });
+        } else {
+          return res.status(500).send({ message: "Something went wrong" });
+        }
+      }
       }
     );
   });
