@@ -105,7 +105,7 @@ module.exports = {
             category_uuid: req.body.data.category.value,
           },
           ignore_user_contacts: false,
-          contact_infos: adminContacts,
+          // contact_infos: adminContacts,
         });
       });
 
