@@ -83,7 +83,7 @@
       }
     },
     "profile_uuid": {
-      "label": "profile_uuid",
+      "label": "profile uuid",
       "operations": {}
     },
     "brand_name": {
