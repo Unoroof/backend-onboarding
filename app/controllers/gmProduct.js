@@ -154,7 +154,6 @@ module.exports = {
 
   async update(req, res) {
     try {
-      //console.log("UPDATE PAYLOADDDDDD------->>>", req.body.data);
       let payload = {};
       let profile = await Profile.findOne({
         where: {
@@ -162,7 +161,6 @@ module.exports = {
           type: "fm-buyer",
         },
       });
-      //  console.log("user profile in update", profile);
       let gmProduct = await GmProduct.findOne({
         where: {
           uuid: req.params.gm_product_uuid,
@@ -172,7 +170,6 @@ module.exports = {
       let profileUuids = await sequelize.query(
         `select distinct profile_uuid  from gm_products where ((data->>'category')::jsonb)->>'value'='${req.body.categories}'AND profile_uuid !='${profile.uuid}'`
       );
-      console.log("PROFILE UUIDS-------->>>>.", profileUuids);
       console;
       if (req.body.name) {
         payload["name"] = req.body.name;
