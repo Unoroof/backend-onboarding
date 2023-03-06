@@ -75,7 +75,6 @@ module.exports = {
 
   async store(req, res) {
     try {
-      console.log("DATA WHILE ADDING THE PRODUCT", req.body.data);
       let profile = await Profile.findOne({
         where: {
           user_uuid: req.user,
