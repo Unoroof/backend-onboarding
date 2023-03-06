@@ -1,17 +1,13 @@
 {
   "name": "gm-products",
   "label": "GM Products",
-  "primary": [
-    "uuid"
-  ],
+  "primary": ["uuid"],
   "softDelete": true,
   "meta": {
     "table": "gm_products",
     "deleted_at_column": "deletedAt"
   },
-  "mixins": [
-    "datetime-in-resource.json"
-  ],
+  "mixins": ["datetime-in-resource.json"],
   "attributes": {
     "uuid": {
       "label": "UUID",
@@ -85,6 +81,10 @@
           ]
         }
       }
+    },
+    "profile_uuid": {
+      "label": "profile_uuid",
+      "operations": {}
     },
     "brand_name": {
       "label": "Brand Name",
