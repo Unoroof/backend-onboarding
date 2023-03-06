@@ -75,6 +75,7 @@ module.exports = {
 
   async store(req, res) {
     try {
+      console.log("DATA WHILE ADDING THE PRODUCT", req.body.data);
       let profile = await Profile.findOne({
         where: {
           user_uuid: req.user,
@@ -103,6 +104,7 @@ module.exports = {
             receiver_name: receiverProfile.data.full_name,
             notification_type: "buyer_has_added_new_product",
             category_uuid: req.body.data.category.value,
+            profile_uuid: profile.uuid,
           },
           ignore_user_contacts: false,
           // contact_infos: adminContacts,
