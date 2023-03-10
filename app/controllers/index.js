@@ -22,6 +22,7 @@ const PopularProductEnquiryController = require("./popularProductEnquiry");
 const SearchFilterGmProductsController = require("./searchFilterGmProducts");
 const GetGmSellerProductsController = require("./getGmSellerProducts");
 const CreateNewGmCategoryRequestController = require("./gmCategoryRequests");
+const VideoConsultationController = require("./videoConsultationController");
 
 module.exports = {
   ProfileController,
@@ -48,4 +49,5 @@ module.exports = {
   SearchFilterGmProductsController,
   GetGmSellerProductsController,
   CreateNewGmCategoryRequestController,
+  VideoConsultationController,
 };
