@@ -24,6 +24,6 @@ spec:
                 [
                   "sh",
                   "-c",
-                  "ENVFILE=backend_onboarding_env node ./app/functions/100ms/DisableRoom/index.js",
+                  "ENVFILE=backend_onboarding_env node ./app/functions/100ms/disableRoom/index.js",
                 ]
           restartPolicy: OnFailure
