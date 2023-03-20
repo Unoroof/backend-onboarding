@@ -122,10 +122,11 @@ const disableRoom = async () => {
         }
       }
     }
-
+    await knex.destroy();
     return true;
   } catch (err) {
     console.log("Error while disable room", err);
+    await knex.destroy();
   }
 };
 
