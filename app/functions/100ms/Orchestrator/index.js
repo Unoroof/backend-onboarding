@@ -13,6 +13,11 @@ const orchestrator = async (endpoint, payload, method = "post") => {
       Authorization: `Bearer ${managementToken}`,
     };
 
+    if (method === "get") {
+      delete headers["Content-Length"];
+      delete headers["Accept"];
+    }
+
     const response = await externalApiCaller(
       apiEndpoint,
       method,
