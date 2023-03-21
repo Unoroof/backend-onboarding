@@ -96,7 +96,6 @@ const disableRoom = async () => {
     //   .utc()
     //   .tz("asia/kolkata")
     //   .format("YYYY-MM-DD HH:mm:ss");
-    console.log("process.env", process.env);
 
     const dateTime = moment().format("YYYY-MM-DD HH:mm:ss");
 
@@ -106,6 +105,11 @@ const disableRoom = async () => {
       .where("request_status", "buyer_payment_done")
       .where("payment_status", "paid")
       .where("consultation_end_date_time", "<", dateTime);
+
+    console.log(
+      "video consultation uuids",
+      videoConsultation.map((item) => item.uuid)
+    );
 
     for (i = 0; i < videoConsultation.length; i++) {
       const consultationRequest = videoConsultation[i];
