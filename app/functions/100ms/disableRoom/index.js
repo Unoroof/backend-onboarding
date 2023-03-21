@@ -92,19 +92,19 @@ const updateVideoConsultationStatus = async (
 const disableRoom = async () => {
   try {
     // Need to check with server timezone
-    // const tzTime = moment()
-    //   .utc()
-    //   .tz("asia/kolkata")
-    //   .format("YYYY-MM-DD HH:mm:ss");
+    const tzTime = moment()
+      .utc()
+      .tz("asia/kolkata")
+      .format("YYYY-MM-DD HH:mm:ss");
 
-    const dateTime = moment().format("YYYY-MM-DD HH:mm:ss");
+    // const dateTime = moment().format("YYYY-MM-DD HH:mm:ss");
 
-    console.log("disable room dateTime ", dateTime);
+    console.log("tzTime ", tzTime);
 
     const videoConsultation = await knex("video_consultations")
       .where("request_status", "buyer_payment_done")
       .where("payment_status", "paid")
-      .where("consultation_end_date_time", "<", dateTime);
+      .where("consultation_end_date_time", "<", tzTime);
     console.log(
       "video consultation uuids",
       videoConsultation.map((item) => item.uuid)
