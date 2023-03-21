@@ -121,6 +121,34 @@
           "findByValue": "category_uuid"
         }
       ]
+    },
+    "product_name": {
+      "localKey": "profiles.uuid",
+      "operation": "in",
+      "transformations": [
+        {
+          "operation": "custom_query_function",
+          "function": "getProfilesByProductName",
+          "findByValue": "product_name",
+          "extract": "uuid"
+        }
+      ]
+    },
+    "category_name": {
+      "localKey": "profiles.uuid",
+      "operation": "in",
+      "transformations": [
+        {
+          "operation": "custom_query_function",
+          "function": "getProductUUIDsByCategoryName",
+          "findByValue": "category_name"
+        },
+        {
+          "operation": "custom_query_function",
+          "function": "getProfilesByProductUUIDs",
+          "findByValue": "category_name"
+        }
+      ]
     }
   }
 }
