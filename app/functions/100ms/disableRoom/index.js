@@ -99,7 +99,6 @@ const disableRoom = async () => {
 
     // const dateTime = moment().format("YYYY-MM-DD HH:mm:ss");
 
-    console.log("disable room dateTime ", dateTime);
     console.log("tzTime ", tzTime);
 
     const videoConsultation = await knex("video_consultations")
@@ -125,7 +124,6 @@ const disableRoom = async () => {
           );
         }
       }
-      console.log("hello subbu");
     }
     await knex.destroy();
     return true;
