@@ -613,5 +613,9 @@ router.post(
   "/video-consultation/create-room/:requestId",
   executeForResponse(videoConsultationController.createRoom)
 );
+router.post(
+  "/video-consultation/search-suggestions",
+  executeForResponse(videoConsultationController.searchAllSuggestions)
+);
 
 module.exports = router;
