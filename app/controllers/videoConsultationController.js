@@ -94,6 +94,7 @@ module.exports = {
               [Op.iLike]: `%${req.body.searchText}%`,
             },
           },
+          video_consultation_enabled: true,
         },
       });
 
