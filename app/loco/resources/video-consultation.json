@@ -108,15 +108,7 @@
       "operations": {
         "*": {},
         "create": {
-          "validate": [
-            {
-              "type": "uuid"
-            },
-            {
-              "table": "fm_categories",
-              "column": "uuid"
-            }
-          ]
+          "validate": []
         }
       },
       "ui": {
@@ -173,15 +165,7 @@
       "label": "Date Time",
       "operations": {
         "create": {
-          "validate": [
-            {
-              "type": "required"
-            },
-            {
-              "type": "custom_validator",
-              "value": "isValidDateTime"
-            }
-          ]
+          "validate": []
         }
       },
       "ui": {
@@ -278,6 +262,9 @@
     },
     "consultation_end_date_time": {
       "label": "Consultation end date time"
+    },
+    "expiry_reason": {
+      "label": "expiry reason"
     }
   }
 }

@@ -3,10 +3,10 @@ kind: CronJob
 metadata:
   name: backend-onboarding-cron
 spec:
-  # Time is in GMT, it will run on every 5mins
+  # Time is in GMT, it will run on every 1mins
   # https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
   # https://crontab.cronhub.io/
-  schedule: "*/5 * * * *"
+  schedule: "*/1 * * * *"
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
   jobTemplate:
@@ -24,6 +24,6 @@ spec:
                 [
                   "sh",
                   "-c",
-                  "ENVFILE=backend_onboarding_env node ./app/functions/100ms/disableRoom/index.js",
+                  "ENVFILE=backend_onboarding_env node ./app/functions/100ms/consultationCrons.js",
                 ]
           restartPolicy: OnFailure
