@@ -1,6 +1,3 @@
-var dotenv = require("dotenv");
-dotenv.config({ path: ".env" });
-
 const moment = require("moment-timezone");
 const orchestrator = require("../Orchestrator");
 
@@ -41,18 +38,31 @@ const getJoinedRolesIn100ms = async (id) => {
     };
 
     const endPoint = `/v2/sessions`;
-    const rolesData = await orchestrator(endPoint, payload, "get");
+    const sessionData = await orchestrator(endPoint, payload, "get");
 
-    const peersListRoles = rolesData?.data
+    const peersListRoles = sessionData?.data
       ?.map((item) => Object.values(item.peers))
       .flat()
       .map((item) => item.role);
 
     const joinedUniqueRoles = [...new Set(peersListRoles)];
 
-    return joinedUniqueRoles;
+    return { joinedUniqueRoles, sessionData };
   } catch (err) {
     console.log("error while get joined roles", err);
+  }
+};
+
+const updateSessionData = async (sessionData, videoConsultation) => {
+  try {
+    return await knex("video_consultations")
+      .update({ video_session_data: sessionData })
+      .where({ uuid: videoConsultation.uuid });
+  } catch (err) {
+    console.log(
+      `error while updating the session data ${videoConsultation.uuid}`,
+      err
+    );
   }
 };
 
@@ -97,16 +107,15 @@ const disableRoom = async () => {
       .tz("asia/kolkata")
       .format("YYYY-MM-DD HH:mm:ss");
 
-    // const dateTime = moment().format("YYYY-MM-DD HH:mm:ss");
-
-    console.log("tzTime ", tzTime);
+    console.log("disableRoom tzTime ", tzTime);
 
     const videoConsultation = await knex("video_consultations")
-      .where("request_status", "buyer_payment_done")
       .where("payment_status", "paid")
+      .where("request_status", "buyer_payment_done")
       .where("consultation_end_date_time", "<", tzTime);
+
     console.log(
-      "video consultation uuids",
+      "disableRoom video consultation uuids",
       videoConsultation.map((item) => item.uuid)
     );
 
@@ -116,8 +125,11 @@ const disableRoom = async () => {
 
       if (roomId) {
         await endActiveRoomIn100ms(roomId);
-        const joinedUniqueRoles = await getJoinedRolesIn100ms(roomId);
+        const { joinedUniqueRoles, sessionData } = await getJoinedRolesIn100ms(
+          roomId
+        );
         if (joinedUniqueRoles) {
+          await updateSessionData(sessionData, consultationRequest);
           await updateVideoConsultationStatus(
             joinedUniqueRoles,
             consultationRequest
@@ -133,4 +145,4 @@ const disableRoom = async () => {
   }
 };
 
-disableRoom();
+module.exports = disableRoom;
