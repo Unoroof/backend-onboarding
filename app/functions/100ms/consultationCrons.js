@@ -8,8 +8,8 @@ const expireLiveConsultation = require("./expireLiveConsultation");
 const consultationCrons = async () => {
   try {
     disableRoom();
-    // expireFutureConsultation();
-    // expireLiveConsultation();
+    expireFutureConsultation();
+    expireLiveConsultation();
   } catch (err) {
     console.log("Error while disable room", err);
   }
