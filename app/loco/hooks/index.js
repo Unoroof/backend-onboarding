@@ -75,7 +75,7 @@ async function afterRespondPatchVideoConsultation(context) {
       data: {
         requested_by: receiverProfile.data.full_name,
         requested_to: senderProfile.data.full_name,
-        notification_type: "banker_has_accepted_the_video_consultation",
+        notification_type: "buyer_has_paid_for_the_video_consultation",
         consultation_amount:
           locoAction["opResult"]["payment_details"]["amount"],
       },
