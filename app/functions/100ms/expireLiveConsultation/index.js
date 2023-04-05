@@ -76,13 +76,13 @@ const expireLiveConsultation = async () => {
         data: {
           requested_by: senderProfile.data.full_name,
           requested_to: receiverProfile.data.full_name,
-          notification_type: "banker_has_accepted_the_video_consultation",
+          notification_type: "your_live_video_consultation_request_is_expired",
         },
         ignore_user_contacts: false,
         contact_infos: [
           {
             type: "email",
-            value: receiverProfile.data.email,
+            value: senderProfile.data.email,
           },
           // {
           //   type: "email",
@@ -104,5 +104,7 @@ const expireLiveConsultation = async () => {
     await knex.destroy();
   }
 };
+
+//expireLiveConsultation();
 
 module.exports = expireLiveConsultation;
