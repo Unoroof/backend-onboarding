@@ -1,5 +1,7 @@
 var dotenv = require("dotenv");
 dotenv.config({ path: ".env" });
+const sendPushNotification = require("../../../functions/neptune/neptuneCaller");
+const Profile = require("../../../models").Profile;
 
 const moment = require("moment-timezone");
 
@@ -56,6 +58,39 @@ const expireFutureConsultation = async () => {
       await knex("video_consultations")
         .update({ request_status: "request_expired", expiry_reason: reason })
         .where({ uuid: consultationRequest.uuid });
+
+      let buyerProfile = await Profile.findOne({
+        where: {
+          uuid: consultationRequest.buyer_uuid,
+          type: "fm-buyer",
+        },
+      });
+
+      let bankerProfile = await Profile.findOne({
+        where: {
+          uuid: consultationRequest.banker_uuid,
+          type: "fm-seller",
+        },
+      });
+
+      await sendPushNotification({
+        event_type: "future_date_consultation_request_is_expired",
+        user_id: buyerProfile.user_uuid,
+        data: {
+          buyer_name: buyerProfile.data.full_name,
+          banker_name: bankerProfile.data.full_name,
+          profile_uuid: buyerProfile.uuid,
+          notification_type:
+            "your_future_date_video_consultation_request_is_expired",
+        },
+        ignore_user_contacts: false,
+        contact_infos: [
+          {
+            type: "email",
+            value: buyerProfile.data.email,
+          },
+        ],
+      });
     }
     await knex.destroy();
     return true;
