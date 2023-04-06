@@ -27,6 +27,7 @@ async function afterRespondCreateVideoConsultation(context) {
     data: {
       requested_by: senderProfile.data.full_name,
       requested_to: receiverProfile.data.full_name,
+      type: locoAction["payload"]["type"],
       notification_type: "buyer_has_requested_for_video_consultation",
     },
     ignore_user_contacts: false,
@@ -52,7 +53,7 @@ async function afterRespondCreateVideoConsultation(context) {
 
 async function afterRespondPatchVideoConsultation(context) {
   const { locoAction } = context;
-
+  console.log("LOCO ACTIONN-----", locoAction["opResult"]["type"]);
   let receiverProfile = await Profile.findOne({
     where: {
       uuid: locoAction["opResult"]["buyer_uuid"],
@@ -75,6 +76,7 @@ async function afterRespondPatchVideoConsultation(context) {
       data: {
         requested_by: receiverProfile.data.full_name,
         requested_to: senderProfile.data.full_name,
+        type: locoAction["opResult"]["type"],
         notification_type: "buyer_has_paid_for_the_video_consultation",
         consultation_amount:
           locoAction["opResult"]["payment_details"]["amount"],
@@ -109,6 +111,7 @@ async function afterRespondPatchVideoConsultation(context) {
       data: {
         requested_by: receiverProfile.data.full_name,
         requested_to: senderProfile.data.full_name,
+        type: locoAction["opResult"]["type"],
         notification_type: "banker_has_cancelled_the_video_consultation",
       },
       ignore_user_contacts: false,
@@ -142,6 +145,7 @@ async function afterRespondPatchVideoConsultation(context) {
       data: {
         requested_by: receiverProfile.data.full_name,
         requested_to: senderProfile.data.full_name,
+        type: locoAction["opResult"]["type"],
         notification_type: "banker_has_accepted_the_video_consultation",
       },
       ignore_user_contacts: false,
