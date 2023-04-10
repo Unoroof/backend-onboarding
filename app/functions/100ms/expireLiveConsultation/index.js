@@ -30,6 +30,7 @@ const expireLiveConsultation = async () => {
       .whereIn("request_status", [
         "buyer_send_request",
         "banker_accepted_the_request",
+        "buyer_payment_failed",
       ])
       .where("type", "live")
       .where("consultation_end_date_time", "<", tzTime);
