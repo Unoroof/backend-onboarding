@@ -26,6 +26,7 @@ phases:
       - echo "Start post build"
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/${IMAGE_NAME}:$UUID
       - sed -i 's@CONTAINER_IMAGE@'"$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/${IMAGE_NAME}:$UUID"'@' kube-manifests/deployment.yml
+      - sed -i 's@CONTAINER_IMAGE@'"$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/${IMAGE_NAME}:$UUID"'@' kube-manifests/cronjob.yml
       # Setup kubectl with our EKS Cluster
       - echo "Update Kube Config"
       - aws eks update-kubeconfig --name $CLUSTER_NAME

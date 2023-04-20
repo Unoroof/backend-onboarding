@@ -126,6 +126,9 @@ const BillDiscountProgramCollectionResponse = require("../app/responses/billDisc
 const BillDiscountProgramResourceResponse = require("../app/responses/billDiscountProgramResource");
 const createVideoConsultationProfile = require("../app/requests/createVideoConsultationProfile");
 
+const videoConsultationController =
+  require("../app/controllers").VideoConsultationController;
+
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
     status: "ok",
@@ -599,6 +602,20 @@ router.post(
   "/v2/gm/get-seller-products",
   executeForResult(getGmSellerProductsController.getGmSellerProducts),
   executeForResponse(gmSellerProductsResponse)
+);
+
+router.get(
+  "/video-consultation/auth-token/:requestId",
+  executeForResponse(videoConsultationController.getAuthToken)
+);
+
+router.post(
+  "/video-consultation/create-room/:requestId",
+  executeForResponse(videoConsultationController.createRoom)
+);
+router.post(
+  "/video-consultation/search-suggestions",
+  executeForResponse(videoConsultationController.searchAllSuggestions)
 );
 
 module.exports = router;

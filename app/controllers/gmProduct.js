@@ -103,6 +103,7 @@ module.exports = {
             receiver_name: receiverProfile.data.full_name,
             notification_type: "buyer_has_added_new_product",
             category_uuid: req.body.data.category.value,
+            profile_uuid: profile.uuid,
           },
           ignore_user_contacts: false,
           // contact_infos: adminContacts,
@@ -154,13 +155,22 @@ module.exports = {
   async update(req, res) {
     try {
       let payload = {};
-
+      let profile = await Profile.findOne({
+        where: {
+          user_uuid: req.user,
+          type: "fm-buyer",
+        },
+      });
       let gmProduct = await GmProduct.findOne({
         where: {
           uuid: req.params.gm_product_uuid,
         },
       });
 
+      let profileUuids = await sequelize.query(
+        `select distinct profile_uuid  from gm_products where ((data->>'category')::jsonb)->>'value'='${req.body.categories}'AND profile_uuid !='${profile.uuid}'`
+      );
+      console;
       if (req.body.name) {
         payload["name"] = req.body.name;
       }
@@ -193,6 +203,30 @@ module.exports = {
       }
 
       gmProduct = await gmProduct.update(payload);
+
+      profileUuids[0].map(async (item, index) => {
+        let receiverProfile = await Profile.findOne({
+          where: {
+            uuid: item.profile_uuid,
+            type: "fm-buyer",
+          },
+        });
+        await sendPushNotification({
+          event_type: "gm_product_details_updated_in_category",
+          user_id: receiverProfile.user_uuid,
+          data: {
+            creator_name: profile.data.full_name,
+            product_name: req.body.data.product_name,
+            category_name: req.body.data.category.label,
+            receiver_name: receiverProfile.data.full_name,
+            notification_type: "user_has_updated_the_product_details",
+            category_uuid: req.body.data.category.value,
+            profile_uuid: profile.uuid,
+          },
+          ignore_user_contacts: false,
+          // contact_infos: adminContacts,
+        });
+      });
       return gmProduct;
     } catch (error) {
       console.error(error);
