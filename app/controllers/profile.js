@@ -234,6 +234,7 @@ module.exports = {
               area_of_specifications: req.body.area_of_specifications,
               official_email_id: req.body.official_email_id,
               official_email_verified: req.body.official_email_verified,
+              live_consultation_charge: req.body.live_consultation_charge,
             },
           }),
         ];
