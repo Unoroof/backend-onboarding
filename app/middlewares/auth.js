@@ -16,6 +16,7 @@ const exclude = [
   "GET /blogs/:id",
   "GET /blogs",
   "POST /contact-us",
+  "GET /gm-products/:gm_product_uuid",
 ];
 
 module.exports = (req, res, next) => {
