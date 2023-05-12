@@ -95,6 +95,8 @@ const GmProductController = require("../app/controllers").GmProductController;
 const createGmProductRequest = require("../app/requests/createGmProduct");
 const gmProductCollectionResponse = require("../app/responses/gmProductCollection");
 const gmProductResourceResponse = require("../app/responses/gmProductResource");
+const gmProductDetailsResourceResponse = require("../app/responses/gmProductDetailsResource");
+
 const createQuote = require("../app/requests/createQuote");
 const QuoteController = require("../app/controllers").QuoteController;
 const QuoteResponse = require("../app/responses/quoteResources");
@@ -426,7 +428,7 @@ router.put(
 router.get(
   "/gm-products/:gm_product_uuid",
   executeForResult(GmProductController.getProductById),
-  executeForResponse(gmProductResourceResponse)
+  executeForResponse(gmProductDetailsResourceResponse)
 );
 
 router.get(
