@@ -237,6 +237,16 @@ module.exports = {
     try {
       let gmProduct = await GmProduct.findOne({
         attributes: {
+          include: [
+            [
+              sequelize.literal(`(
+                SELECT "profiles"."data"
+                FROM "profiles"
+                WHERE "profiles"."uuid" = "GmProduct"."profile_uuid"
+                )`),
+              "profile_data",
+            ],
+          ],
           exclude: ["createdAt", "updatedAt"],
         },
         include: {
@@ -249,6 +259,7 @@ module.exports = {
         where: {
           uuid: req.params.gm_product_uuid,
         },
+        raw: true,
       });
       return gmProduct;
     } catch (error) {
