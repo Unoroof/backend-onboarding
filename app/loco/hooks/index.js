@@ -9,15 +9,13 @@ async function afterRespondCreateVideoConsultation(context) {
 
   let senderProfile = await Profile.findOne({
     where: {
-      uuid: locoAction["payload"]["buyer_uuid"],
-      type: "fm-buyer",
+      uuid: locoAction["payload"]["source"],
     },
   });
 
   let receiverProfile = await Profile.findOne({
     where: {
-      uuid: locoAction["payload"]["banker_uuid"],
-      type: "fm-seller",
+      uuid: locoAction["payload"]["destination"],
     },
   });
 
@@ -56,14 +54,12 @@ async function afterRespondPatchVideoConsultation(context) {
   console.log("LOCO ACTIONN-----", locoAction["opResult"]["type"]);
   let receiverProfile = await Profile.findOne({
     where: {
-      uuid: locoAction["opResult"]["buyer_uuid"],
-      type: "fm-buyer",
+      uuid: locoAction["opResult"]["source"],
     },
   });
   let senderProfile = await Profile.findOne({
     where: {
-      uuid: locoAction["opResult"]["banker_uuid"],
-      type: "fm-seller",
+      uuid: locoAction["opResult"]["destination"],
     },
   });
 

@@ -55,15 +55,13 @@ const sendTimeBasedReminderNotification = async () => {
 
       let bankerProfile = await Profile.findOne({
         where: {
-          uuid: consultationRequest.banker_uuid,
-          type: "fm-seller",
+          uuid: consultationRequest.destination,
         },
       });
 
       let buyerProfile = await Profile.findOne({
         where: {
-          uuid: consultationRequest.buyer_uuid,
-          type: "fm-buyer",
+          uuid: consultationRequest.source,
         },
       });
 
