@@ -26,11 +26,11 @@ const createRoom = async (requestId) => {
     }
 
     const bankerProfile = await knex("profiles")
-      .where("uuid", videoConsultation.banker_uuid)
+      .where("uuid", videoConsultation.destination)
       .first();
 
     const buyerProfile = await knex("profiles")
-      .where("uuid", videoConsultation.buyer_uuid)
+      .where("uuid", videoConsultation.source)
       .first();
 
     const payload = {
