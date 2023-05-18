@@ -46,13 +46,13 @@ const expireFutureConsultation = async () => {
       let reason = "";
 
       if (consultationRequest.request_status === "buyer_send_request") {
-        reason = "banker not accepted the request";
+        reason = "destination not accepted the request";
       }
 
       if (
         consultationRequest.request_status === "banker_accepted_the_request"
       ) {
-        reason = "buyer not done the payment";
+        reason = "source not done the payment";
       }
 
       await knex("video_consultations")
@@ -61,15 +61,13 @@ const expireFutureConsultation = async () => {
 
       let buyerProfile = await Profile.findOne({
         where: {
-          uuid: consultationRequest.buyer_uuid,
-          type: "fm-buyer",
+          uuid: consultationRequest.source,
         },
       });
 
       let bankerProfile = await Profile.findOne({
         where: {
-          uuid: consultationRequest.banker_uuid,
-          type: "fm-seller",
+          uuid: consultationRequest.destination,
         },
       });
 
