@@ -28,6 +28,7 @@ const sendTimeBasedReminderNotification = async () => {
     //get all the video consultations where buyer has done the payment done
     const videoConsultation = await knex("video_consultations")
       .whereIn("request_status", ["buyer_payment_done"])
+      .where("module", "video_consultation")
       .where("type", "future_date");
 
     for (i = 0; i < videoConsultation.length; i++) {

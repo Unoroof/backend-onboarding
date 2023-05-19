@@ -52,11 +52,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      banker_accepted_on: {
+      destination_accepted_on: {
         type: DataTypes.DATE,
         allowNull: true,
       },
-      banker_rejected_on: {
+      destination_rejected_on: {
         type: DataTypes.DATE,
         allowNull: true,
       },

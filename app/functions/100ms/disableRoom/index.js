@@ -71,26 +71,32 @@ const updateVideoConsultationStatus = async (
   videoConsultation
 ) => {
   try {
+    const isGmModule = videoConsultation.module === "gm_module";
+
+    let requestStatus = "consultation_done";
+
     if (
       joinedUniqueRoles.includes("participator") &&
       joinedUniqueRoles.includes("presenter")
     ) {
-      return await knex("video_consultations")
-        .update({ request_status: "consultation_done" })
-        .where({ uuid: videoConsultation.uuid });
+      requestStatus = "consultation_done";
     } else if (joinedUniqueRoles.includes("presenter")) {
-      return await knex("video_consultations")
-        .update({ request_status: "buyer_not_joined" })
-        .where({ uuid: videoConsultation.uuid });
+      requestStatus = isGmModule ? "source_not_joined" : "buyer_not_joined";
     } else if (joinedUniqueRoles.includes("participator")) {
-      return await knex("video_consultations")
-        .update({ request_status: "banker_not_joined" })
-        .where({ uuid: videoConsultation.uuid });
+      requestStatus = isGmModule
+        ? "destination_not_joined"
+        : "banker_not_joined";
     } else {
-      return await knex("video_consultations")
-        .update({ request_status: "buyer_banker_not_joined" })
-        .where({ uuid: videoConsultation.uuid });
+      requestStatus = isGmModule
+        ? "source_destination_not_joined"
+        : "buyer_banker_not_joined";
     }
+
+    return await knex("video_consultations")
+      .update({
+        request_status: requestStatus,
+      })
+      .where({ uuid: videoConsultation.uuid });
   } catch (err) {
     console.log(
       `error while updating the consultation status ${videoConsultation.uuid}`,
@@ -111,7 +117,7 @@ const disableRoom = async () => {
 
     const videoConsultation = await knex("video_consultations")
       .where("payment_status", "paid")
-      .where("request_status", "buyer_payment_done")
+      .whereIn("request_status", ["buyer_payment_done", "source_payment_done"])
       .where("consultation_end_date_time", "<", tzTime);
 
     console.log(

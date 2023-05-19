@@ -33,6 +33,7 @@ const expireFutureConsultation = async () => {
         "banker_accepted_the_request",
       ])
       .where("type", "future_date")
+      .where("module", "video_consultation")
       .where("query_date_time", "<", tzTime);
 
     console.log(

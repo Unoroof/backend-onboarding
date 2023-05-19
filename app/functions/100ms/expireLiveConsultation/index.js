@@ -98,6 +98,7 @@ const expireLiveConsultation = async () => {
         "buyer_payment_failed",
       ])
       .where("type", "live")
+      .where("module", "video_consultation")
       .where("consultation_end_date_time", "<", tzTime);
 
     console.log(
