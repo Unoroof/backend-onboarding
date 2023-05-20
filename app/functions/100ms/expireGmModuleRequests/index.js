@@ -78,7 +78,7 @@ const expireGmModuleRequests = async () => {
     console.log("expireGmModuleRequests tzTime ", tzTime);
 
     const videoConsultation = await knex("video_consultations")
-      .whereIn("request_status", ["buyer_send_request"])
+      .whereIn("request_status", ["source_send_request"])
       .where("type", "live")
       .where("module", "gm_module")
       .where("consultation_end_date_time", "<", tzTime);
