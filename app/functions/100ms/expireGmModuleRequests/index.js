@@ -102,5 +102,5 @@ const expireGmModuleRequests = async () => {
   }
 };
 
-// module.exports = expireGmModuleRequests;
-expireGmModuleRequests();
+module.exports = expireGmModuleRequests;
+// expireGmModuleRequests();
