@@ -284,8 +284,9 @@ async function beforeHandlePatchVideoConsultation(context) {
         videoConsultationRequest.request_status !== "source_send_request"
       ) {
         if (
-          videoConsultationRequest.request_status ===
-          "destination_accepted_the_request"
+          ["destination_accepted_the_request", "source_payment_done"].includes(
+            videoConsultationRequest.request_status
+          )
         ) {
           throw {
             statusCode: 500,
@@ -300,6 +301,20 @@ async function beforeHandlePatchVideoConsultation(context) {
           throw {
             statusCode: 500,
             message: "Already Request Rejected",
+          };
+        }
+
+        if (
+          [
+            "consultation_done",
+            "source_not_joined",
+            "destination_not_joined",
+            "source_destination_not_joined",
+          ].includes(videoConsultationRequest.request_status)
+        ) {
+          throw {
+            statusCode: 500,
+            message: "Consultation Completed",
           };
         }
 
