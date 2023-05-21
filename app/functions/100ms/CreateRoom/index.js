@@ -17,7 +17,11 @@ const createRoom = async (requestId) => {
       .where("uuid", requestId)
       .first();
 
-    if (videoConsultation.request_status !== "buyer_payment_done") {
+    if (
+      !["buyer_payment_done", "source_payment_done"].includes(
+        videoConsultation.request_status
+      )
+    ) {
       throw new Error("Payment not done for the consultation");
     }
 
