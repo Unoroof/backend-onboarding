@@ -139,17 +139,6 @@ async function afterRespondPatchVideoConsultation(context) {
           },
           ignore_user_contacts: false,
         });
-
-        await sendPushNotification({
-          event_type: "destination_has_no_response_video_consultation_own",
-          user_id: destinationProfile.user_uuid,
-          data: {
-            video_consultation_request: videoConsultationRequestData,
-            notification_type:
-              "destination_has_no_response_video_consultation_own_firebase",
-          },
-          ignore_user_contacts: false,
-        });
       }
     } else {
       // this notification will be triggered both when buyer has done the payment for both future date consultations and live consultation.
@@ -351,7 +340,7 @@ async function beforeHandleCreateVideoConsultation(context) {
       if (found.length > 0) {
         throw {
           statusCode: 500,
-          message: "There is active request present",
+          message: "You cannot initiate another request for 3 minutes",
         };
       }
     }
