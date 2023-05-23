@@ -396,7 +396,7 @@ async function beforePreparePatchVideoConsultation(context) {
 async function beforePrepareReadVideoConsultation(context) {
   const { locoAction } = context;
 
-  console.log("beforePrepareReadVideoConsultation ss", locoAction.payload);
+  console.log("beforePrepareReadVideoConsultation", locoAction.payload);
 
   const hasUUIDFilter =
     locoAction.payload.filterBy?.find?.((item) => item.attribute === "uuid") ||
@@ -427,6 +427,7 @@ async function beforePrepareReadVideoConsultation(context) {
   if (buyerUUIDFilterIndex > -1) {
     context.locoAction.payload.filterBy[buyerUUIDFilterIndex].attribute =
       "source";
+    context.locoAction.isOldKeys = true;
   }
 
   const bankerUUIDFilterIndex = locoAction.payload.filterBy?.findIndex?.(
@@ -436,6 +437,7 @@ async function beforePrepareReadVideoConsultation(context) {
   if (bankerUUIDFilterIndex > -1) {
     context.locoAction.payload.filterBy[bankerUUIDFilterIndex].attribute =
       "destination";
+    context.locoAction.isOldKeys = true;
   }
 
   return context;
@@ -445,9 +447,28 @@ async function beforeHandleReadVideoConsultation(context) {
   const { locoAction } = context;
 
   console.log(
-    "beforeHandleReadVideoConsultation ss",
+    "beforeHandleReadVideoConsultation--->",
     JSON.stringify(locoAction.payload)
   );
+
+  return context;
+}
+
+async function afterRespondReadVideoConsultation(context) {
+  const { locoAction } = context;
+
+  if (locoAction.isOldKeys) {
+    context.locoAction.opResult.data = locoAction.opResult.data.map((item) => {
+      return {
+        ...item,
+        buyer_uuid: item.source,
+        banker_uuid: item.destination,
+        banker_config_info: item.destination_config_info,
+        banker_accepted_on: item.destination_accepted_on,
+        banker_rejected_on: item.destination_rejected_on,
+      };
+    });
+  }
 
   return context;
 }
@@ -461,4 +482,5 @@ module.exports = {
   beforePreparePatchVideoConsultation,
   beforePrepareReadVideoConsultation,
   beforeHandleReadVideoConsultation,
+  afterRespondReadVideoConsultation,
 };
