@@ -17,7 +17,11 @@ const createRoom = async (requestId) => {
       .where("uuid", requestId)
       .first();
 
-    if (videoConsultation.request_status !== "buyer_payment_done") {
+    if (
+      !["buyer_payment_done", "source_payment_done"].includes(
+        videoConsultation.request_status
+      )
+    ) {
       throw new Error("Payment not done for the consultation");
     }
 
@@ -26,11 +30,11 @@ const createRoom = async (requestId) => {
     }
 
     const bankerProfile = await knex("profiles")
-      .where("uuid", videoConsultation.banker_uuid)
+      .where("uuid", videoConsultation.destination)
       .first();
 
     const buyerProfile = await knex("profiles")
-      .where("uuid", videoConsultation.buyer_uuid)
+      .where("uuid", videoConsultation.source)
       .first();
 
     const payload = {

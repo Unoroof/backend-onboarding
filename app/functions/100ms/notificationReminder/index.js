@@ -28,6 +28,7 @@ const sendTimeBasedReminderNotification = async () => {
     //get all the video consultations where buyer has done the payment done
     const videoConsultation = await knex("video_consultations")
       .whereIn("request_status", ["buyer_payment_done"])
+      .where("module", "video_consultation")
       .where("type", "future_date");
 
     for (i = 0; i < videoConsultation.length; i++) {
@@ -55,15 +56,13 @@ const sendTimeBasedReminderNotification = async () => {
 
       let bankerProfile = await Profile.findOne({
         where: {
-          uuid: consultationRequest.banker_uuid,
-          type: "fm-seller",
+          uuid: consultationRequest.destination,
         },
       });
 
       let buyerProfile = await Profile.findOne({
         where: {
-          uuid: consultationRequest.buyer_uuid,
-          type: "fm-buyer",
+          uuid: consultationRequest.source,
         },
       });
 

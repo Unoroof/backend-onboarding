@@ -5,6 +5,7 @@ const { Op, Sequelize } = require("sequelize");
 const Profile = models.Profile;
 const Category = models.Category;
 const Product = models.Product;
+const VideoConsultation = models.VideoConsultation;
 
 const { generateAuthToken, createRoom } = require("../functions/100ms");
 
@@ -12,6 +13,14 @@ module.exports = {
   async getAuthToken(req, res) {
     try {
       const requestId = req.params.requestId;
+
+      const videoConsultationRequest = await VideoConsultation.findByPk(
+        requestId
+      );
+
+      if (!videoConsultationRequest) {
+        throw new Error("Request not found");
+      }
 
       const profile = await Profile.findOne({
         where: {
@@ -23,7 +32,10 @@ module.exports = {
         throw new Error("Profile not found");
       }
 
-      const role = profile.type === "fm-buyer" ? "participator" : "presenter";
+      const role =
+        videoConsultationRequest.destination === profile.uuid
+          ? "presenter"
+          : "participator";
 
       const token = await generateAuthToken(req.user, requestId, role);
 

@@ -32,11 +32,11 @@ const paymentKnex = require("knex")({
 const expireTheRequest = async (consultationRequest) => {
   let reason = "";
   if (consultationRequest.request_status === "buyer_send_request") {
-    reason = "banker not accepted the request";
+    reason = "destination not accepted the request";
   }
 
   if (consultationRequest.request_status === "banker_accepted_the_request") {
-    reason = "buyer not done the payment";
+    reason = "source not done the payment";
   }
 
   await knex("video_consultations")
@@ -45,15 +45,13 @@ const expireTheRequest = async (consultationRequest) => {
 
   const senderProfile = await Profile.findOne({
     where: {
-      uuid: consultationRequest.buyer_uuid,
-      type: "fm-buyer",
+      uuid: consultationRequest.source,
     },
   });
 
   const receiverProfile = await Profile.findOne({
     where: {
-      uuid: consultationRequest.banker_uuid,
-      type: "fm-seller",
+      uuid: consultationRequest.destination,
     },
   });
   await sendPushNotification({
@@ -100,6 +98,7 @@ const expireLiveConsultation = async () => {
         "buyer_payment_failed",
       ])
       .where("type", "live")
+      .where("module", "video_consultation")
       .where("consultation_end_date_time", "<", tzTime);
 
     console.log(
