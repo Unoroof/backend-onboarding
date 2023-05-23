@@ -255,6 +255,8 @@ async function beforeHandlePatchVideoConsultation(context) {
 
   const payload = locoAction.payload;
 
+  console.log("beforeHandlePatchVideoConsultation--->.", payload);
+
   if (locoAction.action === "patch" && payload.uuid) {
     const videoConsultationRequest = await VideoConsultation.findByPk(
       payload.uuid
@@ -349,9 +351,136 @@ async function beforeHandleCreateVideoConsultation(context) {
   return context;
 }
 
+const preparePayload = (context) => {
+  const { locoAction } = context;
+
+  const payload = locoAction.payload;
+
+  if (payload.buyer_uuid) {
+    context.locoAction.payload.source = payload.buyer_uuid;
+  }
+
+  if (payload.banker_uuid) {
+    context.locoAction.payload.destination = payload.banker_uuid;
+  }
+
+  if (payload.banker_config_info) {
+    context.locoAction.payload.destination_config_info =
+      payload.banker_config_info;
+  }
+
+  if (payload.banker_accepted_on) {
+    context.locoAction.payload.destination_accepted_on =
+      payload.banker_accepted_on;
+  }
+
+  if (payload.banker_rejected_on) {
+    context.locoAction.payload.destination_rejected_on =
+      payload.banker_rejected_on;
+  }
+
+  return context;
+};
+
+async function beforePrepareCreateVideoConsultation(context) {
+  context = preparePayload(context);
+
+  return context;
+}
+
+async function beforePreparePatchVideoConsultation(context) {
+  context = preparePayload(context);
+  return context;
+}
+
+async function beforePrepareReadVideoConsultation(context) {
+  const { locoAction } = context;
+
+  console.log("beforePrepareReadVideoConsultation", locoAction.payload);
+
+  const hasUUIDFilter =
+    locoAction.payload.filterBy?.find?.((item) => item.attribute === "uuid") ||
+    false;
+
+  const hasModuleFilter =
+    locoAction.payload.filterBy?.find?.(
+      (item) => item.attribute === "module"
+    ) || false;
+
+  if (!hasModuleFilter) {
+    if (!hasUUIDFilter) {
+      const moduleFilterOb = {
+        attribute: "module",
+        op: "in",
+        value: ["video_consultation"],
+      };
+      if (Array.isArray(context.locoAction.payload.filterBy)) {
+        context.locoAction.payload.filterBy.push(moduleFilterOb);
+      }
+    }
+  }
+
+  const buyerUUIDFilterIndex = locoAction.payload.filterBy?.findIndex?.(
+    (item) => item.attribute === "buyer_uuid"
+  );
+
+  if (buyerUUIDFilterIndex > -1) {
+    context.locoAction.payload.filterBy[buyerUUIDFilterIndex].attribute =
+      "source";
+    context.locoAction.isOldKeys = true;
+  }
+
+  const bankerUUIDFilterIndex = locoAction.payload.filterBy?.findIndex?.(
+    (item) => item.attribute === "banker_uuid"
+  );
+
+  if (bankerUUIDFilterIndex > -1) {
+    context.locoAction.payload.filterBy[bankerUUIDFilterIndex].attribute =
+      "destination";
+    context.locoAction.isOldKeys = true;
+  }
+
+  return context;
+}
+
+async function beforeHandleReadVideoConsultation(context) {
+  const { locoAction } = context;
+
+  console.log(
+    "beforeHandleReadVideoConsultation--->",
+    JSON.stringify(locoAction.payload)
+  );
+
+  return context;
+}
+
+async function afterRespondReadVideoConsultation(context) {
+  const { locoAction } = context;
+
+  if (locoAction.isOldKeys) {
+    context.locoAction.opResult.data = locoAction.opResult.data.map((item) => {
+      return {
+        ...item,
+        buyer_uuid: item.source,
+        banker_uuid: item.destination,
+        banker_config_info: item.destination_config_info,
+        banker_accepted_on: item.destination_accepted_on,
+        banker_rejected_on: item.destination_rejected_on,
+      };
+    });
+  }
+
+  return context;
+}
+
 module.exports = {
   afterRespondCreateVideoConsultation,
   afterRespondPatchVideoConsultation,
   beforeHandlePatchVideoConsultation,
   beforeHandleCreateVideoConsultation,
+  beforePrepareCreateVideoConsultation,
+  beforePreparePatchVideoConsultation,
+  beforePrepareReadVideoConsultation,
+  beforeHandleReadVideoConsultation,
+  afterRespondReadVideoConsultation,
 };
