@@ -5,6 +5,8 @@ module.exports = (instance) => {
     "company_name",
     "mobile_number",
     "email",
+    "type",
+    "user_uuid",
     "createdAt",
     "updatedAt",
   ];
