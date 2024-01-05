@@ -36,3 +36,5 @@ docker exec -it 86ba3da2b288 sh
       transformedValue = arrangedTransformedValue;
 
     break;
+
+## Deploy.
