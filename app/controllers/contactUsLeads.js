@@ -20,6 +20,8 @@ module.exports = {
         email: req.body.email,
         company_name: req.body.company_name,
         mobile_number: req.body.mobile_number,
+        type: req.body?.type || "call_request",
+        user_uuid: req.body?.user_uuid || null,
       });
       return contactUsLead;
     } catch (error) {
