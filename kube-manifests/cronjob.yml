@@ -1,29 +1,29 @@
-apiVersion: batch/v1beta1
-kind: CronJob
-metadata:
-  name: backend-onboarding-cron
-spec:
-  # Time is in GMT, it will run on every 1mins
-  # https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
-  # https://crontab.cronhub.io/
-  schedule: "*/1 * * * *"
-  successfulJobsHistoryLimit: 1
-  failedJobsHistoryLimit: 1
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          containers:
-            - name: backend-onboarding-cron
-              image: CONTAINER_IMAGE
-              envFrom:
-                - configMapRef:
-                    name: backend-onboarding
-              imagePullPolicy: Always
-              command:
-                [
-                  "sh",
-                  "-c",
-                  "ENVFILE=backend_onboarding_env node ./app/functions/100ms/consultationCrons.js",
-                ]
-          restartPolicy: OnFailure
+# apiVersion: batch/v1beta1
+# kind: CronJob
+# metadata:
+#   name: backend-onboarding-cron
+# spec:
+#   # Time is in GMT, it will run on every 1mins
+#   # https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
+#   # https://crontab.cronhub.io/
+#   schedule: "*/1 * * * *"
+#   successfulJobsHistoryLimit: 1
+#   failedJobsHistoryLimit: 1
+#   jobTemplate:
+#     spec:
+#       template:
+#         spec:
+#           containers:
+#             - name: backend-onboarding-cron
+#               image: CONTAINER_IMAGE
+#               envFrom:
+#                 - configMapRef:
+#                     name: backend-onboarding
+#               imagePullPolicy: Always
+#               command:
+#                 [
+#                   "sh",
+#                   "-c",
+#                   "ENVFILE=backend_onboarding_env node ./app/functions/100ms/consultationCrons.js",
+#                 ]
+#           restartPolicy: OnFailure
