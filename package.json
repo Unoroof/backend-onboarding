@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "NODE_ENV=development nodemon ./bin/www",
     "start": "node ./bin/www",
+    "serve": "ENVFILE=.env DEBUG=true nodemon server.js",
     "migrate": "sequelize db:migrate",
     "db:migrate:undo": "sequelize db:migrate:undo",
     "db:init": "sequelize init",
