@@ -5,7 +5,14 @@ var logger = require("morgan");
 const Sentry = require("@sentry/node");
 var dotenv = require("dotenv");
 const bootstrapLoco = require("./app/loco/bootstrap");
-const corsMiddleware = require("./app/middlewares/cors");
+const cors = require("cors");
+
+const corsOptions = {
+  origin: "*", // Specify allowed origins
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // Allow credentials
+  optionsSuccessStatus: 204,
+};
 
 dotenv.config({ path: ".env" });
 
@@ -23,8 +30,8 @@ indexRouter = bootstrapLoco(app, indexRouter);
 
 var app = express();
 
+app.use(cors(corsOptions));
 app.use(auth);
-app.use(corsMiddleware);
 
 // view engine setup
 
