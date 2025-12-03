@@ -18,8 +18,7 @@ const dialectOptions = {
 
 if (process.env.DB_SSL === "true") {
   dialectOptions.ssl = {
-    // AWS RDS has valid SSL certificates, so we always validate them
-    rejectUnauthorized: true,
+    rejectUnauthorized: false,
   };
 }
 

@@ -6,7 +6,7 @@ const getDialectOptions = () => {
   if (process.env.DB_SSL === "true") {
     return {
       ssl: {
-        rejectUnauthorized: true,
+        rejectUnauthorized: false,
       },
     };
   }
