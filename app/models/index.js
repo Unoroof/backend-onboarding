@@ -8,6 +8,20 @@ const db = {};
 
 let sequelize;
 
+const dialectOptions = {
+  connectTimeout: 30000,
+};
+
+// SSL configuration for AWS RDS (and other cloud databases)
+// AWS RDS requires SSL connections and uses valid certificates
+// Enable SSL for production and staging environments
+
+if (process.env.DB_SSL === "true") {
+  dialectOptions.ssl = {
+    rejectUnauthorized: false,
+  };
+}
+
 sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USERNAME,
@@ -16,9 +30,7 @@ sequelize = new Sequelize(
     host: process.env.DB_HOST,
     port: process.env.DB_PORT || 5432,
     dialect: process.env.DB_SEQUELIZE_DIALECT || "postgres",
-    dialectOptions: {
-      connectTimeout: 30000,
-    },
+    dialectOptions,
   }
 );
 
