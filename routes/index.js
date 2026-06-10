@@ -131,6 +131,12 @@ const createVideoConsultationProfile = require("../app/requests/createVideoConsu
 const videoConsultationController =
   require("../app/controllers").VideoConsultationController;
 
+router.get("/health", (req, res) => {
+  return res.status(200).send({
+    status: "ok",
+  });
+});
+
 router.get("/liveness", (req, res) => {
   return res.status(200).send({
     status: "ok",
