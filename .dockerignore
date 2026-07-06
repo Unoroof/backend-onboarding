@@ -1,9 +1,44 @@
+# Dependencies (reinstalled in the image)
 node_modules
 npm-debug.log
+yarn-error.log
+*.log
+logs
+
+# Environment and secrets
+.env
+.env.*
+env.list
+
+# Version control
+.git
+.gitignore
+
+# Docker and deployment (not needed at runtime)
 Dockerfile
 .dockerignore
-README.md
-.env
-docs
+DOCKERISATION.md
 kube-manifests
-node_modules/
+
+# Documentation
+docs
+README.md
+readme.md
+*.md
+
+# Postman collections and local samples
+*.postman_collection.json
+sampleToken.txt
+
+# Local and editor files
+.DS_Store
+.cursor
+.vscode
+.idea
+
+# Coverage output
+coverage
+
+# Docker scan reports
+trivy-*.txt
+*-report.txt
