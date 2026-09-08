@@ -25,10 +25,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      test_column: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
       createdAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
